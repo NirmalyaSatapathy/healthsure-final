@@ -13,7 +13,7 @@
 <body class="bg-gray-100">
 
 <f:view>
-    <!-- ✅ Include Fixed Navbar -->
+    <!-- ✅ Include Fixed Navbar -->"src/main/webapp/provider/Provider.jsp"
     <jsp:include page="/navbar/NavProvider.jsp" />
 
     <!-- ✅ Main Content -->

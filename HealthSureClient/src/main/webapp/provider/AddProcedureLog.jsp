@@ -4,6 +4,28 @@
 <html>
 <head>
     <title>Add Procedure Log</title>
+     <!-- still disable caching so browser doesn’t hold onto old HTML -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma"        content="no-cache" />
+  <meta http-equiv="Expires"       content="0" />
+
+  <script type="text/javascript">
+    window.addEventListener('pageshow', function(event) {
+      // if this page was restored from bfcache or via back/forward
+      var navEntries = performance.getEntriesByType &&
+                       performance.getEntriesByType("navigation");
+      var navType = navEntries && navEntries.length
+                    ? navEntries[0].type
+                    : "";
+      if (event.persisted || navType === "back_forward") {
+        // clear out all validation-message spans
+        document.querySelectorAll('.error-message').forEach(function(el) {
+          el.textContent = '';
+        });
+      }
+    });
+  </script>
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -50,10 +72,14 @@
         }
 
         .error-message {
-            color: red;
-            font-size: 12px;
-            margin-top: 3px;
-        }
+  display: block;                /* ensure it takes its own line */
+  color: #f44336 !important;     /* vivid red */
+  font-size: 14px;               /* a bit larger */
+  font-weight: 600;              /* semi-bold */
+  padding: 4px 8px;             
+  border-radius: 4px;
+  margin-top: 6px;               
+}
 
         .button-group {
             display: flex;

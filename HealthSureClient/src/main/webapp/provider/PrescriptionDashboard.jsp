@@ -1,86 +1,115 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Prescribed Medicines Dashboard</title>
-    <link rel="stylesheet" href="css/healthsure-style.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #eef5f9;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <title>Prescribed Medicines Dashboard</title>
+  <link rel="stylesheet" href="css/healthsure-style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef5f9;
+      margin: 0;
+      padding: 0;
+    }
 
-        .dashboard-container {
-            max-width: 600px;
-            margin: 80px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
+    .dashboard-container {
+      max-width: 600px;
+      margin: 80px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
 
-        .dashboard-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2a3f54;
-            margin-bottom: 30px;
-        }
+    .dashboard-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2a3f54;
+      margin-bottom: 30px;
+    }
 
-        .action-button, .action-link {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 10px;
-            display: inline-block;
-            cursor: pointer;
-        }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
 
-        .action-link:hover, .action-button:hover {
-            background-color: #0056b3;
-        }
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        .spacer {
-            height: 20px;
-        }
-       .error-message {
-            color: red;
-            font-size: 12px;
-            margin-top: 3px;
-        }
-    </style>
+    .action-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .action-button:hover {
+      background-color: #0056b3;
+    }
+
+    .error-message {
+      display: block;
+      margin-top: 5px;
+      color: red;
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
-    <f:view>
-        <div class="dashboard-container">
-            <div class="dashboard-title">Prescription Dashboard</div>
-            <h:form prependId="false">
-            	
-                <h:commandButton value="Add Medicine" action="#{procedureController.createNewPrescribedMedicine()}" />
-                
-                <div class="spacer"></div>
-                
-                <h:commandButton value="Add Test" action="#{procedureController.createNewProcedureTest()}"
-                                 styleClass="action-button" />
-                  <div class="spacer"></div>
-                <h:commandButton value="submit" id="submit" action="#{procedureController.prescriptionDetailsSubmit()}" 
-                                 styleClass="action-button" /> <br>
-                 <h:message for="submit" styleClass="error-message" />
-                <h:commandButton value="back" id="back" action="#{procedureController.backFromPrescription()}" 
-                                 styleClass="action-button" />
-                                 <br>
-                                  <h:message for="back" styleClass="error-message"  />
-            </h:form>
+  <f:view>
+    <div class="dashboard-container">
+      <div class="dashboard-title">Prescription Dashboard</div>
+
+      <h:form prependId="false">
+        <div class="button-row">
+
+          <div class="button-group">
+            <h:commandButton id="addMed"
+                             value="Add Medicine"
+                             action="#{procedureController.createNewPrescribedMedicine()}"
+                             styleClass="action-button" />
+            <h:message for="addMed" styleClass="error-message" />
+          </div>
+
+          <div class="button-group">
+            <h:commandButton id="addTest"
+                             value="Add Test"
+                             action="#{procedureController.createNewProcedureTest()}"
+                             styleClass="action-button" />
+            <h:message for="addTest" styleClass="error-message" />
+          </div>
+
+          <div class="button-group">
+            <h:commandButton id="submit"
+                             value="Submit"
+                             action="#{procedureController.prescriptionDetailsSubmit()}"
+                             styleClass="action-button" />
+            <h:message for="submit" styleClass="error-message" />
+          </div>
+
+          <div class="button-group">
+            <h:commandButton id="back"
+                             value="Back"
+                             action="#{procedureController.backFromPrescription()}"
+                             styleClass="action-button" />
+            <h:message for="back" styleClass="error-message" />
+          </div>
+
         </div>
-    </f:view>
+      </h:form>
+    </div>
+  </f:view>
 </body>
 </html>

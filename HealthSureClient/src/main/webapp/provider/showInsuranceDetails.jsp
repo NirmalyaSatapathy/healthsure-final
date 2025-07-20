@@ -7,48 +7,132 @@
 <head>
     <meta charset="UTF-8" />
     <title>Patient Insurance Details</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8fcff;
-            color: #003366;
-            margin: 0;
-            padding: 20px;
-        }
+<style>
+    /* Page background: subtle clinic tone */
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background-color: #f4f8fc; /* soft hospital background */
+        color: #2f4f4f;
+        padding: 20px;
+        margin: 0;
+    }
+
+    h2 {
+        color: #0277bd; /* calm blue */
+        font-size: 28px;
+        margin: 20px 0;
+        border-bottom: 2px solid #b3e5fc;
+        padding-bottom: 6px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #004d40;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    .error-message {
+        color: #d32f2f;
+        font-size: 12px;
+        margin-left: 10px;
+        display: block;
+    }
+
+    h\\:inputText {
+        padding: 8px 10px;
+        border: 1px solid #b0bec5;
+        border-radius: 4px;
+        width: 260px;
+        font-size: 14px;
+        background-color: #ffffff;
+        box-sizing: border-box;
+    }
+
+    h\\:commandButton {
+        background-color: #0288d1;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+
+    h\\:commandButton:hover {
+        background-color: #01579b;
+    }
+
+    /* Data table styling */
+    .data-table {
+        width: 100%;
+        margin-top: 30px;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Table headers */
+    .data-table th {
+        background-color: #64b5f6; /* hospital blue */
+        color: #ffffff;
+        font-weight: 600;
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #90caf9;
+        font-size: 15px;
+    }
+
+    /* Alternate row backgrounds */
+    .data-table tr:nth-child(odd) {
+        background-color: #ffffff; /* pure white */
+    }
+
+    .data-table tr:nth-child(even) {
+        background-color: #f0f9ff; /* very light hospital blue tint */
+    }
+
+    /* Table cells */
+    .data-table td {
+        border: 1px solid #cfd8dc;
+        padding: 10px;
+        font-size: 15px;
+        text-align: center;
+    }
+
+    /* Row hover effect */
+    .data-table tr:hover {
+        background-color: #e1f5fe; /* soft highlight */
+    }
+
+    /* Responsive design */
+    @media (max-width: 600px) {
         h2 {
-            color: #0077b6;
-            text-align: center;
-            margin-bottom: 25px;
+            font-size: 24px;
         }
-        .data-table {
-            border-collapse: collapse;
+
+        .data-table th,
+        .data-table td {
+            font-size: 13px;
+            padding: 6px;
+        }
+
+        h\\:inputText {
             width: 100%;
-            margin-top: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
-        .data-table th, .data-table td {
-            border: 1px solid #bcd9ea;
-            padding: 10px;
-            text-align: left;
+
+        h\\:commandButton {
+            width: 100%;
+            margin-bottom: 10px;
         }
-        .data-table th {
-            background-color: #d0f0f3;
-            color: #003c58;
-        }
-        .data-table tr:nth-child(even) {
-            background-color: #f1faff;
-        }
-        .data-table tr:hover {
-            background-color: #e0f7ff;
-        }
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-            display: block;
-            margin-top: 2px;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
 <h2>Patient insurance details</h2>
@@ -86,9 +170,15 @@
 
         <!-- Submit Button -->
         <h:outputLabel />
-        <h:commandButton value="Search" action="#{insuranceController.handleSearch()}" />
-        <h:commandButton value="Reset" action="#{insuranceController.resetPage()}" immediate="true" />
-        <h:commandButton value="Go to Dashboard" action="#{insuranceController.goToDashboard()}"/>
+        <!-- Buttons in a single row -->
+<h:outputLabel />
+<!-- Buttons aligned with input fields -->
+<h:outputLabel />
+<h:panelGroup layout="block" style="max-width: 260px; display: flex; gap: 8px; flex-wrap: wrap;">
+    <h:commandButton value="Search" action="#{insuranceController.handleSearch()}" />
+    <h:commandButton value="Reset" action="#{insuranceController.resetPage()}" immediate="true" />
+    <h:commandButton value="Go to Dashboard" action="#{insuranceController.goToDashboard()}" />
+</h:panelGroup>
  
 
     </h:panelGrid>

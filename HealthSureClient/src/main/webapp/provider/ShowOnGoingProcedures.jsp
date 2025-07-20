@@ -1,244 +1,295 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib prefix="f" uri="http://java.sun.com/jsf/core"%>
-<%@taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
+<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
+
 <f:view>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>In-Progress Procedures</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            padding: 20px;
-        }
+<style>
+    /* Page background: subtle clinic tone */
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background-color: #f4f8fc; /* soft hospital background */
+        color: #2f4f4f;
+        padding: 20px;
+        margin: 0;
+    }
 
+    h2 {
+        color: #0277bd; /* calm blue */
+        font-size: 28px;
+        margin: 20px 0;
+        border-bottom: 2px solid #b3e5fc;
+        padding-bottom: 6px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #004d40;
+    }
+
+    .error {
+        color: #d32f2f;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+
+    h\\:inputText {
+        padding: 8px;
+        border: 1px solid #b0bec5;
+        border-radius: 4px;
+        width: 250px;
+        font-size: 14px;
+    }
+
+    h\\:commandButton {
+        background-color: #0288d1;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 14px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    h\\:commandButton:hover {
+        background-color: #01579b;
+    }
+
+    /* Data table styling */
+    .data-table {
+        width: 100%;
+        margin-top: 30px;
+        border-collapse: collapse;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Table headers: crisp and clean */
+    .data-table th {
+        background-color: #64b5f6; /* moderate hospital blue */
+        color: #ffffff;
+        font-weight: 600;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #90caf9;
+    }
+
+  .data-table tr:nth-child(odd) {
+    background-color: #ffffff;   /* pure white */
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #eaf6ff;   /* lightest tint of column blue (header: #64b5f6) */
+}
+
+    /* Table cells */
+    .data-table td {
+        border: 1px solid #cfd8dc;
+        padding: 10px;
+        font-size: 15px;
+        text-align: center;
+    }
+
+    /* Row hover */
+    .data-table tr:hover {
+        background-color: #e3f2fd; /* soft blue highlight */
+    }
+
+    /* Responsive design */
+    @media (max-width: 600px) {
         h2 {
-            color: #3f51b5;
-            font-size: 30px;
-            margin: 20px 0;
+            font-size: 24px;
         }
-       .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        .error {
-            color: red;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .data-table {
-            width: 100%;
-            margin-top: 30px;
-            border-collapse: collapse;
-        }
-
         .data-table th,
         .data-table td {
-            padding: 14px;
-            text-align: left;
-            border: 1px solid #ddd;
+            font-size: 13px;
+            padding: 6px;
         }
-
-        .data-table th {
-            background-color: #3f51b5;
-            color: #ffffff;
-            font-weight: bold;
-            white-space: nowrap;
+        h\\:inputText {
+            width: 100%;
         }
-
-        .data-table td {
-            background-color: #fff;
-            color: #333;
-        }
-
-        .data-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .data-table tr:hover {
-            background-color: #ddd;
-        }
-
-        @media (max-width: 600px) {
-            h2 {
-                font-size: 24px;
-            }
-
-            .data-table th,
-            .data-table td {
-                font-size: 14px;
-                padding: 8px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
+
 <body>
-<h:form prependId="false">
-        <h2>Search on-going Procedures</h2>
+  <h:form prependId="false">
+    <h2>Search on-going Procedures</h2>
 
-        <div class="form-group">
-            <label><span style="color: red;">*</span>Doctor ID:</label>
-            <h:inputText id="doctorId" value="#{procedureController.doctorId}" />
-            <br/>
-            <h:message for="doctorId" styleClass="error" />
-        </div>
+    <div class="form-group">
+      <label><span style="color: red;">*</span>Doctor ID:</label>
+      <h:inputText id="doctorId" value="#{procedureController.doctorId}" />
+      <h:message for="doctorId" styleClass="error" />
+    </div>
 
-        <div class="form-group">
-            <label>Procedure ID (optional):</label>
-            <h:inputText id="procedureId" value="#{procedureController.procedureId}" />
-            <br/>
-            <h:message for="procedureId" styleClass="error" />
-        </div>
+    <div class="form-group">
+      <label>Procedure ID (optional):</label>
+      <h:inputText id="procedureId" value="#{procedureController.procedureId}" />
+      <h:message for="procedureId" styleClass="error" />
+    </div>
 
-        <div class="form-group">
-            <h:commandButton value="Search" action="#{procedureController.fetchInProgressProceduresController()}" />&nbsp;&nbsp;
-            
-            <h:commandButton value="Reset" action="#{procedureController.resetSearchForm()}" immediate="true" />&nbsp;&nbsp;
-            <h:commandButton value="Go to Dashboard" action="#{procedureController.goToDashboard2()}"/>
-        </div>
+    <div class="form-group">
+      <h:commandButton value="Search"
+                       action="#{procedureController.fetchInProgressProceduresController()}" />
+      &nbsp;&nbsp;
+      <h:commandButton value="Reset"
+                       action="#{procedureController.resetSearchForm()}"
+                       immediate="true" />
+      &nbsp;&nbsp;
+      <h:commandButton value="Go to Dashboard"
+                       action="#{procedureController.goToDashboard2()}" />
+    </div>
 
     <h:panelGroup rendered="#{not empty procedureController.inProgressProcedures}">
-        <h:outputText value="Total: #{procedureController.allInProgressProcedures.size()} procedures" style="font-weight: bold;" />
+      <h:outputText value="Total: #{procedureController.allInProgressProcedures.size()} procedures"
+                    style="font-weight: bold;" />
 
-        <h:dataTable value="#{procedureController.inProgressProcedures}" var="p" styleClass="data-table">
-            <h:column>
-                <f:facet name="header">
-                        <h:commandLink action="#{procedureController.sortByInProgress('appointmentId')}">
-                            <span class="sort-header">
-                                Appointment ID
-                                <h:outputText styleClass="arrow"
-                                    value="#{procedureController.sortField eq 'appointmentId' ? (procedureController.sortAscending ? '↑' : '↓') : ''}" />
-                            </span>
-                        </h:commandLink>
-                    </f:facet>
-                <h:outputText value="#{p.appointment.appointmentId}" />
-            </h:column>
+      <h:dataTable value="#{procedureController.inProgressProcedures}"
+                   var="p"
+                   styleClass="data-table">
 
-            <h:column>
-                <f:facet name="header">
-                        <h:commandLink action="#{procedureController.sortByInProgress('procedureId')}">
-                            <span class="sort-header">
-                                Procedure ID
-                                <h:outputText styleClass="arrow"
-                                    value="#{procedureController.sortField eq 'procedureId' ? (procedureController.sortAscending ? '↑' : '↓') : ''}" />
-                            </span>
-                        </h:commandLink>
-                    </f:facet>
-                <h:outputText value="#{p.procedureId}" />
-            </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:commandLink action="#{procedureController.sortByInProgress('appointmentId')}">
+              Appointment ID
+              <h:outputText styleClass="arrow"
+                value="#{procedureController.sortField eq 'appointmentId'
+                        ? (procedureController.sortAscending ? '↑' : '↓')
+                        : ''}" />
+            </h:commandLink>
+          </f:facet>
+          <h:outputText value="#{p.appointment.appointmentId}" />
+        </h:column>
 
-            <h:column>
-                 <f:facet name="header">
-                        <h:commandLink action="#{procedureController.sortByInProgress('recipientFirstName')}">
-                            <span class="sort-header">
-                                Recipient First Name
-                                <h:outputText styleClass="arrow"
-                                    value="#{procedureController.sortField eq 'recipientFirstName' ? (procedureController.sortAscending ? '↑' : '↓') : ''}" />
-                            </span>
-                        </h:commandLink>
-                    </f:facet>
-                <h:outputText value="#{p.recipient.firstName}" />
-            </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:commandLink action="#{procedureController.sortByInProgress('procedureId')}">
+              Procedure ID
+              <h:outputText styleClass="arrow"
+                value="#{procedureController.sortField eq 'procedureId'
+                        ? (procedureController.sortAscending ? '↑' : '↓')
+                        : ''}" />
+            </h:commandLink>
+          </f:facet>
+          <h:outputText value="#{p.procedureId}" />
+        </h:column>
 
-            <h:column>
-              <f:facet name="header">
-                        <h:commandLink action="#{procedureController.sortByInProgress('recipientLastName')}">
-                            <span class="sort-header">
-                                Recipient Last Name
-                                <h:outputText styleClass="arrow"
-                                    value="#{procedureController.sortField eq 'recipientLastName' ? (procedureController.sortAscending ? '↑' : '↓') : ''}" />
-                            </span>
-                        </h:commandLink>
-                    </f:facet>
-                <h:outputText value="#{p.recipient.lastName}" />
-            </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:commandLink action="#{procedureController.sortByInProgress('recipientFirstName')}">
+              Recipient First Name
+              <h:outputText styleClass="arrow"
+                value="#{procedureController.sortField eq 'recipientFirstName'
+                        ? (procedureController.sortAscending ? '↑' : '↓')
+                        : ''}" />
+            </h:commandLink>
+          </f:facet>
+          <h:outputText value="#{p.recipient.firstName}" />
+        </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                        <h:commandLink action="#{procedureController.sortByInProgress('doctorName')}">
-                            <span class="sort-header">
-                                Doctor
-                                <h:outputText styleClass="arrow"
-                                    value="#{procedureController.sortField eq 'doctorName' ? (procedureController.sortAscending ? '↑' : '↓') : ''}" />
-                            </span>
-                        </h:commandLink>
-                    </f:facet>
-                <h:outputText value="#{p.doctor.doctorName}" />
-            </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:commandLink action="#{procedureController.sortByInProgress('recipientLastName')}">
+              Recipient Last Name
+              <h:outputText styleClass="arrow"
+                value="#{procedureController.sortField eq 'recipientLastName'
+                        ? (procedureController.sortAscending ? '↑' : '↓')
+                        : ''}" />
+            </h:commandLink>
+          </f:facet>
+          <h:outputText value="#{p.recipient.lastName}" />
+        </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                        <h:commandLink action="#{procedureController.sortByInProgress('providerName')}">
-                            <span class="sort-header">
-                                Provider
-                                <h:outputText styleClass="arrow"
-                                    value="#{procedureController.sortField eq 'providerName' ? (procedureController.sortAscending ? '↑' : '↓') : ''}" />
-                            </span>
-                        </h:commandLink>
-                    </f:facet>
-                <h:outputText value="#{p.provider.name}" />
-            </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:commandLink action="#{procedureController.sortByInProgress('doctorName')}">
+              Doctor
+              <h:outputText styleClass="arrow"
+                value="#{procedureController.sortField eq 'doctorName'
+                        ? (procedureController.sortAscending ? '↑' : '↓')
+                        : ''}" />
+            </h:commandLink>
+          </f:facet>
+          <h:outputText value="#{p.doctor.doctorName}" />
+        </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                        <h:commandLink action="#{procedureController.sortByInProgress('startedOn')}">
-                            <span class="sort-header">
-                                Started on
-                                <h:outputText styleClass="arrow"
-                                    value="#{procedureController.sortField eq 'startedOn' ? (procedureController.sortAscending ? '↑' : '↓') : ''}" />
-                            </span>
-                        </h:commandLink>
-                    </f:facet>
-                <h:outputText value="#{p.fromDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd" />
-                </h:outputText>
-            </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:commandLink action="#{procedureController.sortByInProgress('providerName')}">
+              Provider
+              <h:outputText styleClass="arrow"
+                value="#{procedureController.sortField eq 'providerName'
+                        ? (procedureController.sortAscending ? '↑' : '↓')
+                        : ''}" />
+            </h:commandLink>
+          </f:facet>
+          <h:outputText value="#{p.provider.name}" />
+        </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Add Details" />
-                </f:facet>
-                <h:commandButton value="Add Procedure Details" action="#{procedureController.goToAddProcedureDetails(p)}" />
-            </h:column>
+        <h:column>
+          <f:facet name="header">
+            <h:commandLink action="#{procedureController.sortByInProgress('startedOn')}">
+              Started On
+              <h:outputText styleClass="arrow"
+                value="#{procedureController.sortField eq 'startedOn'
+                        ? (procedureController.sortAscending ? '↑' : '↓')
+                        : ''}" />
+            </h:commandLink>
+          </f:facet>
+          <h:outputText value="#{p.fromDate}">
+            <f:convertDateTime pattern="yyyy-MM-dd" />
+          </h:outputText>
+        </h:column>
 
-            <h:column>
-                <f:facet name="header">
-                    <h:outputText value="Action" />
-                </f:facet>
-                <h:commandButton value="Completed" action="#{procedureController.completeProcedure(p)}" />
-            </h:column>
-        </h:dataTable>
-        <br/>
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="Add Details" />
+          </f:facet>
+          <h:commandButton value="Add Procedure Details"
+                           action="#{procedureController.goToAddProcedureDetails(p)}" />
+        </h:column>
 
-<h:panelGrid columns="5" cellpadding="10">
+        <h:column>
+          <f:facet name="header">
+            <h:outputText value="Action" />
+          </f:facet>
+          <h:commandButton value="Completed"
+                           action="#{procedureController.completeProcedure(p)}" />
+        </h:column>
 
-    <h:commandButton value="First" action="#{procedureController.goToFirstPage()}" 
-                     disabled="#{!procedureController.hasPreviousPage()}" />
+      </h:dataTable>
 
-    <h:commandButton value="Previous" action="#{procedureController.previousPage()}" 
-                     disabled="#{!procedureController.hasPreviousPage()}" />
+      <h:panelGrid columns="5" cellpadding="10" style="margin-top: 20px;">
+        <h:commandButton value="First"
+                         action="#{procedureController.goToFirstPage()}"
+                         disabled="#{!procedureController.hasPreviousPage()}" />
 
-    <h:outputText value="Page #{procedureController.currentPage} of #{procedureController.totalPages}" 
-                  style="font-weight: bold;" />
+        <h:commandButton value="Previous"
+                         action="#{procedureController.previousPage()}"
+                         disabled="#{!procedureController.hasPreviousPage()}" />
 
-    <h:commandButton value="Next" action="#{procedureController.nextPage()}" 
-                     disabled="#{!procedureController.hasNextPage()}" />
+        <h:outputText value="Page #{procedureController.currentPage}
+                             of #{procedureController.totalPages}"
+                      style="font-weight: bold;" />
 
-    <h:commandButton value="Last" action="#{procedureController.goToLastPage()}" 
-                     disabled="#{!procedureController.hasNextPage()}" />
+        <h:commandButton value="Next"
+                         action="#{procedureController.nextPage()}"
+                         disabled="#{!procedureController.hasNextPage()}" />
 
-</h:panelGrid>
-        
+        <h:commandButton value="Last"
+                         action="#{procedureController.goToLastPage()}"
+                         disabled="#{!procedureController.hasNextPage()}" />
+      </h:panelGrid>
+
     </h:panelGroup>
-</h:form>
-
+  </h:form>
 </body>
 </html>
 </f:view>
