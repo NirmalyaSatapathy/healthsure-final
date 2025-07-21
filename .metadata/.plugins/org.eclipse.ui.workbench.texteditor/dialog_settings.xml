@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<section name="java.lang.Class">
+		<list key="findhistory">
+			<item value="resetPage"/>
+			<item value="error"/>
+			<item value="nextpage"/>
+			<item value="procedureSubmit"/>
+			<item value="selectedAppointment"/>
+			<item value="createnew"/>
+			<item value="procedureAppointment"/>
+			<item value="providerDao"/>
+			<item value="addtest"/>
+			<item value="add"/>
+			<item value="prescriptionDetailsSubmit"/>
+			<item value="proceduresu"/>
+		</list>
+	</section>
+</section>
