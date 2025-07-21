@@ -6,101 +6,99 @@
 <f:view>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Provider Dashboard</title>
-<style>
+  <meta charset="UTF-8">
+  <title>Provider Dashboard</title>
+  <style>
     body {
-        font-family: 'Segoe UI', Arial, sans-serif;
-        justify-content: center;
-        background-color: #f4f8fc; /* soft hospital blue */
-        margin: 0;
-        padding: 0;
+   
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f4f8fc;
+ 
+      padding: 0;
     }
 
     .dashboard-container {
-        max-width: 700px;
-        margin: 50px auto;
-        justify-content: center;
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        padding: 40px 30px;
+      max-width: 700px;
+      margin: 50px auto;
+           margin-top:3rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 40px 30px;
     }
 
     h2 {
-        color: #0277bd;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 26px;
-        border-bottom: 2px solid #b3e5fc;
-        padding-bottom: 10px;
+      color: #0277bd;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 26px;
+      border-bottom: 2px solid #b3e5fc;
+      padding-bottom: 10px;
     }
-.button-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 30px;
-}
+
+    /* grid layout: two buttons per row */
+    .button-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    /* full-width on small screens */
+    @media (max-width: 600px) {
+      .button-container {
+        grid-template-columns: 1fr;
+      }
+    }
 
     .dashboard-button {
-        font-size: 16px;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        color: #ffffff;
-        min-width: 200px;
-        text-align: center;
+      font-size: 16px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: #ffffff;
+      text-align: center;
+      width: 100%;
     }
-
-    .btn-blue { background-color: #2196F3; }
-    .btn-green { background-color: #4CAF50; }
+    .btn-blue   { background-color: #2196F3; }
+    .btn-green  { background-color: #4CAF50; }
     .btn-orange { background-color: #FF9800; }
     .btn-purple { background-color: #9C27B0; }
 
     .dashboard-button:hover {
-        opacity: 0.85;
+      opacity: 0.85;
     }
-
-    @media (max-width: 600px) {
-        .dashboard-button {
-            width: 100%;
-        }
-    }
-    .center-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Full height of viewport */
-}
-</style>
+  </style>
 </head>
+
 <body>
- <jsp:include page="/navbar/NavProvider.jsp" />
-    <h:form>
-        <div class="dashboard-container">
-            <h2>Welcome to Provider's Patient Dashboard</h2>
+  <jsp:include page="/navbar/NavProvider.jsp" />
 
-          <div class="button-container">
-    <h:commandButton value="Add New Procedure"
-                     action="ProcedureOptions"
-                     styleClass="dashboard-button btn-blue" />
- <h:commandButton value="Show Patient Insurance Details"
-                     action="showInsuranceDetails"
-                     styleClass="dashboard-button btn-purple" />
-    <h:commandButton value="Show Scheduled Procedures"
-                     action="ShowScheduledProcedures"
-                     styleClass="dashboard-button btn-green" />
+  <h:form prependId="false">
+    <div class="dashboard-container">
+      <h2>Welcome to Provider's Patient Dashboard</h2>
 
-    <h:commandButton value="Show Ongoing Procedures"
-                     action="ShowOnGoingProcedures"
-                     styleClass="dashboard-button btn-orange" />
+      <div class="button-container">
+        <h:commandButton value="Booked Appointments"
+                         action="ShowBookedAppointments"
+                         styleClass="dashboard-button btn-blue" />
 
-   
-</div>
-    </h:form>
+        <h:commandButton value="Patient Insurance Details"
+                         action="showInsuranceDetails"
+                         styleClass="dashboard-button btn-purple" />
+
+        <h:commandButton value="Scheduled Procedures"
+                         action="ShowScheduledProcedures"
+                         styleClass="dashboard-button btn-green" />
+
+        <h:commandButton value="Ongoing Procedures"
+                         action="ShowOnGoingProcedures"
+                         styleClass="dashboard-button btn-orange" />
+      </div>
+    </div>
+  </h:form>
 </body>
 </html>
 </f:view>

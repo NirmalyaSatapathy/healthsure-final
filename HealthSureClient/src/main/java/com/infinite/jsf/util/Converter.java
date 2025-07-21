@@ -14,16 +14,21 @@ import com.infinite.jsf.provider.model.ProcedureStatus;
 public class Converter {
 	public static Appointment convertToEJBAppointment(com.infinite.jsf.provider.model.Appointment jsfAppointment) {
 	    if (jsfAppointment == null) return null;
+
 	    Appointment ejbAppointment = new Appointment();
+
+	    // Basic field mapping
 	    ejbAppointment.setAppointmentId(jsfAppointment.getAppointmentId());
+	    ejbAppointment.setRequestedAt(jsfAppointment.getRequestedAt());
+	    ejbAppointment.setBookedAt(jsfAppointment.getBookedAt());
+	    ejbAppointment.setStatus(jsfAppointment.getStatus().name());
+	    ejbAppointment.setNotes(jsfAppointment.getNotes());
+
+	    // Entity mapping (custom conversion methods assumed)
 	    ejbAppointment.setDoctor(convertToEJBDoctor(jsfAppointment.getDoctor()));
 	    ejbAppointment.setRecipient(convertToEJBRecipient(jsfAppointment.getRecipient()));
 	    ejbAppointment.setProvider(convertToEJBProvider(jsfAppointment.getProvider()));
-	    if (jsfAppointment.getAvailability() != null) {
-	        DoctorAvailability availability = new DoctorAvailability();
-	        availability.setAvailabilityId(jsfAppointment.getAvailability().getAvailabilityId());
-	        ejbAppointment.setAvailability(availability);
-	    }
+
 	    return ejbAppointment;
 	}
 	public static com.infinite.ejb.provider.model.Doctor convertToEJBDoctor(
@@ -32,6 +37,7 @@ public class Converter {
 
 	    com.infinite.ejb.provider.model.Doctor ejbDoctor = new com.infinite.ejb.provider.model.Doctor();
 	    ejbDoctor.setDoctorId(jsfDoctor.getDoctorId());
+	    ejbDoctor.setDoctorName(jsfDoctor.getDoctorName());
 	    return ejbDoctor;
 	}
 	public static com.infinite.ejb.provider.model.Provider convertToEJBProvider(

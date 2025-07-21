@@ -43,10 +43,14 @@ public class ProcedureController {
     private String procedureType; // "single" or "scheduled"
     private String doctorId;
     private String procedureId;
+    private String appointmentId;
     private List<MedicalProcedure> scheduledProcedures;
     private List<MedicalProcedure> allInProgressProcedures;
      private List<MedicalProcedure> allScheduledProcedures; // complete data for sorting
+     private List<Appointment> allBookedAppointments;
+     private List<Appointment> bookedAppointments;
      private List<MedicalProcedure> inProgressProcedures;
+     private Appointment procedureAppointment;
      private int currentPage = 1;
      private int pageSize = 3;
      private int totalPages;
@@ -85,7 +89,23 @@ public class ProcedureController {
      		this.totalPages = totalPages;
      	}
 
-     	public void setScheduledProcedures(List<MedicalProcedure> scheduledProcedures) {
+     	public String getAppointmentId() {
+			return appointmentId;
+		}
+
+		public void setAppointmentId(String appointmentId) {
+			this.appointmentId = appointmentId;
+		}
+
+		public List<Appointment> getAllBookedAppointments() {
+			return allBookedAppointments;
+		}
+
+		public void setAllBookedAppointments(List<Appointment> allBookedAppointments) {
+			this.allBookedAppointments = allBookedAppointments;
+		}
+
+		public void setScheduledProcedures(List<MedicalProcedure> scheduledProcedures) {
      		this.scheduledProcedures = scheduledProcedures;
      	}
 
@@ -191,11 +211,27 @@ public class ProcedureController {
         this.procedureId = procedureId;
     }
 
-    public List<MedicalProcedure> getScheduledProcedures() {
+    public List<Appointment> getBookedAppointments() {
+		return bookedAppointments;
+	}
+
+	public void setBookedAppointments(List<Appointment> bookedAppointments) {
+		this.bookedAppointments = bookedAppointments;
+	}
+
+	public List<MedicalProcedure> getScheduledProcedures() {
         return scheduledProcedures;
     }
 
-    public String getProcedureType() {
+    public Appointment getProcedureAppointment() {
+		return procedureAppointment;
+	}
+
+	public void setProcedureAppointment(Appointment procedureAppointment) {
+		this.procedureAppointment = procedureAppointment;
+	}
+
+	public String getProcedureType() {
         return procedureType;
     }
 
@@ -1171,7 +1207,10 @@ public class ProcedureController {
     public String createNewProcedure() throws ClassNotFoundException, SQLException {
         procedure = new MedicalProcedure();
         procedure.setProcedureId(providerEjb.generateNewProcedureId());
-
+        procedure.setAppointment(procedureAppointment);
+        procedure.setProvider(procedureAppointment.getProvider());
+        procedure.setRecipient(procedureAppointment.getRecipient());
+        procedure.setDoctor(procedureAppointment.getDoctor());
         // Get today's date
         Date today = new Date(); // java.util.Date
 
@@ -1296,6 +1335,8 @@ public class ProcedureController {
         inProgressProcedures=null;
         allScheduledProcedures=null;
         scheduledProcedures=null;
+        allBookedAppointments=null;
+        bookedAppointments=null;
         currentPage=1;
         pageSize=3;
         sortField=null;
@@ -1351,6 +1392,8 @@ public class ProcedureController {
         inProgressProcedures=null;
         allScheduledProcedures=null;
         scheduledProcedures=null;
+        allBookedAppointments=null;
+        bookedAppointments=null;
         currentPage=1;
         pageSize=3;
         sortField=null;
@@ -1360,6 +1403,65 @@ public class ProcedureController {
         paginate();
         return null;
     }
+    public List<Appointment> fetchBookedAppointments() {
+   	 allBookedAppointments=null;
+       providerDao = new ProviderDaoImpl();
+     
+       if (doctorId == null || doctorId.trim().isEmpty()) {
+           FacesContext.getCurrentInstance().addMessage("doctorId",
+               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter doctor id DOCXXX", null));
+           return null;
+       }
+
+       if (!doctorId.matches("^[Dd][Oo][Cc]\\d{3}$")) {
+           FacesContext.getCurrentInstance().addMessage("doctorId",
+               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
+           return null;
+       }
+       Doctor doctor = providerDao.searchDoctorById(doctorId);
+       if (doctor == null) {
+           FacesContext.getCurrentInstance().addMessage("doctorId",
+               new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doctor with ID " + doctorId + " does not exist.", null));
+           return null;
+       }
+
+       List<Appointment> appointments;
+       if (appointmentId != null && !appointmentId.trim().isEmpty()) {
+       	 if (!appointmentId.matches("^[Aa][Pp][Pp].{3}$")) {
+                FacesContext.getCurrentInstance().addMessage("appointmentId",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct appointment id format APPXXX", null));
+                return null;
+            }
+       	 appointments = providerDao.getBookedAppointments(doctorId, appointmentId);
+           if (appointments.isEmpty()) {
+               FacesContext.getCurrentInstance().addMessage("appointmentId",
+                   new FacesMessage(FacesMessage.SEVERITY_WARN,
+                       "No booked appointments  found with ID " + appointmentId + " for Doctor ID " + doctorId, null));
+               return null;
+           }
+       } else {
+       	appointments = providerDao.getBookedAppointments(doctorId, null);
+           if (appointments.isEmpty()) {
+               FacesContext.getCurrentInstance().addMessage("doctorId",
+                   new FacesMessage(FacesMessage.SEVERITY_INFO,
+                       "No booked appointments  found for Doctor ID " + doctorId, null));
+           }
+       }
+       allInProgressProcedures = null;
+       inProgressProcedures=null;
+       allScheduledProcedures=null;
+       scheduledProcedures=null;
+       allBookedAppointments=null;
+       bookedAppointments=null;
+       currentPage=1;
+       pageSize=3;
+       sortField=null;
+       sortAscending=true;
+       totalPages=0;
+       allBookedAppointments=appointments;  
+       paginate();
+       return allBookedAppointments;
+   }
     //Paginations
     public void paginate() {
        if(allScheduledProcedures!=null)
@@ -1377,6 +1479,14 @@ public class ProcedureController {
         int fromIndex = (currentPage - 1) * pageSize;
         int toIndex = Math.min(fromIndex + pageSize, total);
         inProgressProcedures = allInProgressProcedures.subList(fromIndex, toIndex);
+       }
+       if(allBookedAppointments!=null)
+       {
+        int total = allBookedAppointments.size();
+        totalPages = (int) Math.ceil((double) total / pageSize);
+        int fromIndex = (currentPage - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, total);
+        bookedAppointments = allBookedAppointments.subList(fromIndex, toIndex);
        }
     }
     public void nextPage() {
@@ -1453,7 +1563,25 @@ public class ProcedureController {
                 paginate();
             }
         }
-        // Comparator mapping for each field
+        public void sortByBooked(String field) {
+            if (field.equals(sortField)) {
+                sortAscending = !sortAscending;
+            } else {
+                sortField     = field;
+                sortAscending = true;
+            }
+
+            Comparator<Appointment> cmp = getComparatorForBookedField(field);
+            if (cmp != null && allBookedAppointments != null) {
+                if (!sortAscending) {
+                    cmp = cmp.reversed();
+                }
+                allBookedAppointments.sort(cmp);
+                currentPage = 1;
+                paginate();
+            }
+        }
+        // Comparator mapping for each field(scheduled & inprogress)
         private Comparator<MedicalProcedure> getComparatorForField(String field) {
             switch (field) {
                 case "procedureId":
@@ -1476,6 +1604,30 @@ public class ProcedureController {
                     return null;
             }
         }
+        private Comparator<Appointment> getComparatorForBookedField(String field) {
+            switch (field) {
+            case "appointmentId":
+                return Comparator.comparing(Appointment::getAppointmentId);
+            case "providerId":
+                return Comparator.comparing(a -> a.getProvider().getProviderId(),Comparator.nullsLast(String::compareTo));
+            case "doctorId":
+                return Comparator.comparing(a -> a.getDoctor().getDoctorId(),Comparator.nullsLast(String::compareTo));
+            case "doctorName":
+                return Comparator.comparing( a -> a.getDoctor().getDoctorName(),Comparator.nullsLast(String::compareTo));
+            case "recipientId":
+                return Comparator.comparing(a -> a.getRecipient().gethId(),Comparator.nullsLast(String::compareTo));
+            case "userName":
+                return Comparator.comparing(a -> a.getRecipient().getUserName(),Comparator.nullsLast(String::compareTo));
+            case "bookedAt":
+                return Comparator.comparing(
+                    Appointment::getBookedAt,Comparator.nullsLast(Date::compareTo));
+            case "status":
+                return Comparator.comparing(
+                    Appointment::getStatus,Comparator.nullsLast(String::compareTo));
+            default:
+                return null;
+        }
+    }
         //Scheduled Reset
         public String resetPage() {
             // Reset form input fields
@@ -1512,6 +1664,23 @@ public class ProcedureController {
             this.sortAscending = true;
             this.inProgressProcedures=null;
             this.allInProgressProcedures = null; // Clear previous search results if needed
+            FacesContext.getCurrentInstance().getViewRoot().getChildren().clear();
+            return null; // Return the same page name for reload
+        }
+        //Appointments reset
+        public String reset() {
+            this.doctorId = null;
+            this.appointmentId = null;
+            //reset sorting
+            this.sortField = null;
+            this.sortAscending = true;
+
+            // Reset pagination
+            this.currentPage = 1;
+            this.totalPages = 0;
+            this.pageSize = 3; // or your default page size
+          this.allBookedAppointments=null;// Clear previous search results if needed
+          this.bookedAppointments=null;
             FacesContext.getCurrentInstance().getViewRoot().getChildren().clear();
             return null; // Return the same page name for reload
         }
@@ -1555,9 +1724,27 @@ public class ProcedureController {
             FacesContext.getCurrentInstance().getViewRoot().getChildren().clear();
             return "ProviderDashboard?faces-redirect=true";
         }
+        //Appointments back button
+        public String goToDashboard3()
+        {
+        	this.doctorId = null;
+            this.appointmentId = null;
+          //reset sorting
+            this.sortField = null;
+            this.sortAscending = true;
+
+            // Reset pagination
+            this.currentPage = 1;
+            this.totalPages = 0;
+            this.pageSize = 3; // or your default page size
+          this.allBookedAppointments=null;// Clear previous search results if needed
+          this.bookedAppointments=null;
+            FacesContext.getCurrentInstance().getViewRoot().getChildren().clear();
+            return "ProviderDashboard?faces-redirect=true";
+        }
        
-	public String procedureSubmit() {
-	    try {
+	public String procedureSubmit() throws ClassNotFoundException, SQLException {
+	    
 	        // Step 1: Save the procedure
 	    	if(providerEjb.generateNewProcedureId().equals(procedure.getProcedureId()))
 	    	{
@@ -1624,11 +1811,6 @@ public class ProcedureController {
 
 	        // Step 4: Redirect to dashboard
 	        return "ProviderDashboard?faces-redirect=true";
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return "ErrorPage?faces-redirect=true";
-	    }
 	}
 
 
@@ -1737,7 +1919,20 @@ public class ProcedureController {
 	    // 4. Redirect to the appropriate dashboard
 	    return "LongTermProcedureDashboard?faces-redirect=true";  // Change path if needed
 	}
-
-
-   
+public List<Appointment> showBookedAppointmentsController()
+{
+	providerDao=new ProviderDaoImpl();
+	return providerDao.showBookedAppointments();
+}
+public String selectedAppointment(Appointment app)
+{
+	providerDao=new ProviderDaoImpl();
+	providerDao.updateAppointment(app);
+	System.out.println("controller called for selecting the appointment"+app);
+	this.procedureAppointment=app;
+	System.out.println("the selected appointment is "+procedureAppointment);
+	this.fetchBookedAppointments();
+	return"ProcedureOptions?faces-redirect=true";
+}
+  
 }

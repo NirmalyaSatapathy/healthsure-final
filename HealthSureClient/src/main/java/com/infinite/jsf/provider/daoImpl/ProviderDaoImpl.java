@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.infinite.ejb.provider.model.Appointment;
+import com.infinite.ejb.provider.model.AppointmentStatus;
 import com.infinite.ejb.provider.model.Doctor;
 import com.infinite.ejb.provider.model.MedicalProcedure;
 import com.infinite.ejb.provider.model.Provider;
@@ -260,9 +262,85 @@ public class ProviderDaoImpl {
 		    }
 		    return result;
 		}
+		public List<com.infinite.ejb.provider.model.Appointment> showBookedAppointments() {
+		    List<com.infinite.ejb.provider.model.Appointment> ejbAppointments = new ArrayList<>();
 
+		    Session session = sessionFactory.openSession();
+		        String hql = "FROM Appointment WHERE status = 'BOOKED'";
+		        List<com.infinite.jsf.provider.model.Appointment> jsfAppointmentList =
+		            session.createQuery(hql).list();
 
+		        for (com.infinite.jsf.provider.model.Appointment jsfAppointment : jsfAppointmentList) {
+		            com.infinite.ejb.provider.model.Appointment converted =
+		                Converter.convertToEJBAppointment(jsfAppointment);
 
+		            if (converted != null) {
+		                ejbAppointments.add(converted);
+		            }
+		        }
 
-	   
+		    return ejbAppointments;
+		}
+		public List<com.infinite.ejb.provider.model.Appointment> getBookedAppointments(
+		        String doctorId,
+		        String appointmentId) {
+
+		    List<com.infinite.ejb.provider.model.Appointment> ejbAppointments = new ArrayList<>();
+
+		    // Try-with-resources will auto-close the Session
+		    Session session = sessionFactory.openSession();
+		        StringBuilder hql = new StringBuilder()
+		            .append("SELECT a ")
+		            .append("FROM com.infinite.jsf.provider.model.Appointment a ")
+		            .append("JOIN FETCH a.doctor d ")
+		            .append("JOIN FETCH a.recipient r ")
+		            .append("JOIN FETCH a.provider p ")
+		            .append("JOIN FETCH a.availability av ")
+		            .append("WHERE a.status = :status ")
+		            .append("AND d.doctorId = :doctorId");
+
+		        if (appointmentId != null && !appointmentId.trim().isEmpty()) {
+		            hql.append(" AND a.appointmentId = :appointmentId");
+		        }
+
+		        // Create a typed query so getResultList() returns List<JSF Appointment>
+		        Query query =
+		            session.createQuery(hql.toString());
+
+		        query.setParameter("status", AppointmentStatus.BOOKED);
+		        query.setParameter("doctorId", doctorId);
+
+		        if (appointmentId != null && !appointmentId.trim().isEmpty()) {
+		            query.setParameter("appointmentId", appointmentId);
+		        }
+
+		        // This correctly returns the list of JSF-layer Appointments
+		        List<com.infinite.jsf.provider.model.Appointment> jsfAppointments =
+		            query.list();
+
+		        // Convert each to EJB-layer Appointment
+		        for (com.infinite.jsf.provider.model.Appointment jsf : jsfAppointments) {
+		            com.infinite.ejb.provider.model.Appointment ejb =
+		                Converter.convertToEJBAppointment(jsf);
+
+		            if (ejb != null) {
+		                ejbAppointments.add(ejb);
+		            }
+		        }
+
+		    return ejbAppointments;
+		}
+		public String updateAppointment(Appointment app) {
+		    Session session = sessionFactory.openSession();
+		    Transaction tx = null;
+		        tx = session.beginTransaction();
+		        // Load the existing appointment from the database
+		        com.infinite.jsf.provider.model.Appointment existing = (com.infinite.jsf.provider.model.Appointment) session.get(com.infinite.jsf.provider.model.Appointment.class, app.getAppointmentId());
+		        // Check if appointment exists and status is BOOKED
+		            existing.setStatus(com.infinite.jsf.provider.model.AppointmentStatus.COMPLETED);
+		            session.update(existing); // update the entity
+		            tx.commit();
+		            session.close();
+		            return "Appointment updated to COMPLETED";
+		}	 
 }
