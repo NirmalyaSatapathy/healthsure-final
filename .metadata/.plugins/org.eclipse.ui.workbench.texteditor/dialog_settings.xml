@@ -2,7 +2,11 @@
 <section name="Workbench">
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<section name="java.lang.Class">
+		<item key="replaceBarOpen" value="false"/>
 		<list key="findhistory">
+			<item value="form-control"/>
+			<item value="error-message"/>
+			<item value="form-group"/>
 			<item value="reset"/>
 			<item value="fetchsched"/>
 			<item value="getComparatorForField"/>
@@ -15,9 +19,6 @@
 			<item value="nextpage"/>
 			<item value="procedureSubmit"/>
 			<item value="createnew"/>
-			<item value="procedureAppointment"/>
-			<item value="providerDao"/>
-			<item value="addtest"/>
 		</list>
 	</section>
 </section>
