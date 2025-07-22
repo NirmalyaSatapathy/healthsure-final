@@ -228,6 +228,12 @@
                      action="#{procedureController.createNewPrescription()}"
                      immediate="true" />
 </div>
+<div class="button-group">
+            <h:commandButton 
+                             value="Edit Procedure"
+                             action="#{procedureController.gotoProcedureForm()}"
+                             styleClass="action-button" />
+          </div>
  
         </h:form>
     </div>

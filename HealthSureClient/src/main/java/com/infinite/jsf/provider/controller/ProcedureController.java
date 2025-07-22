@@ -56,6 +56,7 @@ public class ProcedureController {
      private int totalPages;
      private String sortField;
      private boolean sortAscending = true;
+     private boolean flag=true;
          // Getters and Setters for sorting
          public String getSortField() {
              return sortField;
@@ -142,7 +143,15 @@ public class ProcedureController {
     		return prescriptions;
     	}
 
-    	public void setPrescriptions(List<Prescription> prescriptions) {
+    	public boolean isFlag() {
+			return flag;
+		}
+
+		public void setFlag(boolean flag) {
+			this.flag = flag;
+		}
+
+		public void setPrescriptions(List<Prescription> prescriptions) {
     		this.prescriptions = prescriptions;
     	}
 
@@ -1289,6 +1298,8 @@ public class ProcedureController {
 	}
 
     public String fetchScheduledProceduresController() {
+    	allScheduledProcedures=null;
+    	scheduledProcedures=null;
         providerDao = new ProviderDaoImpl();
         if (doctorId == null || doctorId.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
@@ -1296,13 +1307,13 @@ public class ProcedureController {
             return null;
         }
 
-        if (!doctorId.matches("^[Dd][Oo][Cc]\\d{3}$")) {
+        if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$")) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
             return null;
         }
 
-        Doctor doctor = providerDao.searchDoctorById(doctorId);
+        Doctor doctor = providerDao.searchDoctorById(doctorId.trim());
         if (doctor == null) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doctor with ID " + doctorId + " does not exist.", null));
@@ -1311,12 +1322,12 @@ public class ProcedureController {
 
         List<MedicalProcedure> procedures;
         if (procedureId != null && !procedureId.trim().isEmpty()) {
-        	   if (!procedureId.matches("^[Pp][Rr][Oo][Cc].{3}$")) {
+        	   if (!procedureId.trim().matches("^[Pp][Rr][Oo][Cc].{3}$")) {
                    FacesContext.getCurrentInstance().addMessage("procedureId",
                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct procedure id format PROCXXX", null));
                    return null;
                }
-            procedures = providerEjb.getScheduledProceduresByDoctor(doctorId, procedureId);
+            procedures = providerEjb.getScheduledProceduresByDoctor(doctorId.trim(), procedureId.trim());
             if (procedures.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage("procedureId",
                     new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -1324,7 +1335,7 @@ public class ProcedureController {
                 return null;
             }
         } else {
-            procedures = providerEjb.getScheduledProceduresByDoctor(doctorId, null);
+            procedures = providerEjb.getScheduledProceduresByDoctor(doctorId.trim(), null);
             if (procedures.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage("doctorId",
                     new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -1346,6 +1357,8 @@ public class ProcedureController {
         return null;
     }
     public String fetchInProgressProceduresController() {
+    	allInProgressProcedures=null;
+    	inProgressProcedures=null;
         providerDao = new ProviderDaoImpl();
       
         if (doctorId == null || doctorId.trim().isEmpty()) {
@@ -1354,12 +1367,12 @@ public class ProcedureController {
             return null;
         }
 
-        if (!doctorId.matches("^[Dd][Oo][Cc]\\d{3}$")) {
+        if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$")) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
             return null;
         }
-        Doctor doctor = providerDao.searchDoctorById(doctorId);
+        Doctor doctor = providerDao.searchDoctorById(doctorId.trim());
         if (doctor == null) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doctor with ID " + doctorId + " does not exist.", null));
@@ -1368,12 +1381,12 @@ public class ProcedureController {
 
         List<MedicalProcedure> procedures;
         if (procedureId != null && !procedureId.trim().isEmpty()) {
-        	 if (!procedureId.matches("^[Pp][Rr][Oo][Cc].{3}$")) {
+        	 if (!procedureId.trim().matches("^[Pp][Rr][Oo][Cc].{3}$")) {
                  FacesContext.getCurrentInstance().addMessage("procedureId",
                      new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct procedure id format PROCXXX", null));
                  return null;
              }
-            procedures = providerEjb.getInProgressProceduresByDoctor(doctorId, procedureId);
+            procedures = providerEjb.getInProgressProceduresByDoctor(doctorId.trim(), procedureId.trim());
             if (procedures.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage("procedureId",
                     new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -1381,7 +1394,7 @@ public class ProcedureController {
                 return null;
             }
         } else {
-            procedures = providerEjb.getInProgressProceduresByDoctor(doctorId, null);
+            procedures = providerEjb.getInProgressProceduresByDoctor(doctorId.trim(), null);
             if (procedures.isEmpty()) {
                 FacesContext.getCurrentInstance().addMessage("doctorId",
                     new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -1405,6 +1418,7 @@ public class ProcedureController {
     }
     public List<Appointment> fetchBookedAppointments() {
    	 allBookedAppointments=null;
+   	 bookedAppointments=null;
        providerDao = new ProviderDaoImpl();
      
        if (doctorId == null || doctorId.trim().isEmpty()) {
@@ -1413,12 +1427,12 @@ public class ProcedureController {
            return null;
        }
 
-       if (!doctorId.matches("^[Dd][Oo][Cc]\\d{3}$")) {
+       if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$")) {
            FacesContext.getCurrentInstance().addMessage("doctorId",
                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
            return null;
        }
-       Doctor doctor = providerDao.searchDoctorById(doctorId);
+       Doctor doctor = providerDao.searchDoctorById(doctorId.trim());
        if (doctor == null) {
            FacesContext.getCurrentInstance().addMessage("doctorId",
                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doctor with ID " + doctorId + " does not exist.", null));
@@ -1427,12 +1441,12 @@ public class ProcedureController {
 
        List<Appointment> appointments;
        if (appointmentId != null && !appointmentId.trim().isEmpty()) {
-       	 if (!appointmentId.matches("^[Aa][Pp][Pp].{3}$")) {
+       	 if (!appointmentId.trim().matches("^[Aa][Pp][Pp].{3}$")) {
                 FacesContext.getCurrentInstance().addMessage("appointmentId",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct appointment id format APPXXX", null));
                 return null;
             }
-       	 appointments = providerDao.getBookedAppointments(doctorId, appointmentId);
+       	 appointments = providerDao.getBookedAppointments(doctorId.trim(), appointmentId.trim());
            if (appointments.isEmpty()) {
                FacesContext.getCurrentInstance().addMessage("appointmentId",
                    new FacesMessage(FacesMessage.SEVERITY_WARN,
@@ -1440,7 +1454,7 @@ public class ProcedureController {
                return null;
            }
        } else {
-       	appointments = providerDao.getBookedAppointments(doctorId, null);
+       	appointments = providerDao.getBookedAppointments(doctorId.trim(), null);
            if (appointments.isEmpty()) {
                FacesContext.getCurrentInstance().addMessage("doctorId",
                    new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -1746,7 +1760,7 @@ public class ProcedureController {
 	public String procedureSubmit() throws ClassNotFoundException, SQLException {
 	    
 	        // Step 1: Save the procedure
-	    	if(providerEjb.generateNewProcedureId().equals(procedure.getProcedureId()))
+	    	if(providerEjb.generateNewProcedureId().equalsIgnoreCase(procedure.getProcedureId()))
 	    	{
 	      providerEjb.addMedicalProcedure(procedure);
 	        // Step 2: Set the saved procedure reference in each related object and save them
@@ -1796,6 +1810,9 @@ public class ProcedureController {
 	            providerEjb.addProcedureLog(log);
 	        }
 	        }
+	        providerDao=new ProviderDaoImpl();
+	    	providerDao.updateAppointment(this.procedureAppointment);
+	    	this.fetchBookedAppointments();
 	        // Step 3: Clear the session-level data (optional if session-scope controller)
 	        procedure=null;
 	        prescription=null;
@@ -1807,7 +1824,7 @@ public class ProcedureController {
 	       procedureTests.clear();
 	       procedureLog=null;
 	       procedureLogs.clear();
-	    		   
+	     flag=true;
 
 	        // Step 4: Redirect to dashboard
 	        return "ProviderDashboard?faces-redirect=true";
@@ -1865,8 +1882,17 @@ public class ProcedureController {
         // 2. Set status and fromDate
         fullProc.setProcedureStatus(ProcedureStatus.IN_PROGRESS);
         fullProc.setFromDate(new java.sql.Date(System.currentTimeMillis()));
-
        this.procedure=fullProc;
+       procedure=null;
+       prescription=null;
+       prescriptions.clear();
+       
+      prescribedMedicine=null;
+      prescribedMedicines.clear();
+      procedureTest=null;
+      procedureTests.clear();
+      procedureLog=null;
+      procedureLogs.clear();
         // 6. Redirect to prescription entry page
         return "ViewProcedureDetails?faces-redirect=true";  // update path if needed
     }
@@ -1909,6 +1935,7 @@ public class ProcedureController {
     }
 
 	public String goToAddProcedureDetails(MedicalProcedure p) {
+		flag=false;
 	    System.out.println("in goToAddProcedureDetails controller");
 
 	    // 1. Reload full procedure from DB using ID
@@ -1926,13 +1953,24 @@ public List<Appointment> showBookedAppointmentsController()
 }
 public String selectedAppointment(Appointment app)
 {
-	providerDao=new ProviderDaoImpl();
-	providerDao.updateAppointment(app);
 	System.out.println("controller called for selecting the appointment"+app);
 	this.procedureAppointment=app;
 	System.out.println("the selected appointment is "+procedureAppointment);
-	this.fetchBookedAppointments();
+	
 	return"ProcedureOptions?faces-redirect=true";
 }
-  
+  public String gotoProcedureForm()
+  {
+	  System.out.println("in edit procedure________________"+procedure);
+	  String res="";
+	  if(procedure.getType()==ProcedureType.SINGLE_DAY && procedure.getProcedureStatus()==ProcedureStatus.IN_PROGRESS)
+	  {
+		  res="AddMedicalProcedure?faces-redirect=true";
+	  }
+	  if(procedure.getType()==ProcedureType.LONG_TERM && procedure.getProcedureStatus()==ProcedureStatus.IN_PROGRESS)
+	  {
+		  res="AddInProgressMedicalProcedure?faces-redirect=true";
+	  }
+	  return res;
+  }
 }

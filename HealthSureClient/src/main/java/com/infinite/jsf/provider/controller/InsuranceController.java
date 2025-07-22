@@ -391,7 +391,7 @@ public class InsuranceController {
             return null;
         }
 
-        if (!doctorId.matches("^[Dd][Oo][Cc]\\d{3}$")) {
+        if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$")) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
             return null;

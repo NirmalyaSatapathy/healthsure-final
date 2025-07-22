@@ -176,6 +176,18 @@
                            action="#{procedureController.createNewProcedureTest()}"
                            immediate="true"/>
         </div>
+        <div class="button-group">
+            <h:commandButton 
+                             value="Edit Prescription"
+                             action="AddPrescription?faces-redirect=true"
+                             styleClass="action-button" />
+          </div>
+          <div class="button-group">
+            <h:commandButton 
+                             value="Edit Procedure"
+                             action="#{procedureController.gotoProcedureForm()}"
+                             styleClass="action-button" />
+          </div>
       </h:form>
     </div>
   </f:view>

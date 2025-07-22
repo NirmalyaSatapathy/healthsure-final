@@ -1,79 +1,187 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java"
+         contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Procedure Action Panel</title>
-    <link rel="stylesheet" href="css/healthsure-style.css" />
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f2f7fb;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <title>Procedure Action Panel</title>
+  <link rel="stylesheet" href="css/healthsure-style.css" />
+  <style>
+    /*----------------------
+      Base & Container
+    ----------------------*/
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f7fb;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-container {
+      max-width: 720px;
+      margin: 60px auto;
+      padding: 2rem;
+      background-color: #ffffff;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .nav-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
 
-        .nav-container {
-            max-width: 700px;
-            margin: 100px auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+    /*----------------------
+      Grid Layout
+    ----------------------*/
+    .button-row {
+      display: grid;
+      gap: 1rem;
+    }
+    .button-row.row1 {
+      grid-template-columns: repeat(2, minmax(140px, 1fr));
+    }
+    .button-row.row2 {
+      grid-template-columns: repeat(3, minmax(140px, 1fr));
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 600px) {
+      .button-row.row1,
+      .button-row.row2 {
+        grid-template-columns: 1fr;
+      }
+    }
 
-        .nav-title {
-            font-size: 26px;
-            color: #2c3e50;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
+    /*----------------------
+      Buttons
+    ----------------------*/
+    .button-row {
+  display: grid;
+  gap: 1rem;
+}
 
-        .nav-actions {
-            margin: 20px 0;
-        }
+/* Row 1 always two columns */
+.button-row.row1 {
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+}
 
-        .nav-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 16px;
-            margin: 10px;
-            display: inline-block;
-            cursor: pointer;
-        }
+/* Row 2 adapts to number of child buttons */
+.button-row.row2 {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin-top: 1.5rem;
+}
 
-        .nav-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+/* …rest of your button styles… */
+    
+    .button-group {
+      width: 100%;
+      max-width: 200px;
+    }
+    .action-button {
+      display: inline-block;
+      width: 100%;
+      padding: 0.75rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.5rem;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-decoration: none;
+    }
+    .action-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    }
+    .action-button:focus {
+      outline: 3px solid currentColor;
+      outline-offset: 2px;
+    }
+
+    /* Color Variants */
+    .add-button {
+      background-color: #28a745;
+    }
+    .add-button:hover {
+      background-color: #218838;
+    }
+
+    .edit-button {
+      background-color: #ffc107;
+      color: #212529;
+    }
+    .edit-button:hover {
+      background-color: #e0a800;
+    }
+
+    .submit-button {
+      background-color: #17a2b8;
+    }
+    .submit-button:hover {
+      background-color: #117a8b;
+    }
+  </style>
 </head>
 <body>
-    <f:view>
-        <div class="nav-container">
-            <div class="nav-title">Procedure Navigation Panel</div>
-            
-            <h:form>
-                <div class="nav-actions">
-                    <h:commandButton value="Add Prescription"
-                                     action="#{procedureController.createNewPrescription()}"
-                                     styleClass="nav-button" />
+  <f:view>
+    <div class="nav-container">
+      <div class="nav-title">Procedure Action Panel</div>
 
-                    <h:commandButton value="Add Procedure Logs"
-                                     action="#{procedureController.createNewProcedureLog()}"
-                                     styleClass="nav-button" />
+      <h:form prependId="false">
 
-                    <h:commandButton value="Submit Procedure"
-                                     action="#{procedureController.procedureSubmit()}"
-                                     styleClass="nav-button" />
-                </div>
-            </h:form>
+        <!-- Row 1: Add Actions -->
+        <div class="button-row row1">
+          <div class="button-group">
+            <h:commandButton
+              value="Add Prescription"
+              action="#{procedureController.createNewPrescription()}"
+              styleClass="action-button add-button" />
+          </div>
+          <div class="button-group">
+            <h:commandButton
+              value="Add Procedure Logs"
+              action="#{procedureController.createNewProcedureLog()}"
+              styleClass="action-button add-button" />
+          </div>
         </div>
-    </f:view>
+
+        <!-- Row 2: Edit & Submit -->
+        <div class="button-row row2">
+          <h:panelGroup rendered="#{procedureController.isFlag() ne false}">
+            <div class="button-group">
+              <h:commandButton
+                value="Edit Procedure"
+                action="#{procedureController.gotoProcedureForm()}"
+                styleClass="action-button edit-button" />
+            </div>
+          </h:panelGroup>
+
+          <h:panelGroup rendered="#{not empty procedureController.prescriptions}">
+            <div class="button-group">
+              <h:commandButton
+                value="Edit Last Prescription"
+                action="AddPrescription?faces-redirect=true"
+                styleClass="action-button edit-button" />
+            </div>
+          </h:panelGroup>
+
+          <div class="button-group">
+            <h:commandButton
+              value="Submit Procedure"
+              action="#{procedureController.procedureSubmit()}"
+              styleClass="action-button submit-button" />
+          </div>
+        </div>
+
+      </h:form>
+    </div>
+  </f:view>
 </body>
 </html>
