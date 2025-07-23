@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<!DOCTYPE html>
+  <f:view>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -24,6 +24,7 @@
       border-radius: 10px;
       box-shadow: 0 0 12px rgba(0,0,0,0.1);
       text-align: center;
+      margin-top:130px;
     }
 
     .nav-title {
@@ -103,7 +104,7 @@
   </style>
 </head>
 <body>
-  <f:view>
+ <jsp:include page="/navbar/NavProvider.jsp" />
     <div class="nav-container">
       <div class="nav-title">Procedure Navigation Panel</div>
 
@@ -113,12 +114,6 @@
           <div class="button-group">
             <h:commandButton value="Add Prescription"
                              action="#{procedureController.createNewPrescription()}"
-                             styleClass="action-button add-button" />
-          </div>
-
-           <div class="button-group">
-            <h:commandButton value="Add Procedure Logs"
-                             action="#{procedureController.createNewProcedureLog()}"
                              styleClass="action-button add-button" />
           </div>
 </div>
@@ -137,7 +132,6 @@
                                styleClass="action-button edit-button" />
             </div>
           </h:panelGroup>
-        
           <div class="button-group">
             <h:commandButton value="Submit Procedure"
                              action="#{procedureController.procedureSubmit()}"
@@ -146,6 +140,7 @@
         </div>
       </h:form>
     </div>
-  </f:view>
+
 </body>
 </html>
+  </f:view>

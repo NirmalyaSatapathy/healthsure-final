@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<!DOCTYPE html>
+<f:view>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -24,6 +24,7 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
+      margin-top:130px;
     }
 
     .dashboard-title {
@@ -108,7 +109,7 @@
   </style>
 </head>
 <body>
-  <f:view>
+ <jsp:include page="/navbar/NavProvider.jsp" />
     <div class="dashboard-container">
       <div class="dashboard-title">Prescription Dashboard</div>
 

@@ -13,24 +13,25 @@
    
       font-family: 'Segoe UI', Arial, sans-serif;
       background-color: #f4f8fc;
- 
+ margin-top: 100px;
       padding: 0;
     }
 
     .dashboard-container {
       max-width: 700px;
       margin: 50px auto;
-           margin-top:3rem;
+           margin-top:1rem;
       background-color: #ffffff;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       padding: 40px 30px;
+      margin-top:130px;
     }
 
     h2 {
       color: #0277bd;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 50px;
       font-size: 26px;
       border-bottom: 2px solid #b3e5fc;
       padding-bottom: 10px;

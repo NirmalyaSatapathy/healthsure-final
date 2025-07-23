@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-
+<f:view>
 <html>
 <head>
     <title>Select Procedure Type</title>
@@ -21,6 +21,7 @@
             border-radius: 16px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            margin-top:130px;
         }
 
         h2 {
@@ -64,7 +65,7 @@
     </style>
 </head>
 <body>
-<f:view>
+ <jsp:include page="/navbar/NavProvider.jsp" />
     <h:form>
         <div class="container">
             <h2>Select Procedure Type</h2>

@@ -8,7 +8,7 @@
     <persistedState key="isRestored" value="true"/>
     <persistedState key="workingSets" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workingSets/>"/>
     <persistedState key="aggregateWorkingSetId" value="Aggregate for window 1749633151411"/>
-    <persistedState key="show_in_time" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;show_in_time/>"/>
+    <persistedState key="show_in_time" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;show_in_time>&#xD;&#xA;&lt;id IMemento.internal.id=&quot;org.eclipse.tm.terminal.view.ui.TerminalsView&quot;/>&#xD;&#xA;&lt;/show_in_time>"/>
     <tags>topLevel</tags>
     <tags>shellMaximized</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="_xyFHMkzUEfC9IY_p1cvGiA" selectedElement="_xyFHM0zUEfC9IY_p1cvGiA" horizontal="true">
@@ -139,7 +139,7 @@
             </children>
             <children xsi:type="basic:PartSashContainer" xmi:id="_xyFHQkzUEfC9IY_p1cvGiA" containerData="8000" selectedElement="_xyFHQ0zUEfC9IY_p1cvGiA" horizontal="true">
               <children xsi:type="basic:PartSashContainer" xmi:id="_xyFHQ0zUEfC9IY_p1cvGiA" containerData="5000" selectedElement="_xyFuTEzUEfC9IY_p1cvGiA" horizontal="true">
-                <children xsi:type="basic:PartStack" xmi:id="_xyFHREzUEfC9IY_p1cvGiA" elementId="bottomRight" visible="false" containerData="5000" selectedElement="_xyFuRUzUEfC9IY_p1cvGiA">
+                <children xsi:type="basic:PartStack" xmi:id="_xyFHREzUEfC9IY_p1cvGiA" elementId="bottomRight" visible="false" containerData="5000" selectedElement="_xyFHRkzUEfC9IY_p1cvGiA">
                   <tags>General</tags>
                   <tags>Oomph</tags>
                   <tags>Minimized</tags>
@@ -152,7 +152,7 @@
                     <tags>View</tags>
                     <tags>categoryTag:Server</tags>
                   </children>
-                  <children xsi:type="advanced:Placeholder" xmi:id="_xyFHR0zUEfC9IY_p1cvGiA" elementId="org.eclipse.tm.terminal.view.ui.TerminalsView" ref="_xyGXCUzUEfC9IY_p1cvGiA" closeable="true">
+                  <children xsi:type="advanced:Placeholder" xmi:id="_xyFHR0zUEfC9IY_p1cvGiA" elementId="org.eclipse.tm.terminal.view.ui.TerminalsView" toBeRendered="false" ref="_xyGXCUzUEfC9IY_p1cvGiA" closeable="true">
                     <tags>View</tags>
                     <tags>categoryTag:Terminal</tags>
                   </children>
@@ -511,7 +511,7 @@
           <tags>org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor</tags>
         </children>
         <children xsi:type="basic:Part" xmi:id="_9pOg0GXtEfC7Vc9t6ZKkvA" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="ProviderDaoImpl.java" iconURI="platform:/plugin/org.eclipse.jdt.ui/icons/full/obj16/jcu_obj.png" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;ProviderDaoImpl.java&quot; partName=&quot;ProviderDaoImpl.java&quot; title=&quot;ProviderDaoImpl.java&quot; tooltip=&quot;HealthSureClient/src/main/java/com/infinite/jsf/provider/daoImpl/ProviderDaoImpl.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/HealthSureClient/src/main/java/com/infinite/jsf/provider/daoImpl/ProviderDaoImpl.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;10743&quot; selectionTopPixel=&quot;5190&quot;/>&#xD;&#xA;&lt;/editor>"/>
+          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;org.eclipse.jdt.ui.CompilationUnitEditor&quot; name=&quot;ProviderDaoImpl.java&quot; partName=&quot;ProviderDaoImpl.java&quot; title=&quot;ProviderDaoImpl.java&quot; tooltip=&quot;HealthSureClient/src/main/java/com/infinite/jsf/provider/daoImpl/ProviderDaoImpl.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; path=&quot;/HealthSureClient/src/main/java/com/infinite/jsf/provider/daoImpl/ProviderDaoImpl.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;11442&quot; selectionTopPixel=&quot;5635&quot;/>&#xD;&#xA;&lt;/editor>"/>
           <tags>Editor</tags>
           <tags>removeOnHide</tags>
           <tags>org.eclipse.jdt.ui.CompilationUnitEditor</tags>
@@ -744,7 +744,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_xyGXQ0zUEfC9IY_p1cvGiA" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_eFshQGXwEfCOdqCkNOMaDA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_xyL4BUzUEfC9IY_p1cvGiA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_4Lw8cGcHEfCckIWT2_MISA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_xyL4BUzUEfC9IY_p1cvGiA"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_xyGXUEzUEfC9IY_p1cvGiA" elementId="group.edit" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -752,8 +752,8 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_xyGXUkzUEfC9IY_p1cvGiA" elementId="org.eclipse.ui.workbench.edit">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_eFtvYGXwEfCOdqCkNOMaDA" elementId="undo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/undo_edit.png" tooltip="Undo" enabled="false" command="_xyL1x0zUEfC9IY_p1cvGiA"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_eFuWcGXwEfCOdqCkNOMaDA" elementId="redo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/redo_edit.png" tooltip="Redo" enabled="false" command="_xyL2fUzUEfC9IY_p1cvGiA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_4Lw8dmcHEfCckIWT2_MISA" elementId="undo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/undo_edit.png" tooltip="Undo" enabled="false" command="_xyL1x0zUEfC9IY_p1cvGiA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_4Lw8d2cHEfCckIWT2_MISA" elementId="redo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/redo_edit.png" tooltip="Redo" enabled="false" command="_xyL2fUzUEfC9IY_p1cvGiA"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_xyGXVkzUEfC9IY_p1cvGiA" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -786,7 +786,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_xyHjpEzUEfC9IY_p1cvGiA" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_eFu9gGXwEfCOdqCkNOMaDA" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_xyL3pUzUEfC9IY_p1cvGiA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_4Lw8fWcHEfCckIWT2_MISA" elementId="org.eclipse.ui.window.pinEditor" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_xyL3pUzUEfC9IY_p1cvGiA"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_xyHjskzUEfC9IY_p1cvGiA" elementId="org.jboss.tools.central.editors.JBossCentralEditor" visible="false">
         <tags>Draggable</tags>
@@ -3814,7 +3814,7 @@
   <addons xmi:id="_xyMctkzUEfC9IY_p1cvGiA" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_xyMct0zUEfC9IY_p1cvGiA" elementId="org.eclipse.ui.workbench.addon.0" contributorURI="platform:/plugin/org.eclipse.platform" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_xyMcuEzUEfC9IY_p1cvGiA" elementId="SplitterAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.splitteraddon.SplitterAddon"/>
-  <addons xmi:id="_d3BzIWXwEfCOdqCkNOMaDA" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
+  <addons xmi:id="_37K7sWcHEfCckIWT2_MISA" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
   <addons xmi:id="_xyMcukzUEfC9IY_p1cvGiA" elementId="org.eclipse.ui.ide.application.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide.application" contributionURI="bundleclass://org.eclipse.ui.ide.application/org.eclipse.ui.internal.ide.application.addons.ModelCleanupAddon"/>
   <categories xmi:id="_xyMcu0zUEfC9IY_p1cvGiA" elementId="org.eclipse.ui.category.edit" name="Edit"/>
   <categories xmi:id="_xyMcvEzUEfC9IY_p1cvGiA" elementId="org.jboss.ide.eclipse.as.wtp.ui.commands.modules" name="Modules" description="Commands related to modules"/>

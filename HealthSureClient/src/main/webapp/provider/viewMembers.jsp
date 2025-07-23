@@ -110,7 +110,6 @@
     </style>
 </head>
 <body>
-
 <h2>Subscribed Family Members</h2>
 
 <h:form prependId="false">

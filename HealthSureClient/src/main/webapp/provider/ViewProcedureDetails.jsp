@@ -112,6 +112,7 @@
 
 </head>
 <body>
+ <jsp:include page="/navbar/NavProvider.jsp" />
 <f:view>
     <div class="container">
         <h:form prependId="false">

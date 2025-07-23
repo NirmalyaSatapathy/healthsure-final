@@ -2,194 +2,184 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
+<f:view>
 <html>
 <head>
   <title>Add Procedure Test</title>
 
-  <!-- still disable caching so browser doesn’t hold onto old HTML -->
+  <!-- Prevent caching -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma"        content="no-cache" />
-  <meta http-equiv="Expires"       content="0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
   <script type="text/javascript">
     window.addEventListener('pageshow', function(event) {
-      // if this page was restored from bfcache or via back/forward
-      var navEntries = performance.getEntriesByType &&
-                       performance.getEntriesByType("navigation");
-      var navType = navEntries && navEntries.length
-                    ? navEntries[0].type
-                    : "";
+      var navEntries = performance.getEntriesByType?.("navigation");
+      var navType = navEntries?.length ? navEntries[0].type : "";
       if (event.persisted || navType === "back_forward") {
-        // clear out all validation-message spans
-        document.querySelectorAll('.error-message').forEach(function(el) {
-          el.textContent = '';
-        });
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
       }
     });
   </script>
 
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #fce4ec, #e1f5fe);
-      margin: 0; padding: 0;
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f8fb;
+      overflow: hidden;
     }
-    .container {
-      max-width: 850px;
-      margin: 40px auto;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-      padding: 25px 30px;
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
-    h2 {
-      text-align: center;
-      color: #00796b;
-      font-size: 22px;
-      margin-bottom: 20px;
+
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      margin-top: 90px;
     }
-    .form-group {
-      margin-bottom: 18px;
-    }
-    label, h\:outputLabel {
-      font-weight: 600;
-      color: #2c3e50;
-      font-size: 14px;
-      display: block;
-      margin-bottom: 5px;
-    }
-    input[type="text"], textarea {
-      padding: 8px 10px;
-      font-size: 13px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+
+    .form-container {
+      max-width: 600px;
       width: 100%;
-      box-sizing: border-box;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
     }
+
+    .form-title {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: #2a3f54;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    label, h\:outputLabel {
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 15px;
+      color: #2c3e50;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+
     .error-message {
       display: block;
       color: #f44336 !important;
       font-size: 14px;
       font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 4px;
-      margin-top: 6px;
+      margin-top: 3px;
     }
-    .button-group {
+
+    .button-row {
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       justify-content: center;
-      gap: 20px;
-      margin-top: 25px;
+      margin-top: 15px;
     }
-    .custom-button {
-      background-color: #00796b;
-      color: white;
-      padding: 10px 20px;
-      font-size: 13px;
-      font-weight: bold;
+
+    .shared-button {
+      flex: 1;
+      min-width: 100px;
+      padding: 8px 14px;
+      font-size: 14px;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
+      color: white;
+      background-color: #00796b;
       cursor: pointer;
+      text-align: center;
       transition: background-color 0.3s ease;
     }
-    .custom-button:hover {
+
+    .shared-button:hover {
       background-color: #004d40;
-    }
-    .blue-button {
-      background-color: #0288d1;
-    }
-    .blue-button:hover {
-      background-color: #0277bd;
     }
   </style>
 </head>
 
 <body>
-  <f:view>
-    <div class="container">
-      <h:form prependId="false">
-        <h2>Add Procedure Test</h2>
+<div class="page-wrapper">
+  <jsp:include page="/navbar/NavProvider.jsp" />
+  <div class="main-content">
+    <div class="form-container">
+      <div class="form-title">Add Procedure Test</div>
 
-        <!-- Prescription ID (readonly) -->
+      <h:form prependId="false">
+        <h:messages globalOnly="true" styleClass="error-message" />
+
         <div class="form-group">
           <h:outputLabel for="prescriptionId" value="Prescription ID:" />
-          <h:inputText id="prescriptionId"
-                       value="#{procedureController.prescription.prescriptionId}"
-                       readonly="true" />
+          <h:inputText id="prescriptionId" value="#{procedureController.prescription.prescriptionId}" readonly="true" styleClass="form-control" />
         </div>
 
-        <!-- Test ID -->
         <div class="form-group">
           <h:outputLabel for="testId" value="Test ID:" />
-          <h:inputText  id="testId"
-                        value="#{procedureController.procedureTest.testId}"
-                        readonly="true" />
+          <h:inputText id="testId" value="#{procedureController.procedureTest.testId}" readonly="true" styleClass="form-control" />
           <h:message for="testId" styleClass="error-message" />
         </div>
 
-        <!-- Test Name -->
         <div class="form-group">
-          <h:outputLabel for="testName">
-            Test Name: <span style="color:red">*</span>
-          </h:outputLabel>
-          <h:inputText id="testName"
-                       value="#{procedureController.procedureTest.testName}" />
+          <h:outputLabel for="testName">Test Name <span style="color:red">*</span></h:outputLabel>
+          <h:inputText id="testName" value="#{procedureController.procedureTest.testName}" styleClass="form-control" />
           <h:message for="testName" styleClass="error-message" />
         </div>
 
-        <!-- Test Date -->
         <div class="form-group">
-          <h:outputLabel for="testDate">
-            Test Date (yyyy-MM-dd): <span style="color:red">*</span>
-          </h:outputLabel>
-          <h:inputText id="testDate"
-                       value="#{procedureController.procedureTest.testDate}">
-            <f:convertDateTime pattern="yyyy-MM-dd"/>
+          <h:outputLabel for="testDate">Test Date (yyyy-MM-dd) <span style="color:red">*</span></h:outputLabel>
+          <h:inputText id="testDate" value="#{procedureController.procedureTest.testDate}" styleClass="form-control">
+            <f:convertDateTime pattern="yyyy-MM-dd" />
           </h:inputText>
-          <h:message for="testDate" styleClass="error-message"/>
-          <script type="text/javascript">
+          <h:message for="testDate" styleClass="error-message" />
+          <script>
             var cal = document.querySelector("#testDate");
-            if (cal) { cal.setAttribute("type","date"); }
+            if (cal) {
+              cal.setAttribute("type","date");
+              const today = new Date().toISOString().split("T")[0];
+              cal.setAttribute("min", today);
+            }
           </script>
         </div>
 
-        <!-- Result Summary -->
         <div class="form-group">
-          <h:outputLabel for="resultSummary">
-            Result Summary: <span style="color:red">*</span>
-          </h:outputLabel>
-          <h:inputTextarea id="resultSummary"
-                          value="#{procedureController.procedureTest.resultSummary}"
-                          rows="4" cols="50"/>
-          <h:message for="resultSummary" styleClass="error-message"/>
+          <h:outputLabel for="resultSummary">Result Summary <span style="color:red">*</span></h:outputLabel>
+          <h:inputTextarea id="resultSummary" value="#{procedureController.procedureTest.resultSummary}" rows="4" styleClass="form-control" />
+          <h:message for="resultSummary" styleClass="error-message" />
         </div>
 
-        <!-- Buttons (with POST-REDIRECT-GET in your bean) -->
-        <div class="button-group">
-          <h:commandButton value="Save Test"
-                           styleClass="custom-button"
-                           action="#{procedureController.addTestController(
-                                      procedureController.procedureTest)}" />
-
-          <h:commandButton value="Reset Form"
-                           styleClass="custom-button blue-button"
-                           action="#{procedureController.createNewProcedureTest()}"
-                           immediate="true"/>
+        <div class="button-row">
+          <h:commandButton value="Save Test" action="#{procedureController.addTestController(procedureController.procedureTest)}" styleClass="shared-button" />
+          <h:commandButton value="Reset Form" action="#{procedureController.createNewProcedureTest()}" immediate="true" styleClass="shared-button" />
+          <h:commandButton value="Edit Prescription" action="AddPrescription?faces-redirect=true" styleClass="shared-button" />
+          <h:commandButton value="Edit Procedure" action="#{procedureController.gotoProcedureForm()}" styleClass="shared-button" />
         </div>
-        <div class="button-group">
-            <h:commandButton 
-                             value="Edit Prescription"
-                             action="AddPrescription?faces-redirect=true"
-                             styleClass="action-button" />
-          </div>
-          <div class="button-group">
-            <h:commandButton 
-                             value="Edit Procedure"
-                             action="#{procedureController.gotoProcedureForm()}"
-                             styleClass="action-button" />
-          </div>
       </h:form>
     </div>
-  </f:view>
+  </div>
+</div>
 </body>
 </html>
+</f:view>

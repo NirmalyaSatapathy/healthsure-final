@@ -1,187 +1,212 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<f:view>
 <html>
 <head>
     <title>Add Procedure Log</title>
-     <!-- still disable caching so browser doesn’t hold onto old HTML -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma"        content="no-cache" />
-  <meta http-equiv="Expires"       content="0" />
 
-  <script type="text/javascript">
-    window.addEventListener('pageshow', function(event) {
-      // if this page was restored from bfcache or via back/forward
-      var navEntries = performance.getEntriesByType &&
-                       performance.getEntriesByType("navigation");
-      var navType = navEntries && navEntries.length
-                    ? navEntries[0].type
-                    : "";
-      if (event.persisted || navType === "back_forward") {
-        // clear out all validation-message spans
-        document.querySelectorAll('.error-message').forEach(function(el) {
-          el.textContent = '';
+    <!-- Prevent HTML caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <script type="text/javascript">
+        window.addEventListener('pageshow', function(event) {
+            var navEntries = performance.getEntriesByType?.("navigation");
+            var navType = navEntries?.length ? navEntries[0].type : "";
+            if (event.persisted || navType === "back_forward") {
+                document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            }
         });
-      }
-    });
-  </script>
-    
+    </script>
+
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #fce4ec, #e1f5fe);
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f8fb;
+            overflow: hidden;
         }
 
-        .container {
-            max-width: 850px;
-            margin: 40px auto;
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 90px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            padding: 15px;
             background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            padding: 25px 30px;
+            box-shadow: 0 0 10px #ccc;
         }
 
-        h2 {
+        .form-title {
             text-align: center;
-            color: #00796b;
             font-size: 22px;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
+            color: #2a3f54;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
         }
 
         label, h\:outputLabel {
-            font-weight: 600;
+            font-weight: bold;
+            margin-bottom: 4px;
+            font-size: 15px;
             color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 14px;
-            display: block;
         }
 
-        input[type="text"], textarea {
-            padding: 8px 10px;
-            font-size: 13px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+        .form-control {
             width: 100%;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
             box-sizing: border-box;
+            font-size: 15px;
         }
 
         .error-message {
-  display: block;                /* ensure it takes its own line */
-  color: #f44336 !important;     /* vivid red */
-  font-size: 14px;               /* a bit larger */
-  font-weight: 600;              /* semi-bold */
-  padding: 4px 8px;             
-  border-radius: 4px;
-  margin-top: 6px;               
-}
+            display: block;
+            color: #f44336 !important;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
 
         .button-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 25px;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .custom-button {
-            background-color: #00796b;
-            color: white;
-            padding: 10px 20px;
-            font-size: 13px;
-            font-weight: bold;
+        .btn-add, .btn-reset, .action-button {
+            padding: 8px 14px;
+            font-size: 14px;
             border: none;
-            border-radius: 6px;
+            border-radius: 5px;
+            color: white;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
-        .custom-button:hover {
-            background-color: #004d40;
+        .btn-add {
+            background-color: #28a745;
         }
 
-        .blue-button {
-            background-color: #0288d1;
+        .btn-add:hover {
+            background-color: #218838;
         }
 
-        .blue-button:hover {
-            background-color: #0277bd;
+        .btn-reset {
+            background-color: #007bff;
+        }
+
+        .btn-reset:hover {
+            background-color: #0056b3;
+        }
+
+        .action-button {
+            background-color: #6c757d;
+        }
+
+        .action-button:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
 <body>
-<f:view>
-    <div class="container">
-        <h:form prependId="false">
-            <h2>Add Daily Procedure Log</h2>
+<div class="page-wrapper">
+    <jsp:include page="/navbar/NavProvider.jsp" />
 
-            <!-- Procedure ID (readonly from session) -->
-            <div class="form-group">
-                <h:outputLabel for="procedureId" value="Procedure ID:" />
-                <h:inputText id="procedureId" value="#{procedureController.procedure.procedureId}" readonly="true" />
-            </div>
-            <div class="form-group">
-                <h:outputLabel for="logId" value="Log ID:" />
-                <h:inputText id="logId" value="#{procedureController.procedureLog.logId}" readonly="true" />
-            </div>
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-title">Add Daily Procedure Log</div>
 
-            <!-- Log Date (readonly or auto-filled) -->
-            <div class="form-group">
-                <h:outputLabel for="logDate">
-                    Log Date (yyyy-MM-dd): <span style="color:red">*</span>
-                </h:outputLabel>
-                <h:inputText id="logDate" value="#{procedureController.procedureLog.logDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd" />
-                </h:inputText>
-                <h:message for="logDate" styleClass="error-message" />
-            </div>
-				<script>
-    const calendarInput = document.querySelector("#logDate");
-    if (calendarInput) {
-        calendarInput.setAttribute("type", "date");
-        const today = new Date().toISOString().split("T")[0];
-        calendarInput.setAttribute("min", today);
-    }
-</script>
-            <!-- Vitals -->
-            <div class="form-group">
-                <h:outputLabel for="vitals">Vitals (optional):</h:outputLabel>
-                <h:inputText id="vitals" value="#{procedureController.procedureLog.vitals}" />
-                <h:message for="vitals" styleClass="error-message" />
-            </div>
+            <h:form prependId="false">
+                <h:messages globalOnly="true" styleClass="error-message" />
 
-            <!-- Notes -->
-            <div class="form-group">
-                <h:outputLabel for="notes">
-                    Notes: <span style="color:red">*</span>
-                </h:outputLabel>
-                <h:inputTextarea id="notes" value="#{procedureController.procedureLog.notes}" rows="4" cols="50" />
-                <h:message for="notes" styleClass="error-message" />
-            </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <h:outputLabel for="procedureId" value="Procedure ID:" />
+                        <h:inputText id="procedureId" value="#{procedureController.procedure.procedureId}" readonly="true" styleClass="form-control" />
+                    </div>
 
-            <!-- Submit + Reset Buttons -->
-            <div class="button-group">
-                <h:commandButton value="Save Log"
-                                 styleClass="custom-button"
-                                 action="#{procedureController.addProcedureLogController(procedureController.procedureLog)}" />
+                    <div class="form-group">
+                        <h:outputLabel for="logId" value="Log ID:" />
+                        <h:inputText id="logId" value="#{procedureController.procedureLog.logId}" readonly="true" styleClass="form-control" />
+                    </div>
 
-                <h:commandButton value="Reset Form"
-                                 styleClass="custom-button blue-button"
-                                 action="#{procedureController.createNewProcedureLog()}"
-                                 immediate="true" />
-            </div>
-            <div class="button-group">
-            <h:commandButton 
-                             value="Edit Procedure"
-                             action="#{procedureController.gotoProcedureForm()}"
-                             styleClass="action-button" />
-          </div>
-        </h:form>
+                    <div class="form-group full-width">
+                        <h:outputLabel for="logDate">Log Date <span style="color:red">*</span></h:outputLabel>
+                        <h:inputText id="logDate" value="#{procedureController.procedureLog.logDate}" styleClass="form-control">
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:inputText>
+                        <h:message for="logDate" styleClass="error-message" />
+                        <script>
+                            const calendarInput = document.querySelector("#logDate");
+                            if (calendarInput) {
+                                calendarInput.setAttribute("type", "date");
+                                const today = new Date().toISOString().split("T")[0];
+                                calendarInput.setAttribute("min", today);
+                            }
+                        </script>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <h:outputLabel for="vitals" value="Vitals (optional):" />
+                        <h:inputText id="vitals" value="#{procedureController.procedureLog.vitals}" styleClass="form-control" />
+                        <h:message for="vitals" styleClass="error-message" />
+                    </div>
+
+                    <div class="form-group full-width">
+                        <h:outputLabel for="notes">Notes <span style="color:red">*</span></h:outputLabel>
+                        <h:inputTextarea id="notes" value="#{procedureController.procedureLog.notes}" rows="4" styleClass="form-control" />
+                        <h:message for="notes" styleClass="error-message" />
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <h:commandButton value="Save Log" action="#{procedureController.addProcedureLogController(procedureController.procedureLog)}" styleClass="btn-add" />
+                    <h:commandButton value="Reset Form" action="#{procedureController.createNewProcedureLog()}" immediate="true" styleClass="btn-reset" />
+                </div>
+
+                <div class="button-group">
+                    <h:commandButton value="Edit Procedure" action="#{procedureController.gotoProcedureForm()}" styleClass="action-button" />
+                </div>
+            </h:form>
+        </div>
     </div>
-</f:view>
+</div>
 </body>
 </html>
+</f:view>

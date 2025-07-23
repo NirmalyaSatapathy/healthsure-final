@@ -22,6 +22,7 @@ public class InsuranceController {
     private String doctorId;
     private String healthId;
     private String patientName;
+    private String insuranceType;
     private String matchType;
     private String sortField;
     private boolean ascending = true;
@@ -75,6 +76,14 @@ public class InsuranceController {
 
 	public int getMemberFirst() {
 		return memberFirst;
+	}
+
+	public String getInsuranceType() {
+		return insuranceType;
+	}
+
+	public void setInsuranceType(String insuranceType) {
+		this.insuranceType = insuranceType;
 	}
 
 	public void setMemberFirst(int memberFirst) {
@@ -385,53 +394,69 @@ public class InsuranceController {
         showPatientsFlag = false;
         showInsuranceFlag = false;
 
-        if (doctorId == null || doctorId.trim().isEmpty()) {
+        if (doctorId == null || doctorId.trim().isEmpty())
+        {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter doctor id DOCXXX", null));
             return null;
         }
 
-        if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$")) {
+        if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$"))
+        {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
             return null;
         }
         Doctor doctor = providerDao.searchDoctorById(doctorId);
-        if (doctor == null) {
+        if (doctor == null)
+        {
             context.addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Doctor with ID " + doctorId + " does not exist.", null));
             return null;
         }
-        	if (matchType != null) {
+        	if (matchType != null)
+        	{
         	    if (patientName == null || patientName.trim().isEmpty()) {
         	        FacesContext.getCurrentInstance().addMessage("matchType",
         	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter patient name to search", null));
         	        return null;
         	    }
         	}
-        if (healthId != null && !healthId.trim().isEmpty()) {
+        if (healthId != null && !healthId.trim().isEmpty())
+        {
+        	
             cameFromPatientSearch = false;
 
-            if (!healthId.matches("^[Hh]\\d{3}$")) {
+            if (!healthId.matches("^[Hh]\\d{3}$"))
+            {
                 FacesContext.getCurrentInstance().addMessage("recipientId",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct Patient id format HXXX", null));
                 return null;
             }
             Recipient recipient = providerDao.searchRecipientByHealthId(healthId);
-            if (recipient == null) {
+            if (recipient == null)
+            {
                 context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Patient with Health ID " + healthId + " does not exist.", null));
                 return null;
             }
-
-            if (patientName != null && !patientName.trim().isEmpty()) {
+            if(insuranceType==null||insuranceType.isEmpty())
+        	{
+        		  FacesContext.getCurrentInstance().addMessage("recipientId",
+          	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "select insurance type", null));
+          	        return null;
+        	}
+            if (patientName != null && !patientName.trim().isEmpty())
+            {
                 String cleaned = patientName.replaceAll("\\s+", "");
-                if (cleaned.length() < 2) {
+                if (cleaned.length() < 2)
+                {
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Please enter at least 2 characters in the patient name.", null));
                     return null;
                 }
-                if (!patientName.matches("^[a-zA-Z0-9\\s]+$")) {
+                if (!patientName.matches("^[a-zA-Z0-9\\s]+$"))
+                {
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Patient name can only contain letters, digits, and spaces.", null));
                     return null;
@@ -441,10 +466,13 @@ public class InsuranceController {
                 String inputName = cleaned.toLowerCase();
 
                 boolean match;
-                if (matchType == null || matchType.trim().isEmpty()) {
+                if (matchType == null || matchType.trim().isEmpty())
+                {
                     match = fullName.equals(inputName);
-                } else {
-                    switch (matchType.toLowerCase()) {
+                } else
+                {
+                    switch (matchType.toLowerCase())
+                    {
                         case "startswith":
                             match = fullName.startsWith(inputName);
                             break;
@@ -455,8 +483,9 @@ public class InsuranceController {
                             match = false;
                     }
                 }
-
-                if (!match) {
+               
+                if (!match)
+                {
                     context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_WARN,
                             "Patient with ID " + healthId + " does not have a name that " +
                             (matchType != null ? matchType : "matches exactly") +
@@ -465,43 +494,54 @@ public class InsuranceController {
                 }
             }
 
-            if (!providerDao.isDoctorPatientAssociatedByAppointment(doctorId, healthId)) {
+            if (!providerDao.isDoctorPatientAssociatedByAppointment(doctorId, healthId))
+            {
                 context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Access denied: The doctor is not associated with this patient via an appointment.", null));
                 return null;
             }
 
             patientInsuranceList = insuranceDaoImpl.showInsuranceOfRecipient(healthId);
-            if (patientInsuranceList == null || patientInsuranceList.isEmpty()) {
+            if (patientInsuranceList == null || patientInsuranceList.isEmpty())
+            {
                 context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "No insurance found for patient ID: " + healthId, null));
-            } else {
+            } else
+            {
                 showInsuranceFlag = true;
             }
 
-        } else if (patientName != null && !patientName.trim().isEmpty()) {
+        }
+        else if (patientName != null && !patientName.trim().isEmpty()) 
+        {
             String cleaned = patientName.replaceAll("\\s+", "");
-            if (cleaned.length() < 2) {
+            if (cleaned.length() < 2)
+            {
                 context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Please enter at least 2 characters in the patient name.", null));
                 return null;
             }
-            if (!patientName.matches("^[a-zA-Z0-9\\s]+$")) {
+            if (!patientName.matches("^[a-zA-Z0-9\\s]+$"))
+            {
                 context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Patient name can only contain letters, digits, and spaces.", null));
                 return null;
             }
 
-            if (matchType == null || matchType.trim().isEmpty()) {
+            if (matchType == null || matchType.trim().isEmpty())
+            {
                 associatedPatients = providerDao.searchPatientsByExactName(doctorId, patientName);
                 if (associatedPatients == null || associatedPatients.isEmpty()) {
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "No exact match found for patient name '" + patientName + "' under Doctor ID '" + doctorId + "'. Please select a match type for partial search.", null));
                     return null;
                 }
-            } else {
+            } 
+            else 
+            {
                 associatedPatients = providerDao.searchPatientsByName(doctorId, patientName, matchType);
-                if (associatedPatients == null || associatedPatients.isEmpty()) {
+                if (associatedPatients == null || associatedPatients.isEmpty()) 
+                {
                     String readableMatch = matchType.equalsIgnoreCase("startswith") ? "start with" : "contain";
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_WARN,
                             "No patients found under Doctor ID " + doctorId +
@@ -512,7 +552,8 @@ public class InsuranceController {
 
             showPatientsFlag = true;
 
-        } else {
+        } else 
+        {
             associatedPatients = providerDao.getPatientListByDoctorId(doctorId);
             if (associatedPatients == null || associatedPatients.isEmpty()) {
                 context.addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -522,6 +563,7 @@ public class InsuranceController {
             }
         }
         matchType=null;
+        insuranceType=null;
         return null;
     }
 
@@ -665,7 +707,7 @@ public class InsuranceController {
         this.showInsuranceFlag = false;
         this.cameFromPatientSearch = false;
         this.topMessage = null;
-
+        this.insuranceType=null;
         // Reset pagination
         this.insuranceFirst = 0;
         this.patientFirst = 0;

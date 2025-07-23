@@ -5,34 +5,53 @@
 <html>
 <head>
     <title>Add Prescribed Medicine</title>
- <!-- still disable caching so browser doesn’t hold onto old HTML -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma"        content="no-cache" />
-  <meta http-equiv="Expires"       content="0" />
 
-  <script type="text/javascript">
-    window.addEventListener('pageshow', function(event) {
-      // if this page was restored from bfcache or via back/forward
-      var navEntries = performance.getEntriesByType &&
-                       performance.getEntriesByType("navigation");
-      var navType = navEntries && navEntries.length
-                    ? navEntries[0].type
-                    : "";
-      if (event.persisted || navType === "back_forward") {
-        // clear out all validation-message spans
-        document.querySelectorAll('.error').forEach(function(el) {
-          el.textContent = '';
+    <!-- Prevent HTML caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <script type="text/javascript">
+        window.addEventListener('pageshow', function(event) {
+            var navEntries = performance.getEntriesByType?.("navigation");
+            var navType = navEntries?.length ? navEntries[0].type : "";
+            if (event.persisted || navType === "back_forward") {
+                document.querySelectorAll('.error').forEach(el => el.textContent = '');
+            }
         });
-      }
-    });
-  </script>
+    </script>
 
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f8fb;
+            overflow: hidden;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 90px;
+        }
+
         .form-container {
             max-width: 600px;
-            margin: 40px auto;
-            padding: 30px;
-            background-color: #f4f8fb;
+            width: 100%;
+            padding: 15px;
+            background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 10px #ccc;
         }
@@ -40,14 +59,14 @@
         .form-title {
             text-align: center;
             font-size: 22px;
-            margin-bottom: 25px;
+            margin-bottom: 12px;
             color: #2a3f54;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 8px;
         }
 
         .form-group {
@@ -55,21 +74,23 @@
             flex-direction: column;
         }
 
-        .form-group.notes {
+        .form-group.full-width {
             grid-column: 1 / -1;
         }
 
         label {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            font-size: 15px;
         }
 
         .form-control {
             width: 100%;
-            padding: 8px;
-            border-radius: 5px;
+            padding: 6px;
+            border-radius: 4px;
             border: 1px solid #ccc;
             box-sizing: border-box;
+            font-size: 15px;
         }
 
         .error {
@@ -77,23 +98,27 @@
             color: #f44336 !important;
             font-size: 14px;
             font-weight: 600;
-            margin-top: 6px;
+            margin-top: 3px;
         }
 
         .button-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-add, .btn-reset, .action-button {
+            padding: 8px 14px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
         }
 
         .btn-add {
             background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
         }
 
         .btn-add:hover {
@@ -102,150 +127,123 @@
 
         .btn-reset {
             background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
         }
 
         .btn-reset:hover {
             background-color: #0056b3;
         }
+
+        .action-button {
+            background-color: #6c757d;
+        }
+
+        .action-button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <div class="form-title">Add Prescribed Medicine</div>
+<div class="page-wrapper">
+    <jsp:include page="/navbar/NavProvider.jsp" />
 
-        <h:form prependId="false">
-            <h:messages globalOnly="true" styleClass="error" />
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-title">Add Prescribed Medicine</div>
 
-            <div class="form-grid">
+            <h:form prependId="false">
+                <h:messages globalOnly="true" styleClass="error" />
 
-                <div class="form-group">
-                    <label for="prescribedId">Prescribed ID</label>
-                    <h:inputText id="prescribedId"
-                                 value="#{procedureController.prescribedMedicine.prescribedId}"
-                                 readonly="true"
-                                 styleClass="form-control" />
-                    <h:message for="prescribedId" styleClass="error" />
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="prescribedId">Prescribed ID</label>
+                        <h:inputText id="prescribedId" value="#{procedureController.prescribedMedicine.prescribedId}" readonly="true" styleClass="form-control" />
+                        <h:message for="prescribedId" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prescriptionId">Prescription ID</label>
+                        <h:inputText id="prescriptionId" value="#{procedureController.prescription.prescriptionId}" readonly="true" styleClass="form-control" />
+                        <h:message for="prescriptionId" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="medicineName">Medicine Name <span style="color:red">*</span></label>
+                        <h:inputText id="medicineName" value="#{procedureController.prescribedMedicine.medicineName}" styleClass="form-control" />
+                        <h:message for="medicineName" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">Medicine Type <span style="color:red">*</span></label>
+                        <h:selectOneMenu id="type" value="#{procedureController.prescribedMedicine.type}" styleClass="form-control">
+                            <f:selectItem itemLabel="-- Select Type --" itemValue="" />
+                            <f:selectItem itemLabel="Tablet" itemValue="TABLET" />
+                            <f:selectItem itemLabel="Syrup" itemValue="SYRUP" />
+                            <f:selectItem itemLabel="Injection" itemValue="INJECTION" />
+                            <f:selectItem itemLabel="Drop" itemValue="DROP" />
+                        </h:selectOneMenu>
+                        <h:message for="type" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dosage">Dosage <span style="color:red">*</span></label>
+                        <h:inputText id="dosage" value="#{procedureController.prescribedMedicine.dosage}" styleClass="form-control" />
+                        <h:message for="dosage" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Duration (days) <span style="color:red">*</span></label>
+                        <h:inputText id="duration" value="#{procedureController.prescribedMedicine.duration}" styleClass="form-control" />
+                        <h:message for="duration" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startDate">Start Date <span style="color:red">*</span></label>
+                        <h:inputText id="startDate" value="#{procedureController.prescribedMedicine.startDate}" styleClass="form-control">
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:inputText>
+                        <h:message for="startDate" styleClass="error" />
+                        <script>
+                            const calendarInput = document.querySelector("#startDate");
+                            if (calendarInput) {
+                                calendarInput.setAttribute("type", "date");
+                            }
+                        </script>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endDate">End Date <span style="color:red">*</span></label>
+                        <h:inputText id="endDate" value="#{procedureController.prescribedMedicine.endDate}" styleClass="form-control">
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </h:inputText>
+                        <h:message for="endDate" styleClass="error" />
+                        <script>
+                            const calendarInput1 = document.querySelector("#endDate");
+                            if (calendarInput1) {
+                                calendarInput1.setAttribute("type", "date");
+                            }
+                        </script>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="notes">Notes</label>
+                        <h:inputTextarea id="notes" value="#{procedureController.prescribedMedicine.notes}" styleClass="form-control" />
+                        <h:message for="notes" styleClass="error" />
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="prescriptionId">Prescription ID</label>
-                    <h:inputText id="prescriptionId"
-                                 value="#{procedureController.prescription.prescriptionId}"
-                                 readonly="true"
-                                 styleClass="form-control" />
-                    <h:message for="prescriptionId" styleClass="error" />
+                <div class="button-group">
+                    <h:commandButton value="Add Medicine" action="#{procedureController.addPresribedMedicinesController(procedureController.prescribedMedicine)}" styleClass="btn-add" />
+                    <h:commandButton value="Reset Form" action="#{procedureController.createNewPrescribedMedicine()}" immediate="true" styleClass="btn-reset" />
                 </div>
 
-                <div class="form-group">
-                    <label for="medicineName">Medicine Name <span style="color:red">*</span></label>
-                    <h:inputText id="medicineName"
-                                 value="#{procedureController.prescribedMedicine.medicineName}"
-                                 styleClass="form-control" />
-                    <h:message for="medicineName" styleClass="error" />
-                </div>
-
-                <div class="form-group">
-                    <label for="type">Medicine Type <span style="color:red">*</span></label>
-                    <h:selectOneMenu id="type"
-                                     value="#{procedureController.prescribedMedicine.type}"
-                                     styleClass="form-control">
-                        <f:selectItem itemLabel="-- Select Type --" itemValue="" />
-                        <f:selectItem itemLabel="Tablet" itemValue="TABLET" />
-                        <f:selectItem itemLabel="Syrup" itemValue="SYRUP" />
-                        <f:selectItem itemLabel="Injection" itemValue="INJECTION" />
-                        <f:selectItem itemLabel="Drop" itemValue="DROP" />
-                    </h:selectOneMenu>
-                    <h:message for="type" styleClass="error" />
-                </div>
-
-                <div class="form-group">
-                    <label for="dosage">Dosage (whole number) <span style="color:red">*</span></label>
-                    <h:inputText id="dosage"
-                                 value="#{procedureController.prescribedMedicine.dosage}"
-                                 styleClass="form-control" />
-                    <h:message for="dosage" styleClass="error" />
-                </div>
-
-                <div class="form-group">
-                    <label for="duration">Duration (days) <span style="color:red">*</span></label>
-                    <h:inputText id="duration"
-                                 value="#{procedureController.prescribedMedicine.duration}"
-                                 styleClass="form-control" />
-                    <h:message for="duration" styleClass="error" />
-                </div>
-
-                <div class="form-group">
-                    <label for="startDate">Start Date <span style="color:red">*</span></label>
-                    <h:inputText id="startDate"
-                                 value="#{procedureController.prescribedMedicine.startDate}"
-                                 styleClass="form-control">
-                        <f:convertDateTime pattern="yyyy-MM-dd" />
-                    </h:inputText>
-                    <h:message for="startDate" styleClass="error" />
-                    <script>
-                        const calendarInput = document.querySelector("#startDate");
-                        if (calendarInput) {
-                            calendarInput.setAttribute("type", "date");
-                        }
-                    </script>
-                </div>
-
-                <div class="form-group">
-                    <label for="endDate">End Date <span style="color:red">*</span></label>
-                    <h:inputText id="endDate"
-                                 value="#{procedureController.prescribedMedicine.endDate}"
-                                 styleClass="form-control">
-                        <f:convertDateTime pattern="yyyy-MM-dd" />
-                    </h:inputText>
-                    <h:message for="endDate" styleClass="error" />
-                    <script>
-                        const calendarInput1 = document.querySelector("#endDate");
-                        if (calendarInput1) {
-                            calendarInput1.setAttribute("type", "date");
-                        }
-                    </script>
-                </div>
-
-                <div class="form-group notes">
-                    <label for="notes">Notes</label>
-                    <h:inputTextarea id="notes"
-                                     value="#{procedureController.prescribedMedicine.notes}"
-                                     cols="30" rows="4"
-                                     styleClass="form-control" />
-                    <h:message for="notes" styleClass="error" />
-                </div>
-
-            </div>
-
-            <div class="button-group">
-                <h:commandButton value="Add Medicine"
-                                 action="#{procedureController.addPresribedMedicinesController(
-                                            procedureController.prescribedMedicine)}"
-                                 styleClass="btn-add" />
-
-                <h:commandButton value="Reset Form"
-                                 action="#{procedureController.createNewPrescribedMedicine()}"
-                                 immediate="true"
-                                 styleClass="btn-reset" />
-            </div>
-            <div class="button-group">
-            <h:commandButton 
-                             value="Edit Prescription"
-                             action="AddPrescription?faces-redirect=true"
-                             styleClass="action-button" />
+                <div class="button-group">
+                    <h:commandButton value="Edit Prescription" action="AddPrescription?faces-redirect=true" styleClass="action-button" />
+                    <h:commandButton value="Edit Procedure" action="#{procedureController.gotoProcedureForm()}"styleClass="action-button" />
           </div>
-          <div class="button-group">
-            <h:commandButton 
-                             value="Edit Procedure"
-                             action="#{procedureController.gotoProcedureForm()}"
-                             styleClass="action-button" />
-          </div>
+         
         </h:form>
+         </div>
+    </div>
     </div>
 </body>
 </html>

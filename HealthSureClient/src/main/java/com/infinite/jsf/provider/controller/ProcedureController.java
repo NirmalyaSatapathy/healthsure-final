@@ -1963,7 +1963,7 @@ public String selectedAppointment(Appointment app)
   {
 	  System.out.println("in edit procedure________________"+procedure);
 	  String res="";
-	  if(procedure.getType()==ProcedureType.SINGLE_DAY && procedure.getProcedureStatus()==ProcedureStatus.IN_PROGRESS)
+	  if(procedure.getType()==ProcedureType.SINGLE_DAY && procedure.getProcedureStatus()==ProcedureStatus.COMPLETED)
 	  {
 		  res="AddMedicalProcedure?faces-redirect=true";
 	  }

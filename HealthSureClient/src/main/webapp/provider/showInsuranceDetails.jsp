@@ -189,7 +189,16 @@ input[type="radio"]::-moz-focus-inner {
                    styleClass="form-control" />
       <h:message for="patientName" styleClass="error-message" />
     </div>
-
+ <div class="form-group">
+      <h:selectOneRadio id="insuranceType"
+                        value="#{insuranceController.insuranceType}"
+                        layout="lineDirection"
+                        styleClass="form-control">
+        <f:selectItem itemLabel="Own" itemValue="own" />
+        <f:selectItem itemLabel="Related as a member"  itemValue="relatedAsAMember" />
+      </h:selectOneRadio>
+      <h:message for="insuranceType" styleClass="error-message" />
+    </div>
     <div class="form-group">
       <h:selectOneRadio id="matchType"
                         value="#{insuranceController.matchType}"
@@ -271,8 +280,11 @@ input[type="radio"]::-moz-focus-inner {
           <f:facet name="header">
             <h:outputText value="Show Insurance" />
           </f:facet>
-          <h:commandButton value="Show Insurance"
+          <h:commandButton value="Own"
                            action="#{insuranceController.showInsuranceForPatient(patient.hId)}"
+                           styleClass="btn btn-primary" />
+          <h:commandButton value="As a member"
+                           action="RelatedInsurance"
                            styleClass="btn btn-primary" />
         </h:column>
       </h:dataTable>
