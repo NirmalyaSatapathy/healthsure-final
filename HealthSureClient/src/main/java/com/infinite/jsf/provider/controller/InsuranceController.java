@@ -1,6 +1,7 @@
 package com.infinite.jsf.provider.controller;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.infinite.jsf.insurance.model.SubscribedMember;
 import com.infinite.jsf.provider.daoImpl.InsuranceDaoImpl;
 import com.infinite.jsf.provider.daoImpl.ProviderDaoImpl;
 import com.infinite.jsf.provider.model.PatientInsuranceDetails;
+import com.infinite.jsf.provider.model.RelatedPatientInsuranceDetails;
 
 public class InsuranceController {
     private InsuranceDaoImpl insuranceDaoImpl;
@@ -29,6 +31,7 @@ public class InsuranceController {
     private boolean showInsuranceTable;
     private boolean showInsuranceFlag = false;
     private boolean showPatientsFlag = false;
+    private boolean showRelatedInsuranceFlag = false;
     private List<SubscribedMember> subscribedMembers;
     private List<PatientInsuranceDetails> patientInsuranceList;
     private List<Recipient> associatedPatients;
@@ -38,10 +41,10 @@ public class InsuranceController {
     private boolean cameFromPatientSearch;
     private int insuranceFirst = 0;
     private int insurancePageSize = 3;
-
+    private List<RelatedPatientInsuranceDetails> relatedInsuranceList=new ArrayList<RelatedPatientInsuranceDetails>();
     private int patientFirst = 0;
     private int patientPageSize = 3;
-
+    private String currentSort;
     public int getInsuranceFirst() {
 		return insuranceFirst;
 	}
@@ -54,8 +57,32 @@ public class InsuranceController {
 		return insurancePageSize;
 	}
 
+	public String getCurrentSort() {
+		return currentSort;
+	}
+
+	public void setCurrentSort(String currentSort) {
+		this.currentSort = currentSort;
+	}
+
+	public boolean isShowRelatedInsuranceFlag() {
+		return showRelatedInsuranceFlag;
+	}
+
+	public void setShowRelatedInsuranceFlag(boolean showRelatedInsuranceFlag) {
+		this.showRelatedInsuranceFlag = showRelatedInsuranceFlag;
+	}
+
 	public void setInsurancePageSize(int insurancePageSize) {
 		this.insurancePageSize = insurancePageSize;
+	}
+
+	public List<RelatedPatientInsuranceDetails> getRelatedInsuranceList() {
+		return relatedInsuranceList;
+	}
+
+	public void setRelatedInsuranceList(List<RelatedPatientInsuranceDetails> relatedInsuranceList) {
+		this.relatedInsuranceList = relatedInsuranceList;
 	}
 
 	public int getPatientFirst() {
@@ -387,76 +414,89 @@ public class InsuranceController {
         insuranceDaoImpl = new InsuranceDaoImpl();
         providerDao = new ProviderDaoImpl();
         FacesContext context = FacesContext.getCurrentInstance();
-
+        
+        // Reset all display flags and data
         topMessage = null;
         patientInsuranceList = null;
         associatedPatients = null;
+        relatedInsuranceList = null;
         showPatientsFlag = false;
         showInsuranceFlag = false;
-
-        if (doctorId == null || doctorId.trim().isEmpty())
-        {
+        showRelatedInsuranceFlag = false;
+        relatedInsuranceList = null;
+        cameFromPatientSearch=false;
+        // Validate doctor ID
+        if (doctorId == null || doctorId.trim().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter doctor id DOCXXX", null));
             return null;
         }
 
-        if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$"))
-        {
+        if (!doctorId.trim().matches("^[Dd][Oo][Cc]\\d{3}$")) {
             FacesContext.getCurrentInstance().addMessage("doctorId",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
             return null;
         }
+
         Doctor doctor = providerDao.searchDoctorById(doctorId);
-        if (doctor == null)
-        {
+        if (doctor == null) {
             context.addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Doctor with ID " + doctorId + " does not exist.", null));
             return null;
         }
-        	if (matchType != null)
-        	{
-        	    if (patientName == null || patientName.trim().isEmpty()) {
-        	        FacesContext.getCurrentInstance().addMessage("matchType",
-        	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter patient name to search", null));
-        	        return null;
-        	    }
-        	}
-        if (healthId != null && !healthId.trim().isEmpty())
-        {
-        	
+
+        // Validate match type if patient name is provided
+        if (matchType != null) {
+            if (patientName == null || patientName.trim().isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage("matchType",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter patient name to search", null));
+                return null;
+            }
+        }
+        
+        if (insuranceType != null && !insuranceType.isEmpty()) {
+            if (healthId == null || healthId.trim().isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage("insuranceType",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter patient id to search", null));
+                return null;
+            }
+        }
+
+        // Case 1: Both doctor ID and patient ID are provided
+        if (healthId != null && !healthId.trim().isEmpty()) {
             cameFromPatientSearch = false;
 
-            if (!healthId.matches("^[Hh]\\d{3}$"))
-            {
+            // Validate patient ID format
+            if (!healthId.matches("^[Hh]\\d{3}$")) {
                 FacesContext.getCurrentInstance().addMessage("recipientId",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct Patient id format HXXX", null));
                 return null;
             }
+
+            // Check if patient exists
             Recipient recipient = providerDao.searchRecipientByHealthId(healthId);
-            if (recipient == null)
-            {
+            if (recipient == null) {
                 context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Patient with Health ID " + healthId + " does not exist.", null));
                 return null;
             }
-            if(insuranceType==null||insuranceType.isEmpty())
-        	{
-        		  FacesContext.getCurrentInstance().addMessage("recipientId",
-          	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "select insurance type", null));
-          	        return null;
-        	}
-            if (patientName != null && !patientName.trim().isEmpty())
-            {
+
+            // Validate insurance type is selected
+            if (insuranceType == null || insuranceType.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage("insuranceType",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please select an insurance type", null));
+                return null;
+            }
+
+            // Validate patient name if provided
+            if (patientName != null && !patientName.trim().isEmpty()) {
                 String cleaned = patientName.replaceAll("\\s+", "");
-                if (cleaned.length() < 2)
-                {
+                if (cleaned.length() < 2) {
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Please enter at least 2 characters in the patient name.", null));
                     return null;
                 }
-                if (!patientName.matches("^[a-zA-Z0-9\\s]+$"))
-                {
+                if (!patientName.matches("^[a-zA-Z0-9\\s]+$")) {
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Patient name can only contain letters, digits, and spaces.", null));
                     return null;
@@ -466,13 +506,10 @@ public class InsuranceController {
                 String inputName = cleaned.toLowerCase();
 
                 boolean match;
-                if (matchType == null || matchType.trim().isEmpty())
-                {
+                if (matchType == null || matchType.trim().isEmpty()) {
                     match = fullName.equals(inputName);
-                } else
-                {
-                    switch (matchType.toLowerCase())
-                    {
+                } else {
+                    switch (matchType.toLowerCase()) {
                         case "startswith":
                             match = fullName.startsWith(inputName);
                             break;
@@ -484,8 +521,7 @@ public class InsuranceController {
                     }
                 }
                
-                if (!match)
-                {
+                if (!match) {
                     context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_WARN,
                             "Patient with ID " + healthId + " does not have a name that " +
                             (matchType != null ? matchType : "matches exactly") +
@@ -494,54 +530,64 @@ public class InsuranceController {
                 }
             }
 
-            if (!providerDao.isDoctorPatientAssociatedByAppointment(doctorId, healthId))
-            {
+            // Check doctor-patient association
+            if (!providerDao.isDoctorPatientAssociatedByAppointment(doctorId, healthId)) {
                 context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Access denied: The doctor is not associated with this patient via an appointment.", null));
                 return null;
             }
 
-            patientInsuranceList = insuranceDaoImpl.showInsuranceOfRecipient(healthId);
-            if (patientInsuranceList == null || patientInsuranceList.isEmpty())
-            {
-                context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_WARN,
-                        "No insurance found for patient ID: " + healthId, null));
-            } else
-            {
-                showInsuranceFlag = true;
+            // Handle insurance type selection
+            if ("own".equalsIgnoreCase(insuranceType)) {
+                // Show patient's own insurance
+                patientInsuranceList = insuranceDaoImpl.showInsuranceOfRecipient(healthId);
+                if (patientInsuranceList == null || patientInsuranceList.isEmpty()) {
+                    context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_WARN,
+                            "No personal insurance found for patient ID: " + healthId, null));
+                } else {
+                    showInsuranceFlag = true;
+                    showRelatedInsuranceFlag = false;
+                }
+            } else if ("relatedAsAMember".equalsIgnoreCase(insuranceType)) {
+                // Show insurance where patient is a member
+                relatedInsuranceList = insuranceDaoImpl.showRelatedInsuranceOfMember(healthId);
+                if (relatedInsuranceList == null || relatedInsuranceList.isEmpty()) {
+                    context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_WARN,
+                            "No related insurance found where patient ID " + healthId + " is a member", null));
+                } else {
+                    showInsuranceFlag = false;
+                    showPatientsFlag = false;
+                    showRelatedInsuranceFlag = true;
+                    cameFromPatientSearch = false;
+                }
             }
+          }
 
-        }
-        else if (patientName != null && !patientName.trim().isEmpty()) 
-        {
+       
+        // Case 2: Only patient name is provided (search by name)
+        else if (patientName != null && !patientName.trim().isEmpty()) {
             String cleaned = patientName.replaceAll("\\s+", "");
-            if (cleaned.length() < 2)
-            {
+            if (cleaned.length() < 2) {
                 context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Please enter at least 2 characters in the patient name.", null));
                 return null;
             }
-            if (!patientName.matches("^[a-zA-Z0-9\\s]+$"))
-            {
+            if (!patientName.matches("^[a-zA-Z0-9\\s]+$")) {
                 context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Patient name can only contain letters, digits, and spaces.", null));
                 return null;
             }
 
-            if (matchType == null || matchType.trim().isEmpty())
-            {
+            if (matchType == null || matchType.trim().isEmpty()) {
                 associatedPatients = providerDao.searchPatientsByExactName(doctorId, patientName);
                 if (associatedPatients == null || associatedPatients.isEmpty()) {
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "No exact match found for patient name '" + patientName + "' under Doctor ID '" + doctorId + "'. Please select a match type for partial search.", null));
                     return null;
                 }
-            } 
-            else 
-            {
+            } else {
                 associatedPatients = providerDao.searchPatientsByName(doctorId, patientName, matchType);
-                if (associatedPatients == null || associatedPatients.isEmpty()) 
-                {
+                if (associatedPatients == null || associatedPatients.isEmpty()) {
                     String readableMatch = matchType.equalsIgnoreCase("startswith") ? "start with" : "contain";
                     context.addMessage("patientName", new FacesMessage(FacesMessage.SEVERITY_WARN,
                             "No patients found under Doctor ID " + doctorId +
@@ -551,28 +597,206 @@ public class InsuranceController {
             }
 
             showPatientsFlag = true;
+            showRelatedInsuranceFlag = false;
 
-        } else 
-        {
+        } 
+        // Case 3: Only doctor ID is provided (show all patients)
+        else {
             associatedPatients = providerDao.getPatientListByDoctorId(doctorId);
             if (associatedPatients == null || associatedPatients.isEmpty()) {
                 context.addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_INFO,
                         "No patients found for Doctor ID: " + doctorId, null));
             } else {
                 showPatientsFlag = true;
+                showRelatedInsuranceFlag = false;
+                cameFromPatientSearch=true;
             }
         }
-        matchType=null;
-        insuranceType=null;
+
+        // Reset search parameters
+        matchType = null;
+        insuranceType = null;
         return null;
     }
-
+//    public String handleSearch() {
+//        resetPagination();
+//        cameFromPatientSearch = true;
+//        insuranceDaoImpl = new InsuranceDaoImpl();
+//        providerDao = new ProviderDaoImpl();
+//        FacesContext context = FacesContext.getCurrentInstance();
+//
+//        // Reset all data and flags
+//        topMessage = null;
+//        patientInsuranceList = new ArrayList<>();
+//        associatedPatients = new ArrayList<>();
+//        relatedInsuranceList = new ArrayList<>();
+//        showPatientsFlag = false;
+//        showInsuranceFlag = false;
+//      
+//
+//        // 1. Validate Doctor ID (required)
+//        if (doctorId == null || doctorId.trim().isEmpty()) {
+//            context.addMessage("doctorId",
+//                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter doctor ID (DOCXXX)", null));
+//            return null;
+//        }
+//
+//        if (!doctorId.matches("(?i)^DOC\\d{3}$")) {
+//            context.addMessage("doctorId",
+//                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doctor ID must be in DOCXXX format", null));
+//            return null;
+//        }
+//
+//        Doctor doctor = providerDao.searchDoctorById(doctorId);
+//        if (doctor == null) {
+//            context.addMessage("doctorId",
+//                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doctor not found", null));
+//            return null;
+//        }
+//
+//        // 2. Validate Match Type (if provided)
+//        if (matchType != null && (patientName == null || patientName.trim().isEmpty())) {
+//            context.addMessage("matchType",
+//                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter patient name to use match type", null));
+//            return null;
+//        }
+//
+//        // 3. Validate Patient Name (if provided)
+//        if (patientName != null && !patientName.trim().isEmpty()) {
+//            if (patientName.trim().length() < 2) {
+//                context.addMessage("patientName",
+//                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter at least 2 characters", null));
+//                return null;
+//            }
+//        }
+//
+//        // 4. Validate Insurance Type (if selected)
+//        if (insuranceType != null && !insuranceType.isEmpty()) {
+//            if (healthId == null && patientName == null) {
+//                context.addMessage("insuranceType",
+//                    new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+//                        "Enter either Patient ID or Patient Name to search insurance", null));
+//                return null;
+//            }
+//        }
+//
+//        // ===== SEARCH LOGIC =====
+//        // CASE 1: Health ID provided (direct insurance lookup)
+//        if (healthId != null && !healthId.trim().isEmpty()) {
+//            if (!healthId.matches("(?i)^H\\d{3}$")) {
+//                context.addMessage("recipientId",
+//                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Patient ID must be in HXXX format", null));
+//                return null;
+//            }
+//
+//            Recipient recipient = providerDao.searchRecipientByHealthId(healthId);
+//            if (recipient == null) {
+//                context.addMessage("recipientId",
+//                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Patient not found", null));
+//                return null;
+//            }
+//
+//            if (!providerDao.isDoctorPatientAssociatedByAppointment(doctorId, healthId)) {
+//                context.addMessage("recipientId",
+//                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Doctor not associated with patient", null));
+//                return null;
+//            }
+//
+//            // Validate name match if name provided
+//            if (patientName != null && !isNameMatch(recipient, patientName, matchType)) {
+//                context.addMessage("patientName",
+//                    new FacesMessage(FacesMessage.SEVERITY_WARN, 
+//                        "Patient name doesn't match search criteria", null));
+//                return null;
+//            }
+//
+//            // Fetch insurance
+//            if ("own".equalsIgnoreCase(insuranceType)) {
+//                patientInsuranceList = insuranceDaoImpl.showInsuranceOfRecipient(healthId);
+//                showInsuranceFlag = !patientInsuranceList.isEmpty();
+//            } else if ("relatedAsAMember".equalsIgnoreCase(insuranceType)) {
+//                relatedInsuranceList = insuranceDaoImpl.showRelatedInsuranceOfMember(healthId);
+//               
+//            }
+//
+//            if (!showInsuranceFlag) {
+//                context.addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_INFO, "No insurance records found", null));
+//            }
+//        }
+//        // CASE 2: Patient Name + Insurance Type (no HID)
+//        else if (patientName != null && !patientName.trim().isEmpty() 
+//                  && insuranceType != null && !insuranceType.isEmpty()) {
+//            
+//            // Find matching patients
+//            List<Recipient> patients = (matchType == null) ?
+//                providerDao.searchPatientsByExactName(doctorId, patientName) :
+//                providerDao.searchPatientsByName(doctorId, patientName, matchType);
+//
+//            if (patients.isEmpty()) {
+//                context.addMessage("patientName",
+//                    new FacesMessage(FacesMessage.SEVERITY_WARN, "No matching patients found", null));
+//                return null;
+//            }
+//
+//            // Fetch insurance for all matching patients
+//            if ("own".equalsIgnoreCase(insuranceType)) {
+//                patients.forEach(patient -> {
+//                    List<PatientInsuranceDetails> insurances = insuranceDaoImpl.showInsuranceOfRecipient(patient.gethId());
+//                    if (insurances != null) patientInsuranceList.addAll(insurances);
+//                });
+//                showInsuranceFlag = !patientInsuranceList.isEmpty();
+//            } 
+//            else if ("relatedAsAMember".equalsIgnoreCase(insuranceType)) {
+//                patients.forEach(patient -> {
+//                    List<RelatedPatientInsuranceDetails> related = insuranceDaoImpl.showRelatedInsuranceOfMember(patient.gethId());
+//                    if (related != null) relatedInsuranceList.addAll(related);
+//                });
+//               
+//            }
+//
+//            if (!showInsuranceFlag) {
+//                context.addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_INFO, "No insurance found for matching patients", null));
+//            }
+//        }
+//        // CASE 3: Only Patient Name (show patient list)
+//        else if (patientName != null && !patientName.trim().isEmpty()) {
+//            associatedPatients = (matchType == null) ?
+//                providerDao.searchPatientsByExactName(doctorId, patientName) :
+//                providerDao.searchPatientsByName(doctorId, patientName, matchType);
+//            
+//            showPatientsFlag = !associatedPatients.isEmpty();
+//        }
+//        // CASE 4: Only Doctor ID (show all patients)
+//        else {
+//            associatedPatients = providerDao.getPatientListByDoctorId(doctorId);
+//            showPatientsFlag = !associatedPatients.isEmpty();
+//        }
+//
+//        return null;
+//    }
+//
+//    // Helper method for name matching
+//    private boolean isNameMatch(Recipient recipient, String searchName, String matchType) {
+//        String fullName = (recipient.getFirstName() + recipient.getLastName()).toLowerCase().replaceAll("\\s+", "");
+//        String searchTerm = searchName.toLowerCase().replaceAll("\\s+", "");
+//
+//        if (matchType == null) {
+//            return fullName.equals(searchTerm);
+//        }
+//        switch (matchType.toLowerCase()) {
+//            case "startswith": return fullName.startsWith(searchTerm);
+//            case "contains": return fullName.contains(searchTerm);
+//            default: return false;
+//        }
+//    }
     public String showInsuranceForPatient(String hId) {
         System.out.println("view members called from nested table for hid " + hId);
         patientInsuranceList = insuranceDaoImpl.showInsuranceOfRecipient(hId);
         
         if (patientInsuranceList == null || patientInsuranceList.isEmpty()) {
-            topMessage = "No insurance found for patient ID: " + hId;
+            topMessage = "No personal insurance found for patient ID: " + hId;
             showInsuranceFlag = false;
             showPatientsFlag = true;
         } else {
@@ -597,16 +821,22 @@ public class InsuranceController {
 
         return "viewMembers?faces-redirect=true&ts=" + System.currentTimeMillis();
     }
-
-
-    public void sortBy(String listType, String field) {
-        if (field.equals(sortField)) {
-            ascending = !ascending;
-        } else {
-            sortField = field;
-            ascending = true;
-        }
-
+    public void sortByAsc(String listType,String field) {
+		currentSort = "asc";
+		this.sortField = field;
+		this.ascending = true;
+		sortBy(listType);
+	}
+ 
+	public void sortByDesc(String listType,String field) {
+		currentSort = "desc";
+		this.sortField = field;
+		this.ascending = false;
+		sortBy(listType);
+	}
+	
+    public void sortBy(String listType) {
+    	
         switch (listType) {
             case "insurance":
                 insuranceFirst = 0;
@@ -620,8 +850,36 @@ public class InsuranceController {
                 patientFirst = 0;
                 sortAssociatedPatients();
                 break;
+            case "related":
+            	sortRelatedList();
+            	
         }
     }
+private void sortRelatedList() {
+		
+        if (relatedInsuranceList == null || sortField == null) return;
+
+        Collections.sort(relatedInsuranceList, (i1, i2) -> {
+            try {
+                Field f = i1.getClass().getDeclaredField(sortField);
+                f.setAccessible(true);
+                Object v1 = f.get(i1);
+                Object v2 = f.get(i2);
+
+                if (v1 == null || v2 == null) return 0;
+
+                if (v1 instanceof Date && v2 instanceof Date) {
+                    return ascending ? ((Date) v1).compareTo((Date) v2) : ((Date) v2).compareTo((Date) v1);
+                } else if (v1 instanceof Comparable && v2 instanceof Comparable) {
+                    return ascending ? ((Comparable) v1).compareTo(v2) : ((Comparable) v2).compareTo(v1);
+                } else {
+                    return 0;
+                }
+            } catch (Exception e) {
+                return 0;
+            }
+        });
+}
     private void sortAssociatedPatients() {
         if (associatedPatients == null || sortField == null) return;
 
@@ -708,6 +966,8 @@ public class InsuranceController {
         this.cameFromPatientSearch = false;
         this.topMessage = null;
         this.insuranceType=null;
+        showRelatedInsuranceFlag = false;
+        relatedInsuranceList = null;
         // Reset pagination
         this.insuranceFirst = 0;
         this.patientFirst = 0;
@@ -739,7 +999,8 @@ public class InsuranceController {
         this.showInsuranceFlag = false;
         this.cameFromPatientSearch = false;
         this.topMessage = null;
-
+        showRelatedInsuranceFlag = false;
+        relatedInsuranceList = null;
         // Reset pagination
         this.insuranceFirst = 0;
         this.patientFirst = 0;
@@ -756,7 +1017,33 @@ public class InsuranceController {
         FacesContext.getCurrentInstance().getViewRoot().getChildren().clear();
         return "ProviderDashboard?faces-redirect=true";
     }
+ // New method to show related insurance (modified from original)
+    public String showRelatedInsuranceController(String hId) {
+        relatedInsuranceList = insuranceDaoImpl.showRelatedInsuranceOfMember(hId);
 
+        if (this.relatedInsuranceList == null || this.relatedInsuranceList.isEmpty()) {
+            this.topMessage = "No related insurance found where patient ID " + this.healthId + " is a member";
+            return null;
+        } else {
+            this.topMessage = null; // Clear any previous message
+        }
+        showInsuranceFlag = false;
+        showPatientsFlag = false;
+        showRelatedInsuranceFlag = true;
+        cameFromPatientSearch = true;
+        return null; // Stay on same page
+    }
+
+    // New back method specifically for related insurance
+    public String backFromRelatedInsurance() {
+        // Only reset what's needed for this case
+        showRelatedInsuranceFlag = false;
+        relatedInsuranceList = null;
+        // Return to patient list
+        showPatientsFlag = true;
+        topMessage = null;
+        return null;
+    }
 
 
 }
