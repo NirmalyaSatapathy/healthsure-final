@@ -26,6 +26,14 @@ public class Prescription implements Serializable{
     private Timestamp createdAt;
     private Date startDate;
     private Date endDate;
+    private Doctor prescribedDoc;
+    public Doctor getPrescribedDoc() {
+		return prescribedDoc;
+	}
+
+	public void setPrescribedDoc(Doctor prescribedDoc) {
+		this.prescribedDoc = prescribedDoc;
+	}
     @Override
     public String toString() {
         return "Prescription [" +
@@ -137,5 +145,6 @@ public class Prescription implements Serializable{
         this.recipient = new Recipient();
         this.provider = new Provider();
         this.doctor = new Doctor();
+        this.prescribedDoc=new Doctor();
     }
 }

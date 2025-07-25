@@ -188,6 +188,15 @@
                                          styleClass="form-control"
                                          readonly="true" />
                         </div>
+                         <h:panelGroup rendered="#{procedureController.procedure.type ne 'SINGLE_DAY'}" styleClass="form-group full-width">
+                        <div class="form-group">
+                            <label for="prescribedBy">Prescribed BY</label>
+                            <h:inputText id="prescribedBy"
+                                         value="#{procedureController.prescription.prescribedDoc.doctorId}"
+                                         styleClass="form-control" />
+                            <h:message for="prescribedBy" styleClass="error" />
+                        </div>
+                        </h:panelGroup>
                     </div>
 
                     <!-- Date fields grid -->

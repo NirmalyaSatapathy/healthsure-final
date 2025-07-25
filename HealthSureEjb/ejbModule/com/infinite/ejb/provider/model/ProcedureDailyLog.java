@@ -11,9 +11,19 @@ public class ProcedureDailyLog implements Serializable {
     private String vitals;     // optional: e.g., "BP: 120/80, Pulse: 72"
     private String notes;      // e.g., "Patient stable, no new meds"
     private Date createdAt;
+    private Doctor loggedDoctor;
+    
+    public Doctor getloggedDoctor() {
+		return loggedDoctor;
+	}
 
-    public ProcedureDailyLog() {
+	public void setloggedDoctor(Doctor loggedDoctor) {
+		this.loggedDoctor = loggedDoctor;
+	}
+
+	public ProcedureDailyLog() {
         this.medicalProcedure = new MedicalProcedure();
+        this.loggedDoctor=new Doctor();
     }
 
     // Getters and Setters

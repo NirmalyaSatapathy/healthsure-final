@@ -156,6 +156,7 @@ CREATE TABLE prescription (
     h_id VARCHAR(20) NOT NULL,
     provider_id VARCHAR(20) NOT NULL,
     doctor_id VARCHAR(20) NOT NULL,
+    prescribed_by VARCHAR(20) NOT NULL,
     written_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     start_date TIMESTAMP,
     end_date TIMESTAMP,
@@ -163,7 +164,8 @@ CREATE TABLE prescription (
     FOREIGN KEY (procedure_id) REFERENCES medical_procedure(procedure_id),
     FOREIGN KEY (h_id) REFERENCES Recipient(h_id),
     FOREIGN KEY (provider_id) REFERENCES Providers(provider_id),
-    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id)
+    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id),
+    foreign key(prescribed_by) REFERENCES Doctors(doctor_id)
 );
 CREATE TABLE prescribed_medicines (
     prescribed_id VARCHAR(20) PRIMARY KEY,
@@ -190,6 +192,7 @@ CREATE TABLE prescribed_tests (
 CREATE TABLE procedure_daily_log (
     log_id VARCHAR(20) PRIMARY KEY,
     procedure_id VARCHAR(20) NOT NULL,
+    logged_by VARCHAR(20) NOT NULL,
     log_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     vitals TEXT,  -- optional (BP, temp, pulse)
     notes TEXT,   -- e.g., "Patient stable", "No new meds today"
@@ -338,6 +341,7 @@ CREATE TABLE subscribe (
     h_id VARCHAR(50),
     coverage_id VARCHAR(50),
     subscribe_date DATE NOT NULL,
+    start_date DATE NOT NULL,
     expiry_date DATE NOT NULL,
     type enum('INDIVIDUAL','FAMILY'),
     status ENUM('ACTIVE', 'EXPIRED') NOT NULL,
@@ -349,11 +353,13 @@ CREATE TABLE subscribe (
 CREATE TABLE subscribed_members (
     member_id VARCHAR(50) PRIMARY KEY,
     subscribe_id VARCHAR(50),
+     h_id VARCHAR(50),
     full_name VARCHAR(100) NOT NULL,
     age INT,
     gender VARCHAR(10),
     relation_with_proposer VARCHAR(30), -- Self, Spouse, Child, Parent
     aadhar_no VARCHAR(20),
+	FOREIGN KEY (h_id) REFERENCES Recipient(h_id),
     FOREIGN KEY (subscribe_id) REFERENCES subscribe(subscribe_id)
 );
 

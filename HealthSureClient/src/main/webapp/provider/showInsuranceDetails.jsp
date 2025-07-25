@@ -706,325 +706,333 @@ input[type="radio"]::-moz-focus-inner {
 			</h:panelGroup>
 		</h:form>
 	</h:panelGroup>
-	<!-- Related Member Insurance Table -->
-	<h:panelGroup
-		rendered="#{insuranceController.showRelatedInsuranceFlag}">
-		<h:form prependId="false">
-			<h3>Related Member Insurance Details</h3>
+<!-- Related Member Insurance Table -->
+<h:panelGroup rendered="#{insuranceController.showRelatedInsuranceFlag}">
+    <h:form prependId="false">
+        <h3>Related Member Insurance Details</h3>
+        <h:outputText
+            value="Total related insurance Records: #{insuranceController.relatedInsuranceList.size()}"
+            style="font-weight:bold; display:block; margin-top:20px;" />
+        <!-- Data Table -->
+        <h:dataTable value="#{insuranceController.paginatedRelatedInsuranceList}" var="d" styleClass="data-table">
+            <!-- Full Name -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Full Name" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink action="#{insuranceController.sortByAsc('related','memberName')}"
+                                rendered="#{!(insuranceController.sortField eq 'memberName' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink action="#{insuranceController.sortByDesc('related','memberName')}"
+                                rendered="#{!(insuranceController.sortField eq 'memberName' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.memberName}" />
+            </h:column>
 
-			<h:dataTable value="#{insuranceController.relatedInsuranceList}"
-				var="d" styleClass="data-table">
+            <!-- Age -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Age" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink action="#{insuranceController.sortByAsc('related','memberAge')}"
+                                rendered="#{!(insuranceController.sortField eq 'memberAge' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink action="#{insuranceController.sortByDesc('related','memberAge')}"
+                                rendered="#{!(insuranceController.sortField eq 'memberAge' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.memberAge}" />
+            </h:column>
 
-				<!-- Full Name -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Full Name" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','memberName')}"
-									rendered="#{!(insuranceController.sortField eq 'memberName' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','memberName')}"
-									rendered="#{!(insuranceController.sortField eq 'memberName' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.memberName}" />
-				</h:column>
+            <!-- Gender -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Gender" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink action="#{insuranceController.sortByAsc('related','memberGender')}"
+                                rendered="#{!(insuranceController.sortField eq 'memberGender' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink action="#{insuranceController.sortByDesc('related','memberGender')}"
+                                rendered="#{!(insuranceController.sortField eq 'memberGender' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.memberGender}" />
+            </h:column>
 
-				<!-- Age -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Age" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','memberAge')}"
-									rendered="#{!(insuranceController.sortField eq 'memberAge' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','memberAge')}"
-									rendered="#{!(insuranceController.sortField eq 'memberAge' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.memberAge}" />
-				</h:column>
+            <!-- Relation -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Relation" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink action="#{insuranceController.sortByAsc('related','relationWithProposer')}"
+                                rendered="#{!(insuranceController.sortField eq 'relationWithProposer' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink action="#{insuranceController.sortByDesc('related','relationWithProposer')}"
+                                rendered="#{!(insuranceController.sortField eq 'relationWithProposer' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.relationWithProposer}" />
+            </h:column>
 
-				<!-- Gender -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Gender" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','memberGender')}"
-									rendered="#{!(insuranceController.sortField eq 'memberGender' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','memberGender')}"
-									rendered="#{!(insuranceController.sortField eq 'memberGender' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.memberGender}" />
-				</h:column>
+            <!-- Subscribed By -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Subscribed By" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink action="#{insuranceController.sortByAsc('related','proposerName')}"
+                                rendered="#{!(insuranceController.sortField eq 'proposerName' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink action="#{insuranceController.sortByDesc('related','proposerName')}"
+                                rendered="#{!(insuranceController.sortField eq 'proposerName' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.proposerName}" />
+            </h:column>
 
-				<!-- Relation -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Relation" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','relationWithProposer')}"
-									rendered="#{!(insuranceController.sortField eq 'relationWithProposer' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','relationWithProposer')}"
-									rendered="#{!(insuranceController.sortField eq 'relationWithProposer' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.relationWithProposer}" />
-				</h:column>
+            <!-- Company -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Company" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','companyName')}"
+                                rendered="#{!(insuranceController.sortField eq 'companyName' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','companyName')}"
+                                rendered="#{!(insuranceController.sortField eq 'companyName' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.companyName}" />
+            </h:column>
 
-				<!-- Subscribed By -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Subscribed By" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','proposerName')}"
-									rendered="#{!(insuranceController.sortField eq 'proposerName' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','proposerName')}"
-									rendered="#{!(insuranceController.sortField eq 'proposerName' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.proposerName}" />
-				</h:column>
+            <!-- Plan -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Plan" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','planName')}"
+                                rendered="#{!(insuranceController.sortField eq 'planName' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','planName')}"
+                                rendered="#{!(insuranceController.sortField eq 'planName' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.planName}" />
+            </h:column>
+            <!-- Subscribe Date -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Subscribe Date" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','enrollmentDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'enrollmentDate' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','enrollmentDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'enrollmentDate' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.enrollmentDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:outputText>
+            </h:column>
 
-				<!-- Company -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Company" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','companyName')}"
-									rendered="#{!(insuranceController.sortField eq 'companyName' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','companyName')}"
-									rendered="#{!(insuranceController.sortField eq 'companyName' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.companyName}" />
-				</h:column>
+            <!-- Coverage Start -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Coverage Start" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','coverageStartDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'coverageStartDate' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','coverageStartDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'coverageStartDate' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.coverageStartDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:outputText>
+            </h:column>
 
-				<!-- Plan -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Plan" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','planName')}"
-									rendered="#{!(insuranceController.sortField eq 'planName' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','planName')}"
-									rendered="#{!(insuranceController.sortField eq 'planName' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.planName}" />
-				</h:column>
-				<!-- Subscribe Date -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Subscribe Date" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','enrollmentDate')}"
-									rendered="#{!(insuranceController.sortField eq 'enrollmentDate' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','enrollmentDate')}"
-									rendered="#{!(insuranceController.sortField eq 'enrollmentDate' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.enrollmentDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
-					</h:outputText>
-				</h:column>
+            <!-- Coverage End -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Coverage End" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','coverageEndDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'coverageEndDate' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','coverageEndDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'coverageEndDate' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.coverageEndDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:outputText>
+            </h:column>
 
-				<!-- Coverage Start -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Coverage Start" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','coverageStartDate')}"
-									rendered="#{!(insuranceController.sortField eq 'coverageStartDate' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','coverageStartDate')}"
-									rendered="#{!(insuranceController.sortField eq 'coverageStartDate' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.coverageStartDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
-					</h:outputText>
-				</h:column>
+            <!-- Coverage Amount -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Coverage Amount" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','coverageLimit')}"
+                                rendered="#{!(insuranceController.sortField eq 'coverageLimit' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','coverageLimit')}"
+                                rendered="#{!(insuranceController.sortField eq 'coverageLimit' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.coverageLimit}" />
+            </h:column>
 
-				<!-- Coverage End -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Coverage End" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','coverageEndDate')}"
-									rendered="#{!(insuranceController.sortField eq 'coverageEndDate' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','coverageEndDate')}"
-									rendered="#{!(insuranceController.sortField eq 'coverageEndDate' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.coverageEndDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
-					</h:outputText>
-				</h:column>
+            <!-- Remaining Amount -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Remaining Amount" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','remaining')}"
+                                rendered="#{!(insuranceController.sortField eq 'remaining' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','remaining')}"
+                                rendered="#{!(insuranceController.sortField eq 'remaining' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.remaining}" />
+            </h:column>
 
-				<!-- Coverage Amount -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Coverage Amount" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','coverageLimit')}"
-									rendered="#{!(insuranceController.sortField eq 'coverageLimit' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','coverageLimit')}"
-									rendered="#{!(insuranceController.sortField eq 'coverageLimit' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.coverageLimit}" />
-				</h:column>
+            <!-- Total Claimed -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Total Claimed" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','claimed')}"
+                                rendered="#{!(insuranceController.sortField eq 'claimed' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','claimed')}"
+                                rendered="#{!(insuranceController.sortField eq 'claimed' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.claimed}" />
+            </h:column>
 
-				<!-- Remaining Amount -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Remaining Amount" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','remaining')}"
-									rendered="#{!(insuranceController.sortField eq 'remaining' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','remaining')}"
-									rendered="#{!(insuranceController.sortField eq 'remaining' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.remaining}" />
-				</h:column>
-
-				<!-- Total Claimed -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Total Claimed" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','claimed')}"
-									rendered="#{!(insuranceController.sortField eq 'claimed' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','claimed')}"
-									rendered="#{!(insuranceController.sortField eq 'claimed' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.claimed}" />
-				</h:column>
-
-				<!-- Last Claim Date -->
-				<h:column>
-					<f:facet name="header">
-						<h:panelGroup layout="block"
-							style="display: flex; align-items: center;">
-							<h:outputText value="Last Claim Date" />
-							<h:panelGroup styleClass="sort-icons">
-								<h:commandLink
-									action="#{insuranceController.sortByAsc('related','lastClaimDate')}"
-									rendered="#{!(insuranceController.sortField eq 'lastClaimDate' and insuranceController.isAscending())}"
-									styleClass="sort-icon">▲</h:commandLink>
-								<h:commandLink
-									action="#{insuranceController.sortByDesc('related','lastClaimDate')}"
-									rendered="#{!(insuranceController.sortField eq 'lastClaimDate' and not insuranceController.isAscending())}"
-									styleClass="sort-icon">▼</h:commandLink>
-							</h:panelGroup>
-						</h:panelGroup>
-					</f:facet>
-					<h:outputText value="#{d.lastClaimDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
-					</h:outputText>
-				</h:column>
-
-			</h:dataTable>
-
-			<h:commandButton value="Back to Patient Lists"
-				action="#{insuranceController.backFromRelatedInsurance()}"
-				styleClass="btn btn-tertiary"
-				rendered="#{insuranceController.cameFromPatientSearch and insuranceController.showRelatedInsuranceFlag}" />
-		</h:form>
-	</h:panelGroup>
-
+            <!-- Last Claim Date -->
+            <h:column>
+                <f:facet name="header">
+                    <h:panelGroup layout="block" style="display: flex; align-items: center;">
+                        <h:outputText value="Last Claim Date" />
+                        <h:panelGroup styleClass="sort-icons">
+                            <h:commandLink
+                                action="#{insuranceController.sortByAsc('related','lastClaimDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'lastClaimDate' and insuranceController.isAscending())}"
+                                styleClass="sort-icon">▲</h:commandLink>
+                            <h:commandLink
+                                action="#{insuranceController.sortByDesc('related','lastClaimDate')}"
+                                rendered="#{!(insuranceController.sortField eq 'lastClaimDate' and not insuranceController.isAscending())}"
+                                styleClass="sort-icon">▼</h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </f:facet>
+                <h:outputText value="#{d.lastClaimDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:outputText>
+            </h:column>
+        </h:dataTable>
+        
+        <!-- Updated Pagination Controls -->
+        <div class="pagination-group">
+            <div>
+                <h:commandButton value="First"
+                    action="#{insuranceController.setRelatedFirst(0)}"
+                    disabled="#{insuranceController.relatedFirst == 0}"
+                    styleClass="btn btn-tertiary" />
+                <h:commandButton value="Previous"
+                    action="#{insuranceController.previousRelatedPage()}"
+                    disabled="#{insuranceController.relatedFirst == 0}"
+                    styleClass="btn btn-tertiary" />
+            </div>
+            <div>
+                <h:outputText
+                    value="Page #{insuranceController.getRelatedCurrentPage()} of #{insuranceController.getRelatedTotalPages()}"/>
+              
+            </div>
+            <div>
+                <h:commandButton value="Next"
+                    action="#{insuranceController.nextRelatedPage()}"
+                    disabled="#{!insuranceController.isNextRelatedAvailable()}"
+                    styleClass="btn btn-tertiary" />
+                <h:commandButton value="Last"
+    action="#{insuranceController.setRelatedFirst( 
+              (insuranceController.relatedInsuranceList.size() 
+               - (insuranceController.relatedInsuranceList.size() 
+                  mod insuranceController.relatedPageSize)))}"
+    disabled="#{insuranceController.relatedFirst + insuranceController.relatedPageSize >= insuranceController.relatedInsuranceList.size()}"
+    styleClass="btn btn-tertiary" />
+            </div>
+        </div>
+        
+        <!-- Back button if needed -->
+        <h:panelGroup rendered="#{insuranceController.cameFromPatientSearch}" style="margin-top:20px;">
+            <h:commandButton value="Back to Patient Lists"
+                action="#{insuranceController.backToPatients()}"
+                styleClass="btn btn-tertiary" />
+        </h:panelGroup>
+    </h:form>
+</h:panelGroup>
 </body>
 	</html>
 </f:view>

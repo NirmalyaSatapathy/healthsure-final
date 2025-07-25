@@ -52,6 +52,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	        case COMPLETED:
 	            pst.setDate(6, null); // scheduled_date
 	            pst.setDate(7, new java.sql.Date(medicalProcedure.getProcedureDate().getTime())); // procedure_date
+	            
 	            pst.setTimestamp(8, null); // from_date
 	            pst.setTimestamp(9, null); // to_date
 	            break;
@@ -91,8 +92,8 @@ public class ProviderDaoImpl implements ProviderDao{
 	    Connection con = ConnectionHelper.getConnection();
 	    String sql = "INSERT INTO prescription (" +
 	                 "prescription_id, procedure_id, h_id, provider_id, doctor_id, " +
-	                 "written_on, start_date, end_date, created_at) " +
-	                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	                 "written_on, start_date, end_date, created_at,prescribed_by) " +
+	                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
 	    PreparedStatement pst = con.prepareStatement(sql);
 
@@ -117,7 +118,14 @@ public class ProviderDaoImpl implements ProviderDao{
 	    pst.setTimestamp(9, prescription.getCreatedAt() != null
 	            ? new java.sql.Timestamp(prescription.getCreatedAt().getTime())
 	            : new java.sql.Timestamp(System.currentTimeMillis()));
-
+	    if(prescription.getProcedure().getProcedureStatus()==ProcedureStatus.COMPLETED && prescription.getProcedure().getType()==ProcedureType.SINGLE_DAY)
+	    {
+	    pst.setString(10,prescription.getDoctor().getDoctorId());
+	    }
+	    else
+	    {
+	    	pst.setString(10,prescription.getPrescribedDoc().getDoctorId());
+	    }
 	    pst.executeUpdate();
 	    pst.close();
 	    con.close();
@@ -206,8 +214,8 @@ public class ProviderDaoImpl implements ProviderDao{
 	    Connection con = ConnectionHelper.getConnection();
 
 	    String sql = "INSERT INTO procedure_daily_log (" +
-	                 "log_id, procedure_id, log_date, vitals, notes, created_at) " +
-	                 "VALUES (?, ?, ?, ?, ?, ?)";
+	                 "log_id, procedure_id, log_date, vitals, notes, created_at,logged_by) " +
+	                 "VALUES (?, ?, ?, ?, ?, ?,?)";
 
 	    PreparedStatement pst = con.prepareStatement(sql);
 	    pst.setString(1, log.getLogId());
@@ -223,7 +231,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	    pst.setTimestamp(6, log.getCreatedAt() != null
 	            ? new java.sql.Timestamp(log.getCreatedAt().getTime())
 	            : new java.sql.Timestamp(System.currentTimeMillis()));
-
+	    pst.setString(7, log.getloggedDoctor().getDoctorId());
 	    pst.executeUpdate();
 	    pst.close();
 	    con.close();

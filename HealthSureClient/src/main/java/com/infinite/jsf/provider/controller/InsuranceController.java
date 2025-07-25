@@ -45,6 +45,8 @@ public class InsuranceController {
     private int patientFirst = 0;
     private int patientPageSize = 3;
     private String currentSort;
+    private int relatedFirst = 0;
+    private int relatedPageSize = 3; // Default page size, can be made configurable
     public int getInsuranceFirst() {
 		return insuranceFirst;
 	}
@@ -55,6 +57,22 @@ public class InsuranceController {
 
 	public int getInsurancePageSize() {
 		return insurancePageSize;
+	}
+
+	public int getRelatedFirst() {
+		return relatedFirst;
+	}
+
+	public void setRelatedFirst(int relatedFirst) {
+		this.relatedFirst = relatedFirst;
+	}
+
+	public int getRelatedPageSize() {
+		return relatedPageSize;
+	}
+
+	public void setRelatedPageSize(int relatedPageSize) {
+		this.relatedPageSize = relatedPageSize;
 	}
 
 	public String getCurrentSort() {
@@ -127,6 +145,48 @@ public class InsuranceController {
 
 	private int memberFirst = 0;
     private int memberPageSize = 3;
+ // Navigation methods
+    public void nextRelatedPage() {
+        if (relatedFirst + relatedPageSize < getRelatedInsuranceFullList().size()) {
+            relatedFirst += relatedPageSize;
+        }
+    }
+
+    public void previousRelatedPage() {
+        if (relatedFirst - relatedPageSize >= 0) {
+            relatedFirst -= relatedPageSize;
+        }
+    }
+
+    // Availability check methods
+    public boolean isNextRelatedAvailable() {
+        return relatedFirst + relatedPageSize < getRelatedInsuranceFullList().size();
+    }
+
+    public boolean isPreviousRelatedAvailable() {
+        return relatedFirst > 0;
+    }
+
+    // Paginated list accessor
+    public List<RelatedPatientInsuranceDetails> getPaginatedRelatedInsuranceList() {
+        if (relatedInsuranceList == null) return Collections.emptyList();
+        int toIndex = Math.min(relatedFirst + relatedPageSize, relatedInsuranceList.size());
+        return relatedInsuranceList.subList(relatedFirst, toIndex);
+    }
+
+    private List<RelatedPatientInsuranceDetails> getRelatedInsuranceFullList() {
+        return relatedInsuranceList == null ? Collections.emptyList() : relatedInsuranceList;
+    }
+
+    // Page info methods
+    public int getRelatedTotalPages() {
+        int size = relatedInsuranceList != null ? relatedInsuranceList.size() : 0;
+        return (int) Math.ceil((double) size / relatedPageSize);
+    }
+
+    public int getRelatedCurrentPage() {
+        return (relatedFirst / relatedPageSize) + 1;
+    }
     public void nextInsurancePage() {
         if (insuranceFirst + insurancePageSize < getPatientInsuranceFullList().size()) {
             insuranceFirst += insurancePageSize;
@@ -236,6 +296,7 @@ public class InsuranceController {
         insuranceFirst = 0;
         patientFirst = 0;
         memberFirst = 0;
+        relatedFirst = 0;
     }
     public int getAssociatedPatientsTotalPages() {
         int size = associatedPatients != null ? associatedPatients.size() : 0;
@@ -419,7 +480,7 @@ public class InsuranceController {
         topMessage = null;
         patientInsuranceList = null;
         associatedPatients = null;
-        relatedInsuranceList = null;
+       
         showPatientsFlag = false;
         showInsuranceFlag = false;
         showRelatedInsuranceFlag = false;
@@ -851,6 +912,7 @@ public class InsuranceController {
                 sortAssociatedPatients();
                 break;
             case "related":
+            	relatedFirst=0;
             	sortRelatedList();
             	
         }
@@ -972,11 +1034,11 @@ private void sortRelatedList() {
         this.insuranceFirst = 0;
         this.patientFirst = 0;
         this.memberFirst = 0;
-
+        this.relatedFirst=0;
         // Clear sorting
         this.sortField = null;
         this.ascending = true;
-
+        this.currentSort=null;
         // Clear selected info
         this.selectedItem = null;
         this.selectedPatientId = null;

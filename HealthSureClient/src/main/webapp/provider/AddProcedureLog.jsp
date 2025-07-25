@@ -165,7 +165,11 @@
                         <h:outputLabel for="logId" value="Log ID:" />
                         <h:inputText id="logId" value="#{procedureController.procedureLog.logId}" readonly="true" styleClass="form-control" />
                     </div>
-
+					<div class="form-group">
+                        <h:outputLabel for="loggedBy" value="Logged By:" />
+                        <h:inputText id="loggedBy" value="#{procedureController.procedureLog.loggedDoctor.doctorId}" styleClass="form-control" />
+                    <h:message for="loggedBy" styleClass="error-message" />
+                    </div>
                     <div class="form-group full-width">
                         <h:outputLabel for="logDate">Log Date <span style="color:red">*</span></h:outputLabel>
                         <h:inputText id="logDate" value="#{procedureController.procedureLog.logDate}" styleClass="form-control">

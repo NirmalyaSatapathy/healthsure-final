@@ -334,6 +334,7 @@ public class ProviderDaoImpl {
 		    Session session = sessionFactory.openSession();
 		    Transaction tx = null;
 		        tx = session.beginTransaction();
+		        System.out.println(app);
 		        // Load the existing appointment from the database
 		        com.infinite.jsf.provider.model.Appointment existing = (com.infinite.jsf.provider.model.Appointment) session.get(com.infinite.jsf.provider.model.Appointment.class, app.getAppointmentId());
 		        // Check if appointment exists and status is BOOKED

@@ -38,6 +38,8 @@ public class Converter {
 	    com.infinite.ejb.provider.model.Doctor ejbDoctor = new com.infinite.ejb.provider.model.Doctor();
 	    ejbDoctor.setDoctorId(jsfDoctor.getDoctorId());
 	    ejbDoctor.setDoctorName(jsfDoctor.getDoctorName());
+	    ejbDoctor.setAddress(jsfDoctor.getAddress());
+	    ejbDoctor.setSpecialization(jsfDoctor.getSpecialization());
 	    return ejbDoctor;
 	}
 	public static com.infinite.ejb.provider.model.Provider convertToEJBProvider(
