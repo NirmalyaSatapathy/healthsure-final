@@ -703,7 +703,19 @@ public class ProcedureController {
 				isValid = false;
 			}
 		}
-
+		Date fromDate = medicalProcedure.getFromDate();
+		Date today = new Date();
+		if (fromDate == null) {
+			context.addMessage("fromDate",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Missing Date", "from Date is required."));
+			context.validationFailed();
+			isValid = false;
+		} else if (fromDate.after(today)) {
+			context.addMessage("fromDate", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Date",
+					"fromDate cant be in the future."));
+			context.validationFailed();
+			isValid = false;
+		}
 		// Validate Diagnosis
 		if (medicalProcedure.getDiagnosis() == null || medicalProcedure.getDiagnosis().trim().length() < 2) {
 			context.addMessage("diagnosis", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Diagnosis",
@@ -1310,7 +1322,9 @@ public class ProcedureController {
 		} else {
 			prescription.setPrescriptionId(providerEjb.generateNewPrescriptionId());
 		}
-
+		prescription.setWrittenOn(new Date());
+		prescription.setStartDate(new Date());
+		
 		return "AddPrescription?faces-redirect=true";
 	}
 
@@ -1322,7 +1336,7 @@ public class ProcedureController {
 		} else {
 			prescribedMedicine.setPrescribedId(providerEjb.generateNewPrescribedMedicineId());
 		}
-
+		prescribedMedicine.setStartDate(new Date());
 		return "AddPrescribedMedicine?faces-redirect=true";
 	}
 
@@ -1334,7 +1348,7 @@ public class ProcedureController {
 		} else {
 			procedureTest.setTestId(providerEjb.generateNewProcedureTestId());
 		}
-
+		procedureTest.setTestDate(new Date());
 		return "AddTest?faces-redirect=true";
 	}
 
@@ -1351,7 +1365,7 @@ public class ProcedureController {
 				// Handle DB fallback error appropriately
 			}
 		}
-
+		procedureLog.setLogDate(new Date());
 		return "AddProcedureLog?faces-redirect=true";
 	}
 
