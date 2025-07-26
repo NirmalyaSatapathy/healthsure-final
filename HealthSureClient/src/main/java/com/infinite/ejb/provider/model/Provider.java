@@ -34,12 +34,12 @@ public class Provider implements Serializable{
 				+ ", prescriptions=" + prescriptions + ", claims=" + claims + "]";
 	}
 	// Relationships
-    private List<Doctor> doctors;
-    public List<Doctor> getDoctors() {
+    private List<Doctors> doctors;
+    public List<Doctors> getDoctors() {
 		return doctors;
 	}
 
-	public void setDoctors(List<Doctor> doctors) {
+	public void setDoctors(List<Doctors> doctors) {
 		this.doctors = doctors;
 	}
 

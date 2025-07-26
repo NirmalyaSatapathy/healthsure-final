@@ -6,7 +6,7 @@ import java.util.Set;
 import com.infinite.jsf.pharmacy.model.DispensedEquipment;
 import com.infinite.jsf.pharmacy.model.DispensedMedicine;
 
-public class Doctor {
+public class Doctors {
     private String doctorId;
     private Provider provider;
     private String doctorName;
@@ -23,7 +23,7 @@ public class Doctor {
     public String getDoctorId() {
 		return doctorId;
 	}
-	public Doctor() {
+	public Doctors() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

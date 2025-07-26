@@ -13,7 +13,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.infinite.ejb.provider.model.Appointment;
 import com.infinite.ejb.provider.model.AppointmentStatus;
-import com.infinite.ejb.provider.model.Doctor;
+import com.infinite.ejb.provider.model.Doctors;
 import com.infinite.ejb.provider.model.MedicalProcedure;
 import com.infinite.ejb.provider.model.Provider;
 import com.infinite.ejb.recipient.model.Recipient;
@@ -40,10 +40,10 @@ public class ProviderDaoImpl {
 	        session.close();
 	        return Converter.convertToEJBRecipient(recipient);
 	        }
-	    public Doctor searchDoctorById(String doctorId) {
+	    public Doctors searchDoctorById(String doctorId) {
 	        Session session = sessionFactory.openSession();
-	        com.infinite.jsf.provider.model.Doctor doctor=null;
-	        doctor=(com.infinite.jsf.provider.model.Doctor) session.get(com.infinite.jsf.provider.model.Doctor .class, doctorId);
+	        com.infinite.jsf.provider.model.Doctors doctor=null;
+	        doctor=(com.infinite.jsf.provider.model.Doctors) session.get(com.infinite.jsf.provider.model.Doctors.class, doctorId);
 	        session.close();
 	       return Converter.convertToEJBDoctor(doctor);
 	    }

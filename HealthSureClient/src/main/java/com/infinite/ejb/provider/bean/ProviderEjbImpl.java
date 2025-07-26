@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.naming.NamingException;
 
-import com.infinite.ejb.provider.model.Doctor;
+import com.infinite.ejb.provider.model.Doctors;
 import com.infinite.ejb.provider.model.MedicalProcedure;
 import com.infinite.ejb.provider.model.PrescribedMedicines;
 import com.infinite.ejb.provider.model.Prescription;

@@ -10,7 +10,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-import com.infinite.ejb.provider.model.Doctor;
+import com.infinite.ejb.provider.model.Doctors;
 import com.infinite.ejb.recipient.model.Recipient;
 import com.infinite.jsf.insurance.model.SubscribedMember;
 import com.infinite.jsf.provider.daoImpl.InsuranceDaoImpl;
@@ -499,7 +499,7 @@ public class InsuranceController {
             return null;
         }
 
-        Doctor doctor = providerDao.searchDoctorById(doctorId);
+        Doctors doctor = providerDao.searchDoctorById(doctorId);
         if (doctor == null) {
             context.addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     "Doctor with ID " + doctorId + " does not exist.", null));

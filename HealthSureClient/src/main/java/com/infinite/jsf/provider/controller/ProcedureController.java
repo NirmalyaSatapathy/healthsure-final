@@ -12,7 +12,7 @@ import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import com.infinite.ejb.provider.bean.ProviderEjbImpl;
-import com.infinite.ejb.provider.model.Doctor;
+import com.infinite.ejb.provider.model.Doctors;
 import com.infinite.ejb.provider.model.MedicalProcedure;
 import com.infinite.ejb.provider.model.MedicineType;
 import com.infinite.ejb.provider.model.PrescribedMedicines;
@@ -361,7 +361,7 @@ public class ProcedureController {
 		}
 
 		String doctorId = medicalProcedure.getDoctor().getDoctorId();
-		Doctor doctor = providerDao.searchDoctorById(doctorId);
+		Doctors doctor = providerDao.searchDoctorById(doctorId);
 		if (doctor == null || !doctor.getDoctorId().equalsIgnoreCase(doctorId)) {
 			context.addMessage("doctorId",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Doctor", "Doctor with given ID not found."));
@@ -516,7 +516,7 @@ public class ProcedureController {
 		}
 
 		String doctorId = medicalProcedure.getDoctor().getDoctorId();
-		Doctor doctor = providerDao.searchDoctorById(doctorId);
+		Doctors doctor = providerDao.searchDoctorById(doctorId);
 		if (doctor == null || !doctor.getDoctorId().equalsIgnoreCase(doctorId)) {
 			context.addMessage("doctorId",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Doctor", "Doctor with given ID not found."));
@@ -668,7 +668,7 @@ public class ProcedureController {
 		}
 
 		String doctorId = medicalProcedure.getDoctor().getDoctorId();
-		Doctor doctor = providerDao.searchDoctorById(doctorId);
+		Doctors doctor = providerDao.searchDoctorById(doctorId);
 		if (doctor == null || !doctor.getDoctorId().equalsIgnoreCase(doctorId)) {
 			context.addMessage("doctorId",
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Doctor", "Doctor with given ID not found."));
@@ -1026,9 +1026,9 @@ public class ProcedureController {
         }
         if ( prescription.getPrescribedDoc().getDoctorId()!=null && !prescription.getPrescribedDoc().getDoctorId().isEmpty())
         {
-        	Doctor procedureDoctor=providerDao.searchDoctorById(procedure.getDoctor().getDoctorId());
+        	Doctors procedureDoctor=providerDao.searchDoctorById(procedure.getDoctor().getDoctorId());
        
-        Doctor prescriptionDoctor=providerDao.searchDoctorById(prescription.getPrescribedDoc().getDoctorId());
+        Doctors prescriptionDoctor=providerDao.searchDoctorById(prescription.getPrescribedDoc().getDoctorId());
         
         if(!procedureDoctor.getSpecialization().equals(prescriptionDoctor.getSpecialization()))
         {
@@ -1200,8 +1200,8 @@ public class ProcedureController {
 		}
 		if (procedureLog.getloggedDoctor().getDoctorId() != null
 				&& !procedureLog.getloggedDoctor().getDoctorId().isEmpty()) {
-			Doctor procedureDoctor = providerDao.searchDoctorById(procedure.getDoctor().getDoctorId());
-			Doctor logDoctor = providerDao.searchDoctorById(procedureLog.getloggedDoctor().getDoctorId());
+			Doctors procedureDoctor = providerDao.searchDoctorById(procedure.getDoctor().getDoctorId());
+			Doctors logDoctor = providerDao.searchDoctorById(procedureLog.getloggedDoctor().getDoctorId());
 			System.out.println("procedureDoctor" + procedureDoctor);
 			System.out.println("logDoctor" + logDoctor);
 			if (!procedureDoctor.getSpecialization().equals(logDoctor.getSpecialization())) {
@@ -1385,7 +1385,7 @@ public class ProcedureController {
 			return null;
 		}
 
-		Doctor doctor = providerDao.searchDoctorById(doctorId.trim());
+		Doctors doctor = providerDao.searchDoctorById(doctorId.trim());
 		if (doctor == null) {
 			FacesContext.getCurrentInstance().addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Doctor with ID " + doctorId + " does not exist.", null));
@@ -1443,7 +1443,7 @@ public class ProcedureController {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
 			return null;
 		}
-		Doctor doctor = providerDao.searchDoctorById(doctorId.trim());
+		Doctors doctor = providerDao.searchDoctorById(doctorId.trim());
 		if (doctor == null) {
 			FacesContext.getCurrentInstance().addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Doctor with ID " + doctorId + " does not exist.", null));
@@ -1502,7 +1502,7 @@ public class ProcedureController {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct doctor id format DOCXXX", null));
 			return null;
 		}
-		Doctor doctor = providerDao.searchDoctorById(doctorId.trim());
+		Doctors doctor = providerDao.searchDoctorById(doctorId.trim());
 		if (doctor == null) {
 			FacesContext.getCurrentInstance().addMessage("doctorId", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Doctor with ID " + doctorId + " does not exist.", null));

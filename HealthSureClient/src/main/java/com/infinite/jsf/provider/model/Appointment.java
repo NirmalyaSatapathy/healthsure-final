@@ -1,19 +1,47 @@
 package com.infinite.jsf.provider.model;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 import com.infinite.jsf.recipient.model.Recipient;
 
 public class Appointment {
     private String appointmentId;
-    private Doctor doctor;
+    private Doctors doctor;
     private Recipient recipient;
     private DoctorAvailability availability;
     private Provider provider;
     private Timestamp requestedAt;
     private Timestamp bookedAt;
     private AppointmentStatus status;
+    private Timestamp start;
+    private Timestamp end;
+    private int slotNo;
+    
+    public Date getStart() {
+		return start;
+	}
+
+	public void setStart(Timestamp start) {
+		this.start = start;
+	}
+
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Timestamp end) {
+		this.end = end;
+	}
+
+	public int getSlotNo() {
+		return slotNo;
+	}
+
+	public void setSlotNo(int slotNo) {
+		this.slotNo = slotNo;
+	}
     public Set<MedicalProcedure> getProcedures() {
 		return procedures;
 	}
@@ -27,7 +55,7 @@ public class Appointment {
     // Constructors
     public Appointment() {}
 
-    public Appointment(String appointmentId, Doctor doctor, Recipient recipient, 
+    public Appointment(String appointmentId, Doctors doctor, Recipient recipient, 
                       DoctorAvailability availability, Provider provider) {
         this.appointmentId = appointmentId;
         this.doctor = doctor;
@@ -47,11 +75,11 @@ public class Appointment {
         this.appointmentId = appointmentId;
     }
 
-    public Doctor getDoctor() {
+    public Doctors getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public void setDoctor(Doctors doctor) {
         this.doctor = doctor;
     }
 

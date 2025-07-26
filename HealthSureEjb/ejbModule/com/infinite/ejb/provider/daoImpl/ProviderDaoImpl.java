@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.infinite.ejb.provider.dao.ProviderDao;
 import com.infinite.ejb.provider.model.Appointment;
-import com.infinite.ejb.provider.model.Doctor;
+import com.infinite.ejb.provider.model.Doctors;
 import com.infinite.ejb.provider.model.MedicalProcedure;
 import com.infinite.ejb.provider.model.PrescribedMedicines;
 import com.infinite.ejb.provider.model.Prescription;
@@ -421,7 +421,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	            recipient.setLastName(rs.getString("last_name"));
 	            proc.setRecipient(recipient);
 
-	            Doctor doctor = new Doctor();
+	            Doctors doctor = new Doctors();
 	            doctor.setDoctorId(rs.getString("doctor_id"));
 	            doctor.setDoctorName(rs.getString("doctor_name"));
 	            proc.setDoctor(doctor);
@@ -497,7 +497,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	            recipient.setLastName(rs.getString("last_name"));
 	            proc.setRecipient(recipient);
 
-	            Doctor doctor = new Doctor();
+	            Doctors doctor = new Doctors();
 	            doctor.setDoctorId(rs.getString("doctor_id"));
 	            doctor.setDoctorName(rs.getString("doctor_name"));
 	            proc.setDoctor(doctor);
@@ -646,7 +646,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	                recipient.setLastName(rs.getString("r_lname"));
 	                procedure.setRecipient(recipient);
 
-	                Doctor doctor = new Doctor();
+	                Doctors doctor = new Doctors();
 	                doctor.setDoctorId(rs.getString("doctor_id"));
 	                doctor.setDoctorName(rs.getString("doctor_name")); // ✅ this is correct
 	                procedure.setDoctor(doctor);

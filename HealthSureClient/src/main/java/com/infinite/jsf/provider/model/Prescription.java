@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.infinite.jsf.provider.model.Doctor;
+import com.infinite.jsf.provider.model.Doctors;
 import com.infinite.jsf.provider.model.MedicalProcedure;
 import com.infinite.jsf.provider.model.Provider;
 import com.infinite.jsf.recipient.model.Recipient;
@@ -19,19 +19,19 @@ public class Prescription implements Serializable{
     private MedicalProcedure procedure;    // mapped from procedure_id
     private Recipient recipient;           // mapped from h_id
     private Provider provider;             // mapped from provider_id
-    private Doctor doctor;                 // mapped from doctor_id
+    private Doctors doctor;                 // mapped from doctor_id
     
     // Other fields
     private Timestamp writtenOn;
     private Timestamp createdAt;
     private Date startDate;
     private Date endDate;
-    private Doctor prescribedDoc;
-    public Doctor getPrescribedDoc() {
+    private Doctors prescribedDoc;
+    public Doctors getPrescribedDoc() {
 		return prescribedDoc;
 	}
 
-	public void setPrescribedDoc(Doctor prescribedDoc) {
+	public void setPrescribedDoc(Doctors prescribedDoc) {
 		this.prescribedDoc = prescribedDoc;
 	}
     @Override
@@ -117,11 +117,11 @@ public class Prescription implements Serializable{
         this.provider = provider;
     }
 
-    public Doctor getDoctor() {
+    public Doctors getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public void setDoctor(Doctors doctor) {
         this.doctor = doctor;
     }
 
@@ -144,7 +144,7 @@ public class Prescription implements Serializable{
         this.procedure = new MedicalProcedure();
         this.recipient = new Recipient();
         this.provider = new Provider();
-        this.doctor = new Doctor();
-        this.prescribedDoc=new Doctor();
+        this.doctor = new Doctors();
+        this.prescribedDoc=new Doctors();
     }
 }

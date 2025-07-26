@@ -3,19 +3,27 @@ package com.infinite.ejb.provider.model;
 import java.io.Serializable;
 import java.util.Set;
 
-public class Doctor implements Serializable{
+public class Doctors implements Serializable{
 
-    public Doctor() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	private String doctorId;
+    private String doctorId;
     private String providerId;
     private String doctorName;
     private String qualification;
     private String specialization;
     private String licenseNo;
-    private String email;
+    public Doctors() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public String toString() {
+		return "Doctor [doctorId=" + doctorId + ", providerId=" + providerId + ", doctorName=" + doctorName
+				+ ", qualification=" + qualification + ", specialization=" + specialization + ", licenseNo=" + licenseNo
+				+ ", email=" + email + ", address=" + address + ", gender=" + gender + ", password=" + password
+				+ ", loginStatus=" + loginStatus + ", doctorStatus=" + doctorStatus + ", provider=" + provider
+				+ ", procedures=" + procedures + ", prescriptions=" + prescriptions + "]";
+	}
+	private String email;
     private String address;
     private String gender;
     private String password;

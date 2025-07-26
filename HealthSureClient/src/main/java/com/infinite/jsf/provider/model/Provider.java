@@ -85,10 +85,10 @@ public class Provider {
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
-	public Set<Doctor> getDoctors() {
+	public Set<Doctors> getDoctors() {
 		return doctors;
 	}
-	public void setDoctors(Set<Doctor> doctors) {
+	public void setDoctors(Set<Doctors> doctors) {
 		this.doctors = doctors;
 	}
 	public Set<Account> getAccounts() {
@@ -122,7 +122,7 @@ public class Provider {
 		this.paymentHistories = paymentHistories;
 	}
 	// One-to-Many relationships
-    private Set<Doctor> doctors;
+    private Set<Doctors> doctors;
     private Set<Account> accounts;
     private Set<Appointment> appointments;
     private Set<MedicalProcedure> procedures;

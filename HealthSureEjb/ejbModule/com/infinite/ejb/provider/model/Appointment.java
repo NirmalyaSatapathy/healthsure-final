@@ -1,6 +1,7 @@
 package com.infinite.ejb.provider.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -8,15 +9,42 @@ import com.infinite.ejb.recipient.model.Recipient;
 public class Appointment implements Serializable {
 
     private String appointmentId;
-    private Doctor doctor;
+    private Doctors doctor;
     private Recipient recipient;
     private DoctorAvailability availability;
     private Provider provider;
 
-    private Date requestedAt;
-    private Date bookedAt;
+    private Timestamp requestedAt;
+    private Timestamp bookedAt;
     private String status;
     private String notes;
+    private Timestamp start;
+    private Timestamp end;
+    private int slotNo;
+    
+    public Date getStart() {
+		return start;
+	}
+
+	public void setStart(Timestamp start) {
+		this.start = start;
+	}
+
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Timestamp end) {
+		this.end = end;
+	}
+
+	public int getSlotNo() {
+		return slotNo;
+	}
+
+	public void setSlotNo(int slotNo) {
+		this.slotNo = slotNo;
+	}
 
     public Appointment() {
 		super();
@@ -36,11 +64,11 @@ public class Appointment implements Serializable {
         this.appointmentId = appointmentId;
     }
 
-    public Doctor getDoctor() {
+    public Doctors getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public void setDoctor(Doctors doctor) {
         this.doctor = doctor;
     }
 
@@ -72,7 +100,7 @@ public class Appointment implements Serializable {
         return requestedAt;
     }
 
-    public void setRequestedAt(Date requestedAt) {
+    public void setRequestedAt(Timestamp requestedAt) {
         this.requestedAt = requestedAt;
     }
 
@@ -80,7 +108,7 @@ public class Appointment implements Serializable {
         return bookedAt;
     }
 
-    public void setBookedAt(Date bookedAt) {
+    public void setBookedAt(Timestamp bookedAt) {
         this.bookedAt = bookedAt;
     }
 

@@ -32,7 +32,7 @@
     <!-- Relationships -->
     <set name="doctors" table="Doctors" cascade="all-delete-orphan" lazy="true" inverse="true">
       <key column="provider_id" not-null="true"/>
-      <one-to-many class="com.infinite.jsf.provider.model.Doctor"/>
+      <one-to-many class="com.infinite.jsf.provider.model.Doctors"/>
     </set>
 
     <set name="accounts" table="Accounts" cascade="all-delete-orphan" lazy="true" inverse="true">

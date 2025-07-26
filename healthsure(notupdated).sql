@@ -67,10 +67,14 @@ CREATE TABLE Doctor_availability (
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     slot_type ENUM('STANDARD', 'ADHOC') DEFAULT 'STANDARD',
-    max_capacity INT NOT NULL DEFAULT 15,
+    total_slots INT NOT NULL,
+    patient_window INT GENERATED ALWAYS AS (
+    TIMESTAMPDIFF(MINUTE, start_time, end_time) / total_slots
+	) STORED,
     is_recurring BOOLEAN DEFAULT FALSE,
     notes VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id)
 );
 
@@ -119,7 +123,12 @@ CREATE TABLE Appointment (
     provider_id VARCHAR(36) NOT NULL,
     requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     booked_at TIMESTAMP NULL,
+    cancelled_at TIMESTAMP NULL,
+  completed_at TIMESTAMP NULL,
     status ENUM('PENDING', 'BOOKED', 'CANCELLED', 'COMPLETED') DEFAULT 'PENDING',
+    slot_no INT NOT NULL,
+  start TIMESTAMP,
+  end TIMESTAMP,
     notes TEXT,
     FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id),
     FOREIGN KEY (h_id) REFERENCES Recipient(h_id),

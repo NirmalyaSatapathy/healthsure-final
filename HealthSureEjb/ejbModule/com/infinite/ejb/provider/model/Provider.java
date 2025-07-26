@@ -27,12 +27,12 @@ public class Provider implements Serializable{
 		this.paymentHistory = paymentHistory;
 	}
     // Relationships
-    private List<Doctor> doctors;
-    public List<Doctor> getDoctors() {
+    private List<Doctors> doctors;
+    public List<Doctors> getDoctors() {
 		return doctors;
 	}
 
-	public void setDoctors(List<Doctor> doctors) {
+	public void setDoctors(List<Doctors> doctors) {
 		this.doctors = doctors;
 	}
 

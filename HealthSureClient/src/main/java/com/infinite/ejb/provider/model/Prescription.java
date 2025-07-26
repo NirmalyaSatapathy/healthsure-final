@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.infinite.ejb.recipient.model.Recipient;
-import com.infinite.ejb.provider.model.Doctor;
+import com.infinite.ejb.provider.model.Doctors;
 
 public class Prescription implements Serializable{
 
@@ -16,13 +16,13 @@ public class Prescription implements Serializable{
     private MedicalProcedure procedure;    // mapped from procedure_id
     private Recipient recipient;           // mapped from h_id
     private Provider provider;             // mapped from provider_id
-    private Doctor doctor;                 // mapped from doctor_id
-    private Doctor prescribedDoc;
-    public Doctor getPrescribedDoc() {
+    private Doctors doctor;                 // mapped from doctor_id
+    private Doctors prescribedDoc;
+    public Doctors getPrescribedDoc() {
 		return prescribedDoc;
 	}
 
-	public void setPrescribedDoc(Doctor prescribedDoc) {
+	public void setPrescribedDoc(Doctors prescribedDoc) {
 		this.prescribedDoc = prescribedDoc;
 	}
 	// Other fields
@@ -73,11 +73,11 @@ public class Prescription implements Serializable{
         this.provider = provider;
     }
 
-    public Doctor getDoctor() {
+    public Doctors getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
+    public void setDoctor(Doctors doctor) {
         this.doctor = doctor;
     }
 
@@ -141,7 +141,7 @@ public class Prescription implements Serializable{
         this.procedure = new MedicalProcedure();
         this.recipient = new Recipient();
         this.provider = new Provider();
-        this.doctor = new Doctor();
-        this.prescribedDoc=new Doctor();
+        this.doctor = new Doctors();
+        this.prescribedDoc=new Doctors();
     }
 }
