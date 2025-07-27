@@ -593,7 +593,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	    MedicalProcedure procedure = null;
 	    String sql = "SELECT mp.*, " +
 	             "       a.appointment_id," +
-	             "       r.h_id, r.first_name AS r_fname, r.last_name AS r_lname, " +
+	             "       r.h_id, r.first_name AS r_fname, r.last_name AS r_lname,r.email AS r_email," +
 	             "       d.doctor_id, d.doctor_name AS doctor_name, " +
 	             "       p.provider_id, p.provider_name AS provider_name " +
 	             "FROM medical_procedure mp " +
@@ -644,6 +644,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	                recipient.sethId(rs.getString("h_id"));
 	                recipient.setFirstName(rs.getString("r_fname"));
 	                recipient.setLastName(rs.getString("r_lname"));
+	                recipient.setEmail(rs.getString("r_email"));
 	                procedure.setRecipient(recipient);
 
 	                Doctors doctor = new Doctors();

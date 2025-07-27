@@ -17,7 +17,7 @@
    	
    	</context-param>
    	<context-param>
-   	<param-name>contactNumber</param-name>
+   	<param-name>providerContact</param-name>
    	<param-value>+1 (123) 456-7890</param-value> <!-- Your clinic's contact number -->
    	</context-param>
   <context-param>

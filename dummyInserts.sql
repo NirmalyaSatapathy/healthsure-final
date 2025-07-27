@@ -43,11 +43,11 @@ VALUES
 -- Insert 10 patients
 INSERT INTO Recipient (h_id, first_name, last_name, mobile, user_name, gender, dob, address, password, email, status)
 VALUES
-('H001', 'John', 'Doe', '1234567890', 'johndoe', 'MALE', '1980-05-15', '123 Main St, City', 'hashed_pass1', 'john@email.com', 'ACTIVE'),
-('H002', 'Jane', 'Smith', '2345678901', 'janesmith', 'FEMALE', '1985-08-20', '456 Oak Ave, Town', 'hashed_pass2', 'jane@email.com', 'ACTIVE'),
-('H003', 'Robert', 'Johnson', '3456789012', 'robertj', 'MALE', '1975-03-10', '789 Pine Rd, Village', 'hashed_pass3', 'robert@email.com', 'ACTIVE'),
-('H004', 'Sarah', 'Williams', '4567890123', 'sarahw', 'FEMALE', '1990-11-25', '321 Elm St, City', 'hashed_pass4', 'sarah@email.com', 'ACTIVE'),
-('H005', 'Michael', 'Brown', '5678901234', 'michaelb', 'MALE', '1988-07-30', '654 Maple Dr, Town', 'hashed_pass5', 'michael@email.com', 'ACTIVE');
+('H001', 'John', 'Doe', '1234567890', 'johndoe', 'MALE', '1980-05-15', '123 Main St, City', 'hashed_pass1', 'nirmalyasuman@gmail.com', 'ACTIVE'),
+('H002', 'Jane', 'Smith', '2345678901', 'janesmith', 'FEMALE', '1985-08-20', '456 Oak Ave, Town', 'hashed_pass2', 'satapathynirmalya@gmail.com', 'ACTIVE'),
+('H003', 'Robert', 'Johnson', '3456789012', 'robertj', 'MALE', '1975-03-10', '789 Pine Rd, Village', 'hashed_pass3', 'nirmalya80@gmail.com', 'ACTIVE'),
+('H004', 'Sarah', 'Williams', '4567890123', 'sarahw', 'FEMALE', '1990-11-25', '321 Elm St, City', 'hashed_pass4', 'musicnirmalya@gmail.com', 'ACTIVE'),
+('H005', 'Michael', 'Brown', '5678901234', 'michaelb', 'MALE', '1988-07-30', '654 Maple Dr, Town', 'hashed_pass5', 'nirmalyaguddu177@gmail.com', 'ACTIVE');
 -- Existing H001 to H005 are already inserted
 -- Below are new recipients referenced in subscribed_members
 

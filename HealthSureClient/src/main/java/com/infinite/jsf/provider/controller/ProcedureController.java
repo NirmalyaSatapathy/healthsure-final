@@ -2,6 +2,7 @@ package com.infinite.jsf.provider.controller;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+
 import com.infinite.ejb.provider.bean.ProviderEjbImpl;
 import com.infinite.ejb.provider.model.Doctors;
 import com.infinite.ejb.provider.model.MedicalProcedure;
@@ -23,8 +26,10 @@ import com.infinite.ejb.provider.model.ProcedureType;
 import com.infinite.ejb.provider.model.Provider;
 import com.infinite.ejb.recipient.model.Recipient;
 import com.infinite.jsf.provider.daoImpl.ProviderDaoImpl;
+import com.infinite.jsf.provider.dto.ProcedureSlip;
 import com.infinite.ejb.provider.model.ProcedureDailyLog;
 import com.infinite.jsf.util.Converter;
+import com.infinite.jsf.util.MailSend;
 import com.infinite.jsf.util.ProcedureIdGenerator;
 import com.infinite.ejb.provider.model.Appointment;
 
@@ -1832,72 +1837,156 @@ public class ProcedureController {
 	}
 
 	public String procedureSubmit() throws ClassNotFoundException, SQLException {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    // Step 1: Save the procedure
+	    if (providerEjb.generateNewProcedureId().equalsIgnoreCase(procedure.getProcedureId())) {
+	        providerEjb.addMedicalProcedure(procedure);
+	        // Send completion email if status is COMPLETED
+	        if (procedure.getProcedureStatus() == ProcedureStatus.COMPLETED) {
+	            try {
+	            	  ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+	                SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+	                // Determine the appropriate date based on procedure type
+	                String procedureDate = (procedure.getType() == ProcedureType.SINGLE_DAY)
+	                    ? dateFormat.format(procedure.getProcedureDate())
+	                    : dateFormat.format(procedure.getToDate());
+	                String fromDate=null;
+	                String toDate=null;
+	                // Create ProcedureSlip
+	                ProcedureSlip slip = new ProcedureSlip(
+	                    procedure.getRecipient().gethId(),
+	                    procedure.getRecipient().getFirstName() + " " + procedure.getRecipient().getLastName(),
+	                    procedureDate,
+	                    fromDate,
+	                    toDate,
+	                    procedure.getDoctor().getDoctorName(),
+	                   servletContext.getInitParameter("providerContact"),
+	                    servletContext.getInitParameter("providerEmail"),
+	                    procedure.getType().toString(),
+	                    procedure.getProcedureId()
+	                  
+	                );
+	                // Get procedure name
+	                String procedureName = procedure.getDiagnosis();
+	                // Send email
+	                String subject = "Procedure Completed - " + procedureName;
+	                String htmlContent = MailSend.procedureCompletion(slip, procedureName);
+	                // ACTUAL EMAIL SEND CALL WAS MISSING - THIS IS THE FIX
+	                String sendResult = MailSend.sendMail(procedure.getRecipient().getEmail(), subject, htmlContent);
+	                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+	                    "Procedure completion notification sent to " + procedure.getRecipient().getEmail() 
+	                    + ". Result: " + sendResult, null));
+	            } catch (Exception e) {
+	                e.printStackTrace(); // More detailed error logging
+	                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+	                    "Failed to send completion notification: " + e.getMessage(), null));
+	            }
+	        }
+	    }
 
-		// Step 1: Save the procedure
-		if (providerEjb.generateNewProcedureId().equalsIgnoreCase(procedure.getProcedureId())) {
-			providerEjb.addMedicalProcedure(procedure);
-			// Step 2: Set the saved procedure reference in each related object and save
-			// them
-		}
-		// Save prescriptions
-		for (Prescription p : prescriptions) {
-			boolean flag = false;
-			for (PrescribedMedicines pm : prescribedMedicines) {
-				if (pm.getPrescription().getPrescriptionId().equals(p.getPrescriptionId())) {
-					flag = true;
-					break;
-				}
-			}
-			for (ProcedureTest pt : procedureTests) {
-				if (pt.getPrescription().getPrescriptionId().equals(p.getPrescriptionId())) {
-					flag = true;
-					break;
-				}
-			}
-			if (flag == true) {
-				providerEjb.addPrescription(p);
-			}
 
-		}
+	    // Step 2: Save related objects
 
-		// Save prescribed medicines
-		for (PrescribedMedicines pm : prescribedMedicines) {
-			// or use p.setPrescription() if it's linked through prescription
-			providerEjb.addPrescribedMedicines(pm);
-		}
+	    // Save prescriptions
 
-		// Save tests
-		for (ProcedureTest test : procedureTests) {
-			providerEjb.addTest(test);
-		}
-		if (procedure.getType() == ProcedureType.LONG_TERM)
+	    for (Prescription p : prescriptions) {
 
-		{
-			// Save logs
-			for (ProcedureDailyLog log : procedureLogs) {
+	        boolean flag = false;
 
-				providerEjb.addProcedureLog(log);
-			}
-		}
-		providerDao = new ProviderDaoImpl();
-		providerDao.updateAppointment(this.procedureAppointment);
-		this.fetchBookedAppointments();
-		// Step 3: Clear the session-level data (optional if session-scope controller)
-		procedure = null;
-		prescription = null;
-		prescriptions.clear();
+	        for (PrescribedMedicines pm : prescribedMedicines) {
 
-		prescribedMedicine = null;
-		prescribedMedicines.clear();
-		procedureTest = null;
-		procedureTests.clear();
-		procedureLog = null;
-		procedureLogs.clear();
-		flag = true;
+	            if (pm.getPrescription().getPrescriptionId().equals(p.getPrescriptionId())) {
 
-		// Step 4: Redirect to dashboard
-		return "ProviderDashboard?faces-redirect=true";
+	                flag = true;
+
+	                break;
+
+	            }
+
+	        }
+
+	        for (ProcedureTest pt : procedureTests) {
+
+	            if (pt.getPrescription().getPrescriptionId().equals(p.getPrescriptionId())) {
+
+	                flag = true;
+
+	                break;
+
+	            }
+
+	        }
+
+	        if (flag == true) {
+
+	            providerEjb.addPrescription(p);
+
+	        }
+
+	    }
+	 
+	    // Save prescribed medicines
+
+	    for (PrescribedMedicines pm : prescribedMedicines) {
+
+	        providerEjb.addPrescribedMedicines(pm);
+
+	    }
+	 
+	    // Save tests
+
+	    for (ProcedureTest test : procedureTests) {
+
+	        providerEjb.addTest(test);
+
+	    }
+
+	    if (procedure.getType() == ProcedureType.LONG_TERM) {
+
+	        // Save logs
+
+	        for (ProcedureDailyLog log : procedureLogs) {
+
+	            providerEjb.addProcedureLog(log);
+
+	        }
+
+	    }
+
+	    providerDao = new ProviderDaoImpl();
+
+	    providerDao.updateAppointment(this.procedureAppointment);
+
+	    this.fetchBookedAppointments();
+
+	    // Step 3: Clear the session-level data
+
+	    procedure = null;
+
+	    prescription = null;
+
+	    prescriptions.clear();
+
+	    prescribedMedicine = null;
+
+	    prescribedMedicines.clear();
+
+	    procedureTest = null;
+
+	    procedureTests.clear();
+
+	    procedureLog = null;
+
+	    procedureLogs.clear();
+
+	    flag = true;
+	 
+	    // Step 4: Redirect to dashboard
+
+	    return "ProviderDashboard?faces-redirect=true";
+
 	}
+	 
 
 	public String prescriptionDetailsSubmit() {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -1971,37 +2060,103 @@ public class ProcedureController {
 	}
 
 	public String completeProcedure(MedicalProcedure procedure) {
-		System.out.println("in completeProcedure controller");
 
-		// 1. Reload full procedure from DB using ID
-		MedicalProcedure fullProc = providerEjb.getProcedureById(procedure.getProcedureId());
-		if (fullProc == null) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Procedure not found.", null));
-			return null;
-		}
-		System.out.println("fetched procedure: " + fullProc);
+	    System.out.println("in completeProcedure controller");
+	 providerDao=new ProviderDaoImpl();
+	 FacesContext context = FacesContext.getCurrentInstance();
+	    // 1. Reload full procedure from DB using ID
+	
+	    MedicalProcedure fullProc = providerEjb.getProcedureById(procedure.getProcedureId());
 
-		// 2. Set status and toDate
-		fullProc.setProcedureStatus(ProcedureStatus.COMPLETED);
-		fullProc.setToDate(new java.sql.Date(System.currentTimeMillis())); // set completion date
+	    if (fullProc == null) {
 
-		// 3. Update in DB
-		String result = providerEjb.updateProcedureStatus(fullProc);
-		System.out.println("update result: " + result);
+	        FacesContext.getCurrentInstance().addMessage(null,
 
-		// 4. Clear session if needed
-		Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		sessionMap.remove("procedureId");
-		sessionMap.remove("fromDate");
-		sessionMap.remove("procedureStatus");
+	                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Procedure not found.", null));
 
-		// 5. Optional: set selectedProcedure
+	        return null;
 
-		this.fetchInProgressProceduresController();
-		// 6. Redirect to confirmation or listing page
-		return "ShowOnGoingProcedures?faces-redirect=true";
+	    }
+
+	    System.out.println("fetched procedure: " + fullProc);
+	 
+	    // 2. Set status and toDate
+
+	    fullProc.setProcedureStatus(ProcedureStatus.COMPLETED);
+
+	    fullProc.setToDate(new java.sql.Date(System.currentTimeMillis())); // set completion date
+	 
+	    // 3. Update in DB
+
+	    String result = providerEjb.updateProcedureStatus(fullProc);
+
+	    System.out.println("update result: " + result);
+	 
+	    // 4. Prepare and send completion email
+
+	    try {
+
+	        // Get recipient details (you'll need to implement this)
+
+	        // Create procedure slip
+	    	 ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+	        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+
+	        ProcedureSlip slip = new ProcedureSlip(
+
+	            fullProc.getRecipient().gethId(),
+
+	            fullProc.getRecipient().getFirstName()+fullProc.getRecipient().getLastName(),
+
+	            null, // procedureDate not used for long-term
+
+	            sdf.format(fullProc.getFromDate()), // fromDate
+
+	            sdf.format(fullProc.getToDate()),   // toDate
+
+	            fullProc.getDoctor().getDoctorName(),
+
+	            servletContext.getInitParameter("providerContact"),
+                servletContext.getInitParameter("providerEmail"),
+
+	            fullProc.getType().name(),
+
+	            fullProc.getProcedureId()
+
+	        );
+
+	        // Send email
+
+	        String procedureName = fullProc.getDiagnosis();
+
+	        MailSend.sendProcedureCompletionMail(slip, procedureName,fullProc.getRecipient().getEmail());
+
+	    } catch (Exception e) {
+
+	        System.err.println("Error sending completion email: " + e.getMessage());
+
+	        e.printStackTrace();
+
+	    }
+	 
+	    // 5. Clear session if needed
+
+	    Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+
+	    sessionMap.remove("procedureId");
+
+	    sessionMap.remove("fromDate");
+
+	    sessionMap.remove("procedureStatus");
+	 
+	    this.fetchInProgressProceduresController();
+
+	    // 6. Redirect to confirmation or listing page
+
+	    return "ShowOnGoingProcedures?faces-redirect=true";
+
 	}
+	 
 
 	public String goToAddProcedureDetails(MedicalProcedure p) {
 		flag = false;
