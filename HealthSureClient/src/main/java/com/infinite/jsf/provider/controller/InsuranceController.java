@@ -528,9 +528,9 @@ public class InsuranceController {
             cameFromPatientSearch = false;
 
             // Validate patient ID format
-            if (!healthId.matches("^[Hh]\\d{3}$")) {
+            if (!healthId.matches("^[Hh][Ii][Dd]\\d{3}$")) {
                 FacesContext.getCurrentInstance().addMessage("recipientId",
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct Patient id format HXXX", null));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Correct Patient id format HIDXXX", null));
                 return null;
             }
 

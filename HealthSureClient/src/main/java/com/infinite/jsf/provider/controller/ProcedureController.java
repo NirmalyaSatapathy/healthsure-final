@@ -293,13 +293,13 @@ public class ProcedureController {
 		String hId = medicalProcedure.getRecipient().gethId();
 		if (medicalProcedure.getRecipient().gethId().isEmpty()) {
 			context.addMessage("recipientId",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient", "Enter Recipient Id:HXXX"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient", "Enter Recipient Id:HIDXXX"));
 			context.validationFailed();
 			isValid = false;
 		}
-		if (!medicalProcedure.getRecipient().gethId().matches("^[Hh]\\d{3}$")) {
+		if (!medicalProcedure.getRecipient().gethId().matches("^[Hh][Ii][Dd]\\d{3}$")) {
 			context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient",
-					"Correct HealthId format is HXXX"));
+					"Correct HealthId format is HIDXXX"));
 			context.validationFailed();
 			isValid = false;
 		}
@@ -441,13 +441,13 @@ public class ProcedureController {
 		boolean isValid = true;
 		if (medicalProcedure.getRecipient().gethId().isEmpty()) {
 			context.addMessage("recipientId",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient", "Enter Recipient Id:HXXX"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient", "Enter Recipient Id:HIDXXX"));
 			context.validationFailed();
 			isValid = false;
 		}
-		if (!medicalProcedure.getRecipient().gethId().matches("^[Hh]\\d{3}$")) {
+		if (!medicalProcedure.getRecipient().gethId().matches("^[Hh][Ii][Dd]\\d{3}$")) {
 			context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient",
-					"Correct HealthId format is HXXX"));
+					"Correct HealthId format is HIDXXX"));
 			context.validationFailed();
 			isValid = false;
 		}
@@ -600,13 +600,13 @@ public class ProcedureController {
 		String hId = medicalProcedure.getRecipient().gethId();
 		if (medicalProcedure.getRecipient().gethId().isEmpty()) {
 			context.addMessage("recipientId",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient", "Enter Recipient Id:HXXX"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient", "Enter Recipient Id:HIDXXX"));
 			context.validationFailed();
 			isValid = false;
 		}
-		if (!medicalProcedure.getRecipient().gethId().matches("^[Hh]\\d{3}$")) {
+		if (!medicalProcedure.getRecipient().gethId().matches("^[Hh][Ii][Dd]\\d{3}$")) {
 			context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid Patient",
-					"Correct HealthId format is HXXX"));
+					"Correct HealthId format is HIDXXX"));
 			context.validationFailed();
 			isValid = false;
 		}
