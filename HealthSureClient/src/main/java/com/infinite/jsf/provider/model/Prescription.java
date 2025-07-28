@@ -22,8 +22,8 @@ public class Prescription implements Serializable{
     private Doctors doctor;                 // mapped from doctor_id
     
     // Other fields
-    private Timestamp writtenOn;
-    private Timestamp createdAt;
+    private Date writtenOn;
+    private Date createdAt;
     private Date startDate;
     private Date endDate;
     private Doctors prescribedDoc;
@@ -125,19 +125,19 @@ public class Prescription implements Serializable{
         this.doctor = doctor;
     }
 
-    public Timestamp getWrittenOn() {
+    public Date getWrittenOn() {
         return writtenOn;
     }
 
-    public void setWrittenOn(Timestamp writtenOn) {
+    public void setWrittenOn(Date writtenOn) {
         this.writtenOn = writtenOn;
     }
 
-    public Timestamp getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
     public Prescription() {

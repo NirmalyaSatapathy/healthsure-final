@@ -10,25 +10,19 @@ public class Doctors implements Serializable{
     private String doctorName;
     private String qualification;
     private String specialization;
+    private String phoneNumber;
     private String licenseNo;
     public Doctors() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	@Override
-	public String toString() {
-		return "Doctor [doctorId=" + doctorId + ", providerId=" + providerId + ", doctorName=" + doctorName
-				+ ", qualification=" + qualification + ", specialization=" + specialization + ", licenseNo=" + licenseNo
-				+ ", email=" + email + ", address=" + address + ", gender=" + gender + ", password=" + password
-				+ ", loginStatus=" + loginStatus + ", doctorStatus=" + doctorStatus + ", provider=" + provider
-				+ ", procedures=" + procedures + ", prescriptions=" + prescriptions + "]";
-	}
+
 	private String email;
     private String address;
-    private String gender;
+    private Gender gender;
     private String password;
-    private String loginStatus;
-    private String doctorStatus;
+    private DoctorType doctorType;  // STANDARD or ADHOC
+    private DoctorStatus doctorStatus;
 
     // Relationships
     private Provider provider;  // Assuming mapped in Provider class
@@ -60,19 +54,39 @@ public class Doctors implements Serializable{
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public String getGender() { return gender; }
-    public void setGender(String gender) { this.gender = gender; }
+    
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getLoginStatus() { return loginStatus; }
-    public void setLoginStatus(String loginStatus) { this.loginStatus = loginStatus; }
+    
+    
 
-    public String getDoctorStatus() { return doctorStatus; }
-    public void setDoctorStatus(String doctorStatus) { this.doctorStatus = doctorStatus; }
-
-    public Provider getProvider() { return provider; }
+    public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public Gender getGender() {
+		return gender;
+	}
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+	public DoctorType getDoctorType() {
+		return doctorType;
+	}
+	public void setDoctorType(DoctorType doctorType) {
+		this.doctorType = doctorType;
+	}
+	public DoctorStatus getDoctorStatus() {
+		return doctorStatus;
+	}
+	public void setDoctorStatus(DoctorStatus doctorStatus) {
+		this.doctorStatus = doctorStatus;
+	}
+	public Provider getProvider() { return provider; }
     public void setProvider(Provider provider) { this.provider = provider; }
 
     public Set<MedicalProcedure> getProcedures() { return procedures; }

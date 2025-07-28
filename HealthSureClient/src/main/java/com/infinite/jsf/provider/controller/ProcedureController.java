@@ -62,7 +62,6 @@ public class ProcedureController {
 	private String sortField;
 	private boolean sortAscending = true;
 	private boolean flag = true;
-
 	// Getters and Setters for sorting
 	public String getSortField() {
 		return sortField;
@@ -779,8 +778,10 @@ public class ProcedureController {
 		procedureTest.setTestName(testName);
 		for (ProcedureTest existingTest : procedureTests) {
 			if (existingTest.getPrescription() != null
-					&& existingTest.getPrescription().getPrescriptionId().equals(prescription.getPrescriptionId())
-					&& existingTest.getTestName() != null && existingTest.getTestName().equalsIgnoreCase(testName)) {
+				    && existingTest.getPrescription().getPrescriptionId().equals(prescription.getPrescriptionId())
+				    && existingTest.getTestName() != null
+				    && existingTest.getTestName().equalsIgnoreCase(testName)
+				    && existingTest.getTestDate().equals(procedureTest.getTestDate())){
 				context.addMessage("testName", new FacesMessage(FacesMessage.SEVERITY_ERROR,
 						"This Test is already prescribed in this prescription.", null));
 				context.validationFailed();
@@ -1292,6 +1293,10 @@ public class ProcedureController {
 		procedure.setProvider(procedureAppointment.getProvider());
 		procedure.setRecipient(procedureAppointment.getRecipient());
 		procedure.setDoctor(procedureAppointment.getDoctor());
+		prescriptions.clear();
+		prescribedMedicines.clear();
+		procedureTests.clear();
+		procedureLogs.clear();
 		// Get today's date
 		Date today = new Date(); // java.util.Date
 
@@ -1687,7 +1692,7 @@ public class ProcedureController {
 		case "doctorName":
 			return Comparator.comparing(p -> p.getDoctor().getDoctorName(), Comparator.nullsLast(String::compareTo));
 		case "providerName":
-			return Comparator.comparing(p -> p.getProvider().getName(), Comparator.nullsLast(String::compareTo));
+			return Comparator.comparing(p -> p.getProvider().getHospitalName(), Comparator.nullsLast(String::compareTo));
 		case "appointmentId":
 			return Comparator.comparing(p -> p.getAppointment().getAppointmentId());
 		case "startedOn":
@@ -1979,7 +1984,7 @@ public class ProcedureController {
 
 	    procedureLogs.clear();
 
-	    flag = true;
+	    this.flag = true;
 	 
 	    // Step 4: Redirect to dashboard
 
@@ -1987,47 +1992,99 @@ public class ProcedureController {
 
 	}
 	 
-
 	public String prescriptionDetailsSubmit() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		if ((prescribedMedicines == null || prescribedMedicines.isEmpty())
-				&& (procedureTests == null || procedureTests.isEmpty())) {
-			context.addMessage("submit",
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "No medicines/tests are added to submit ", null));
-			return null;
-		}
-		String result = "";
-		if (procedure.getProcedureStatus() == ProcedureStatus.COMPLETED
-				&& procedure.getType() == ProcedureType.SINGLE_DAY) {
-			result = "ProcedureDashboard?faces-redirect=true";
-		}
-		if (procedure.getProcedureStatus() == ProcedureStatus.IN_PROGRESS
-				&& procedure.getType() == ProcedureType.LONG_TERM) {
-			result = "LongTermProcedureDashboard?faces-redirect=true";
-		}
-		return result;
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    boolean hasItems = false;
+
+	    if (prescribedMedicines != null) {
+	        for (PrescribedMedicines pm : prescribedMedicines) {
+	            if (pm.getPrescription() != null &&
+	                pm.getPrescription().getPrescriptionId().equals(this.prescription.getPrescriptionId())) {
+	                hasItems = true;
+	                break;
+	            }
+	        }
+	    }
+
+	    if (!hasItems && procedureTests != null) {
+	        for (ProcedureTest pt : procedureTests) {
+	            if (pt.getPrescription() != null &&
+	                pt.getPrescription().getPrescriptionId().equals(this.prescription.getPrescriptionId())) {
+	                hasItems = true;
+	                break;
+	            }
+	        }
+	    }
+
+	    if (!hasItems) {
+	        context.addMessage("submit",
+	                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+	                        "No medicines/tests are added to submit", null));
+	        return null;
+	    }
+
+	    String result = "";
+
+	    if (procedure != null) {
+	        if (procedure.getProcedureStatus() == ProcedureStatus.COMPLETED
+	                && procedure.getType() == ProcedureType.SINGLE_DAY) {
+	            result = "ProcedureDashboard?faces-redirect=true";
+	        }
+	        if (procedure.getProcedureStatus() == ProcedureStatus.IN_PROGRESS
+	                && procedure.getType() == ProcedureType.LONG_TERM) {
+	            result = "LongTermProcedureDashboard?faces-redirect=true";
+	        }
+	    }
+
+	    return result;
 	}
 
 	public String backFromPrescription() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		if ((prescribedMedicines != null && !prescribedMedicines.isEmpty())
-				|| (procedureTests != null && !procedureTests.isEmpty())) {
-			context.addMessage("back", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Medicines/Tests are added. Please click on Submit.", null));
-			return null;
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    boolean flag = false;
 
-		}
-		String result = "";
-		if (procedure.getProcedureStatus() == ProcedureStatus.COMPLETED
-				&& procedure.getType() == ProcedureType.SINGLE_DAY) {
-			result = "ProcedureDashboard?faces-redirect=true";
-		}
-		if (procedure.getProcedureStatus() == ProcedureStatus.IN_PROGRESS
-				&& procedure.getType() == ProcedureType.LONG_TERM) {
-			result = "LongTermProcedureDashboard?faces-redirect=true";
-		}
-		return result;
+	    if (prescribedMedicines != null) {
+	        for (PrescribedMedicines pm : prescribedMedicines) {
+	            if (pm.getPrescription() != null &&
+	                pm.getPrescription().getPrescriptionId().equals(this.prescription.getPrescriptionId())) {
+	                flag = true;
+	                break;
+	            }
+	        }
+	    }
+
+	    if (!flag && procedureTests != null) {
+	        for (ProcedureTest pt : procedureTests) {
+	            if (pt.getPrescription() != null &&
+	                pt.getPrescription().getPrescriptionId().equals(this.prescription.getPrescriptionId())) {
+	                flag = true;
+	                break;
+	            }
+	        }
+	    }
+
+	    if (flag) {
+	        context.addMessage("back", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+	                "Medicines/Tests are added. Please click on Submit.", null));
+	        return null;
+	    }
+
+	    String result = "";
+
+	    if (procedure != null) {
+	        if (procedure.getProcedureStatus() == ProcedureStatus.COMPLETED
+	                && procedure.getType() == ProcedureType.SINGLE_DAY) {
+	            result = "ProcedureDashboard?faces-redirect=true";
+	        }
+	        if (procedure.getProcedureStatus() == ProcedureStatus.IN_PROGRESS
+	                && procedure.getType() == ProcedureType.LONG_TERM) {
+	            result = "LongTermProcedureDashboard?faces-redirect=true";
+	        }
+	    }
+
+	    return result;
 	}
+
 
 	public String startProcedure(MedicalProcedure procedure) {
 		System.out.println("in start procedure controller");
@@ -2159,7 +2216,8 @@ public class ProcedureController {
 	 
 
 	public String goToAddProcedureDetails(MedicalProcedure p) {
-		flag = false;
+		this.flag = false;
+		
 		System.out.println("in goToAddProcedureDetails controller");
 
 		// 1. Reload full procedure from DB using ID

@@ -1005,6 +1005,7 @@ private void sortRelatedList() {
         showInsuranceFlag = false;
         showPatientsFlag = true;
         topMessage = null;
+        showRelatedInsuranceFlag=false;
         return null;
     }
     public String pullTopMessage() {

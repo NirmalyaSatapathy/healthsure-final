@@ -75,14 +75,10 @@ public class Converter {
 
 	    	ejbRecipient.setStatus(
 	    	    jsfRecipient.getStatus() != null 
-	    	    ? com.infinite.ejb.recipient.model.Status.valueOf(jsfRecipient.getStatus().name()) 
+	    	    ? com.infinite.ejb.recipient.model.RecipientStatus.valueOf(jsfRecipient.getStatus().name()) 
 	    	    : null
 	    	);
 
-	    ejbRecipient.setLoginAttempts(jsfRecipient.getLoginAttempts());
-	    ejbRecipient.setLockedUntil(jsfRecipient.getLockedUntil());
-	    ejbRecipient.setLastLogin(jsfRecipient.getLastLogin());
-	    ejbRecipient.setPasswordUpdatedAt(jsfRecipient.getPasswordUpdatedAt());
 
 	    return ejbRecipient;
 	}

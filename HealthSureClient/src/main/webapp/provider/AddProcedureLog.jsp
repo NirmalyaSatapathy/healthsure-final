@@ -187,7 +187,7 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <h:outputLabel for="vitals" value="Vitals (optional):" />
+                        <h:outputLabel for="vitals"><span style="color:red">*</span>Vitals</h:outputLabel>
                         <h:inputText id="vitals" value="#{procedureController.procedureLog.vitals}" styleClass="form-control" />
                         <h:message for="vitals" styleClass="error-message" />
                     </div>

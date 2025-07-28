@@ -1,51 +1,57 @@
 use healthsure;
 -- Insert 2 doctors
-INSERT INTO Providers (provider_id, provider_name, hospital_name, email, address, city, state, zip_code, status)
+INSERT INTO Providers (
+  provider_id, provider_name, hospital_name, telephone, email, password,
+  address, city, state, zipcode, status, created_at
+)
+VALUES (
+  'PROV001', 'Dr. Mehta', 'Sunrise Hospital', '022-12345678', 'mehta@sunrisehosp.com', 'hashed_provider_pw1',
+  '123 MG Road', 'Mumbai', 'Maharashtra', '400001', 'APPROVED', CURRENT_TIMESTAMP
+);
+INSERT INTO Doctors (
+  doctor_id, provider_id, doctor_name, qualification, specialization,
+  license_no, email, phone_number, address, gender, doctor_type, doctor_status
+)
 VALUES
-('PROV001', 'Dr. Mehta', 'Sunrise Hospital', 'mehta@sunrisehosp.com', '123 MG Road', 'Mumbai', 'Maharashtra', '400001', 'APPROVED');
-INSERT INTO Doctors (doctor_id, provider_id, doctor_name, qualification, specialization, license_no, email, address, gender, password, login_status, doctor_status)
-VALUES
-  ('DOC001', 'PROV001', 'Dr. Alice Smith', 'MD, Cardiology',    'Cardiologist',     'LIC001', 'alice.smith@hospital.com',     '123 Medical St, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC002', 'PROV001', 'Dr. Brian Lee',   'MD, Cardiology',    'Cardiologist',     'LIC002', 'brian.lee@hospital.com',       '456 Health Ave, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC003', 'PROV001', 'Dr. Carla Cruz',  'MD, Cardiology',    'Cardiologist',     'LIC003', 'carla.cruz@hospital.com',      '789 Care Blvd, City',        'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC004', 'PROV001', 'Dr. David Park',  'MD, Cardiology',    'Cardiologist',     'LIC004', 'david.park@hospital.com',      '321 Wellness Rd, City',      'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC005', 'PROV001', 'Dr. Eva Zhang',   'MD, Cardiology',    'Cardiologist',     'LIC005', 'eva.zhang@hospital.com',       '654 Healing St, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
+  ('DOC001', 'PROV001', 'Dr. Alice Smith',   'MD, Cardiology',    'Cardiologist',     'LIC001', 'alice.smith@hospital.com',   '9876543210', '123 Medical St, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC002', 'PROV001', 'Dr. Brian Lee',     'MD, Cardiology',    'Cardiologist',     'LIC002', 'brian.lee@hospital.com',     '9876543211', '456 Health Ave, City',     'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC003', 'PROV001', 'Dr. Carla Cruz',    'MD, Cardiology',    'Cardiologist',     'LIC003', 'carla.cruz@hospital.com',    '9876543212', '789 Care Blvd, City',      'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC004', 'PROV001', 'Dr. David Park',    'MD, Cardiology',    'Cardiologist',     'LIC004', 'david.park@hospital.com',    '9876543213', '321 Wellness Rd, City',    'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC005', 'PROV001', 'Dr. Eva Zhang',     'MD, Cardiology',    'Cardiologist',     'LIC005', 'eva.zhang@hospital.com',     '9876543214', '654 Healing St, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
 
-  ('DOC006', 'PROV001', 'Dr. Frank Miller','MD, Neurology',     'Neurologist',      'LIC006', 'frank.miller@hospital.com',    '123 Medical St, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC007', 'PROV001', 'Dr. Grace Kim',   'MD, Neurology',     'Neurologist',      'LIC007', 'grace.kim@hospital.com',       '456 Health Ave, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC008', 'PROV001', 'Dr. Henry Scott', 'MD, Neurology',     'Neurologist',      'LIC008', 'henry.scott@hospital.com',     '789 Care Blvd, City',        'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC009', 'PROV001', 'Dr. Irene Patel', 'MD, Neurology',     'Neurologist',      'LIC009', 'irene.patel@hospital.com',     '321 Wellness Rd, City',      'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC010', 'PROV001', 'Dr. Jack Owens',  'MD, Neurology',     'Neurologist',      'LIC010', 'jack.owens@hospital.com',      '654 Healing St, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
+  ('DOC006', 'PROV001', 'Dr. Frank Miller',  'MD, Neurology',     'Neurologist',      'LIC006', 'frank.miller@hospital.com',  '9876543215', '123 Medical St, City',     'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC007', 'PROV001', 'Dr. Grace Kim',     'MD, Neurology',     'Neurologist',      'LIC007', 'grace.kim@hospital.com',     '9876543216', '456 Health Ave, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC008', 'PROV001', 'Dr. Henry Scott',   'MD, Neurology',     'Neurologist',      'LIC008', 'henry.scott@hospital.com',   '9876543217', '789 Care Blvd, City',      'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC009', 'PROV001', 'Dr. Irene Patel',   'MD, Neurology',     'Neurologist',      'LIC009', 'irene.patel@hospital.com',   '9876543218', '321 Wellness Rd, City',    'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC010', 'PROV001', 'Dr. Jack Owens',    'MD, Neurology',     'Neurologist',      'LIC010', 'jack.owens@hospital.com',    '9876543219', '654 Healing St, City',     'MALE',   'STANDARD', 'ACTIVE'),
 
-  ('DOC011', 'PROV001', 'Dr. Karen Reed',  'MD, Pediatrics',    'Pediatrician',     'LIC011', 'karen.reed@hospital.com',      '123 Medical St, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC012', 'PROV001', 'Dr. Leo Ross',    'MD, Pediatrics',    'Pediatrician',     'LIC012', 'leo.ross@hospital.com',        '456 Health Ave, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC013', 'PROV001', 'Dr. Mia Torres',  'MD, Pediatrics',    'Pediatrician',     'LIC013', 'mia.torres@hospital.com',      '789 Care Blvd, City',        'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC014', 'PROV001', 'Dr. Noah Diaz',   'MD, Pediatrics',    'Pediatrician',     'LIC014', 'noah.diaz@hospital.com',       '321 Wellness Rd, City',      'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC015', 'PROV001', 'Dr. Olivia King', 'MD, Pediatrics',    'Pediatrician',     'LIC015', 'olivia.king@hospital.com',     '654 Healing St, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
+  ('DOC011', 'PROV001', 'Dr. Karen Reed',    'MD, Pediatrics',    'Pediatrician',     'LIC011', 'karen.reed@hospital.com',    '9876543220', '123 Medical St, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC012', 'PROV001', 'Dr. Leo Ross',      'MD, Pediatrics',    'Pediatrician',     'LIC012', 'leo.ross@hospital.com',      '9876543221', '456 Health Ave, City',     'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC013', 'PROV001', 'Dr. Mia Torres',    'MD, Pediatrics',    'Pediatrician',     'LIC013', 'mia.torres@hospital.com',    '9876543222', '789 Care Blvd, City',      'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC014', 'PROV001', 'Dr. Noah Diaz',     'MD, Pediatrics',    'Pediatrician',     'LIC014', 'noah.diaz@hospital.com',     '9876543223', '321 Wellness Rd, City',    'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC015', 'PROV001', 'Dr. Olivia King',   'MD, Pediatrics',    'Pediatrician',     'LIC015', 'olivia.king@hospital.com',   '9876543224', '654 Healing St, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
 
-  ('DOC016', 'PROV001', 'Dr. Paul Wang',   'MD, Orthopedics',   'Orthopedic Surgeon','LIC016','paul.wang@hospital.com',        '123 Medical St, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC017', 'PROV001', 'Dr. Queen Allen', 'MD, Orthopedics',   'Orthopedic Surgeon','LIC017','queen.allen@hospital.com',      '456 Health Ave, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC018', 'PROV001', 'Dr. Ryan Young',  'MD, Orthopedics',   'Orthopedic Surgeon','LIC018','ryan.young@hospital.com',       '789 Care Blvd, City',        'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC019', 'PROV001', 'Dr. Sara Bell',   'MD, Orthopedics',   'Orthopedic Surgeon','LIC019','sara.bell@hospital.com',        '321 Wellness Rd, City',      'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC020', 'PROV001', 'Dr. Tom Brooks',  'MD, Orthopedics',   'Orthopedic Surgeon','LIC020','tom.brooks@hospital.com',       '654 Healing St, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
+  ('DOC016', 'PROV001', 'Dr. Paul Wang',     'MD, Orthopedics',   'Orthopedic Surgeon','LIC016','paul.wang@hospital.com',     '9876543225', '123 Medical St, City',     'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC017', 'PROV001', 'Dr. Queen Allen',   'MD, Orthopedics',   'Orthopedic Surgeon','LIC017','queen.allen@hospital.com',   '9876543226', '456 Health Ave, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC018', 'PROV001', 'Dr. Ryan Young',    'MD, Orthopedics',   'Orthopedic Surgeon','LIC018','ryan.young@hospital.com',    '9876543227', '789 Care Blvd, City',      'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC019', 'PROV001', 'Dr. Sara Bell',     'MD, Orthopedics',   'Orthopedic Surgeon','LIC019','sara.bell@hospital.com',     '9876543228', '321 Wellness Rd, City',    'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC020', 'PROV001', 'Dr. Tom Brooks',    'MD, Orthopedics',   'Orthopedic Surgeon','LIC020','tom.brooks@hospital.com',    '9876543229', '654 Healing St, City',     'MALE',   'STANDARD', 'ACTIVE'),
 
-  ('DOC021', 'PROV001', 'Dr. Uma Davis',   'MD, Dermatology',   'Dermatologist',    'LIC021', 'uma.davis@hospital.com',        '123 Medical St, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC022', 'PROV001', 'Dr. Victor Zhu',  'MD, Dermatology',   'Dermatologist',    'LIC022', 'victor.zhu@hospital.com',       '456 Health Ave, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC023', 'PROV001', 'Dr. Wendy Hill',  'MD, Dermatology',   'Dermatologist',    'LIC023', 'wendy.hill@hospital.com',       '789 Care Blvd, City',        'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC024', 'PROV001', 'Dr. Xavier Fox',  'MD, Dermatology',   'Dermatologist',    'LIC024', 'xavier.fox@hospital.com',       '321 Wellness Rd, City',      'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC025', 'PROV001', 'Dr. Yara Khan',   'MD, Dermatology',   'Dermatologist',    'LIC025', 'yara.khan@hospital.com',        '654 Healing St, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
+  ('DOC021', 'PROV001', 'Dr. Uma Davis',     'MD, Dermatology',   'Dermatologist',    'LIC021', 'uma.davis@hospital.com',     '9876543230', '123 Medical St, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC022', 'PROV001', 'Dr. Victor Zhu',    'MD, Dermatology',   'Dermatologist',    'LIC022', 'victor.zhu@hospital.com',    '9876543231', '456 Health Ave, City',     'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC023', 'PROV001', 'Dr. Wendy Hill',    'MD, Dermatology',   'Dermatologist',    'LIC023', 'wendy.hill@hospital.com',    '9876543232', '789 Care Blvd, City',      'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC024', 'PROV001', 'Dr. Xavier Fox',    'MD, Dermatology',   'Dermatologist',    'LIC024', 'xavier.fox@hospital.com',    '9876543233', '321 Wellness Rd, City',    'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC025', 'PROV001', 'Dr. Yara Khan',     'MD, Dermatology',   'Dermatologist',    'LIC025', 'yara.khan@hospital.com',     '9876543234', '654 Healing St, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
 
-  ('DOC026', 'PROV001', 'Dr. Zachary Liu', 'MD, Endocrinology', 'Endocrinologist',  'LIC026', 'zachary.liu@hospital.com',     '123 Medical St, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC027', 'PROV001', 'Dr. Abby Ross',   'MD, Endocrinology', 'Endocrinologist',  'LIC027', 'abby.ross@hospital.com',        '456 Health Ave, City',       'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC028', 'PROV001', 'Dr. Ben Turner',  'MD, Endocrinology', 'Endocrinologist',  'LIC028', 'ben.turner@hospital.com',       '789 Care Blvd, City',        'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC029', 'PROV001', 'Dr. Chloe White', 'MD, Endocrinology', 'Endocrinologist',  'LIC029', 'chloe.white@hospital.com',      '321 Wellness Rd, City',      'FEMALE', 'hashed_password1', 'APPROVED', 'ACTIVE'),
-  ('DOC030', 'PROV001', 'Dr. Derek Young', 'MD, Endocrinology', 'Endocrinologist',  'LIC030', 'derek.young@hospital.com',      '654 Healing St, City',       'MALE',   'hashed_password1', 'APPROVED', 'ACTIVE');
+  ('DOC026', 'PROV001', 'Dr. Zachary Liu',   'MD, Endocrinology', 'Endocrinologist',  'LIC026', 'zachary.liu@hospital.com',   '9876543235', '123 Medical St, City',     'MALE',   'STANDARD', 'ACTIVE'),
+  ('DOC027', 'PROV001', 'Dr. Abby Ross',     'MD, Endocrinology', 'Endocrinologist',  'LIC027', 'abby.ross@hospital.com',     '9876543236', '456 Health Ave, City',     'FEMALE', 'STANDARD', 'ACTIVE'),
+  ('DOC028', 'PROV001', 'Dr. Ben Turner',    'MD, Endocrinology', 'Endocrinologist',  'LIC028', 'ben.turner@hospital.com',    '9876543237', '789 Care Blvd, City',      'MALE','STANDARD', 'ACTIVE');
 -- Insert 10 patients
 INSERT INTO Recipient (h_id, first_name, last_name, mobile, user_name, gender, dob, address, password, email, status)
 VALUES
 ('H001', 'John', 'Doe', '1234567890', 'johndoe', 'MALE', '1980-05-15', '123 Main St, City', 'hashed_pass1', 'nirmalyasuman@gmail.com', 'ACTIVE'),
 ('H002', 'Jane', 'Smith', '2345678901', 'janesmith', 'FEMALE', '1985-08-20', '456 Oak Ave, Town', 'hashed_pass2', 'satapathynirmalya@gmail.com', 'ACTIVE'),
-('H003', 'Robert', 'Johnson', '3456789012', 'robertj', 'MALE', '1975-03-10', '789 Pine Rd, Village', 'hashed_pass3', 'nirmalya80@gmail.com', 'ACTIVE'),
+('H003', 'Robert', 'Johnson', '3456789012', 'robertj', 'MALE', '1975-03-10', '789 Pine Rd, Village', 'hashed_pass3', 'sp.mishradevil@gmail.com', 'ACTIVE'),
 ('H004', 'Sarah', 'Williams', '4567890123', 'sarahw', 'FEMALE', '1990-11-25', '321 Elm St, City', 'hashed_pass4', 'musicnirmalya@gmail.com', 'ACTIVE'),
 ('H005', 'Michael', 'Brown', '5678901234', 'michaelb', 'MALE', '1988-07-30', '654 Maple Dr, Town', 'hashed_pass5', 'nirmalyaguddu177@gmail.com', 'ACTIVE');
 -- Existing H001 to H005 are already inserted

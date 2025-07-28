@@ -14,19 +14,19 @@ public class Appointment implements Serializable {
     private DoctorAvailability availability;
     private Provider provider;
 
-    private Timestamp requestedAt;
-    private Timestamp bookedAt;
+    private Date requestedAt;
+    private Date bookedAt;
     private String status;
     private String notes;
-    private Timestamp start;
-    private Timestamp end;
+    private Date start;
+    private Date end;
     private int slotNo;
     
     public Date getStart() {
 		return start;
 	}
 
-	public void setStart(Timestamp start) {
+	public void setStart(Date start) {
 		this.start = start;
 	}
 
@@ -34,7 +34,7 @@ public class Appointment implements Serializable {
 		return end;
 	}
 
-	public void setEnd(Timestamp end) {
+	public void setEnd(Date end) {
 		this.end = end;
 	}
 
@@ -100,7 +100,7 @@ public class Appointment implements Serializable {
         return requestedAt;
     }
 
-    public void setRequestedAt(Timestamp requestedAt) {
+    public void setRequestedAt(Date requestedAt) {
         this.requestedAt = requestedAt;
     }
 
@@ -108,7 +108,7 @@ public class Appointment implements Serializable {
         return bookedAt;
     }
 
-    public void setBookedAt(Timestamp bookedAt) {
+    public void setBookedAt(Date bookedAt) {
         this.bookedAt = bookedAt;
     }
 

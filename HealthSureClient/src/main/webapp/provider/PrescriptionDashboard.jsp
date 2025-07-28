@@ -150,13 +150,13 @@
                              action="AddPrescription?faces-redirect=true"
                              styleClass="action-button edit-button" />
           </div>
-
+ <h:panelGroup rendered=""#{procedureController.flag}">
           <div class="button-group">
             <h:commandButton value="Edit Procedure"
                              action="#{procedureController.gotoProcedureForm()}"
                              styleClass="action-button edit-button" />
           </div>
-
+</h:panelGroup>
           <div class="button-group">
             <h:commandButton id="submit"
                              value="Submit"

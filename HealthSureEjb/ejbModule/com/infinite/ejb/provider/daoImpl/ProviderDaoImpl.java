@@ -382,7 +382,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	        StringBuilder sql = new StringBuilder(
 	            "SELECT mp.procedure_id, mp.h_id, mp.provider_id, mp.doctor_id, " +
 	            "mp.appointment_id, mp.scheduled_date, mp.procedure_status, " +
-	            "r.first_name, r.last_name, d.doctor_name, p.provider_name " +
+	            "r.first_name, r.last_name, d.doctor_name, p.hospital_name " +
 	            "FROM medical_procedure mp " +
 	            "JOIN Recipient r ON mp.h_id = r.h_id " +
 	            "JOIN Doctors d ON mp.doctor_id = d.doctor_id " +
@@ -428,7 +428,7 @@ public class ProviderDaoImpl implements ProviderDao{
 
 	            Provider provider = new Provider();
 	            provider.setProviderId(rs.getString("provider_id"));
-	            provider.setName(rs.getString("provider_name"));
+	            provider.setHospitalName(rs.getString("hospital_name"));
 	            proc.setProvider(provider);
 
 	            procedures.add(proc);
@@ -458,7 +458,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	        StringBuilder sql = new StringBuilder(
 	            "SELECT mp.procedure_id, mp.h_id, mp.provider_id, mp.doctor_id, " +
 	            "mp.appointment_id, mp.from_date, mp.procedure_status, " +
-	            "r.first_name, r.last_name, d.doctor_name, p.provider_name " +
+	            "r.first_name, r.last_name, d.doctor_name, p.hospital_name " +
 	            "FROM medical_procedure mp " +
 	            "JOIN Recipient r ON mp.h_id = r.h_id " +
 	            "JOIN Doctors d ON mp.doctor_id = d.doctor_id " +
@@ -504,7 +504,7 @@ public class ProviderDaoImpl implements ProviderDao{
 
 	            Provider provider = new Provider();
 	            provider.setProviderId(rs.getString("provider_id"));
-	            provider.setName(rs.getString("provider_name"));
+	            provider.setHospitalName(rs.getString("hospital_name"));
 	            proc.setProvider(provider);
 
 	            procedures.add(proc);
@@ -595,7 +595,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	             "       a.appointment_id," +
 	             "       r.h_id, r.first_name AS r_fname, r.last_name AS r_lname,r.email AS r_email," +
 	             "       d.doctor_id, d.doctor_name AS doctor_name, " +
-	             "       p.provider_id, p.provider_name AS provider_name " +
+	             "       p.provider_id, p.hospital_name AS hospital_name " +
 	             "FROM medical_procedure mp " +
 	             "JOIN appointment a ON mp.appointment_id = a.appointment_id " +
 	             "JOIN recipient r ON mp.h_id = r.h_id " +
@@ -656,7 +656,7 @@ public class ProviderDaoImpl implements ProviderDao{
 	                // Associated Provider
 	                Provider provider = new Provider();
 	                provider.setProviderId(rs.getString("provider_id"));
-	                provider.setName(rs.getString("provider_name"));
+	                provider.setHospitalName(rs.getString("hospital_name"));
 	                procedure.setProvider(provider);
 	            }
 	        }

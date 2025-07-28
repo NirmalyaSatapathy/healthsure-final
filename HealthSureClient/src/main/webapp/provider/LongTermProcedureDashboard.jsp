@@ -176,7 +176,7 @@
  <h:panelGroup rendered="#{not empty procedureController.procedureLogs}">
             <div class="button-group">
               <h:commandButton value="Edit Last Log"
-                               action="AddPrescription?faces-redirect=true"
+                               action="AddProcedureLog?faces-redirect=true"
                                styleClass="action-button edit-button" />
             </div>
           </h:panelGroup>
