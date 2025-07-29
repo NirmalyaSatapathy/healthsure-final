@@ -82,13 +82,13 @@
 
             <h:form>
                 <h:commandButton value="🧾 Scheduled Procedures"
-                                 action="#{providerBean.createClaim}"
+                                 action="ShowScheduledProcedures"
                                  styleClass="action-button btn-purple" />
             </h:form>
 
             <h:form>
                 <h:commandButton value="🧾 Ongoing Procedures"
-                                 action="#{providerBean.searchPayments}"
+                                 action="ShowOnGoingProcedures"
                                  styleClass="action-button btn-pink" />
             </h:form>
 

@@ -1006,174 +1006,209 @@ public class ProcedureController {
 	}
 
 	public String addPrescriptionController(Prescription prescription) throws ClassNotFoundException, SQLException {
-    	
-    	 prescriptions.removeIf(p -> p.getPrescriptionId().equals(prescription.getPrescriptionId()));
-    	 FacesContext context = FacesContext.getCurrentInstance();
-    	 boolean isValid = true;
-        prescription.setProcedure(procedure);
-        prescription.setProvider(procedure.getProvider());
-        prescription.setDoctor(procedure.getDoctor());
-        prescription.setRecipient(procedure.getRecipient());
-        // Validate writtenOn field
-        if(procedure.getType()!=ProcedureType.SINGLE_DAY)
-        {
-        if (prescription.getWrittenOn()==null) {
-            context.addMessage("writtenOn", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Please enter the Prescription Written On date.", null));
-            context.validationFailed();
-            isValid = false;
-        }
-        if(prescription.getPrescribedDoc().getDoctorId()==null || prescription.getPrescribedDoc().getDoctorId().isEmpty())
-        {
-        	context.addMessage("prescribedBy", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Please enter the Doctor who prescribed", null));
-            context.validationFailed();
-            isValid = false;
-        }
-        if ( prescription.getPrescribedDoc().getDoctorId()!=null && !prescription.getPrescribedDoc().getDoctorId().isEmpty())
-        {
-        	Doctors procedureDoctor=providerDao.searchDoctorById(procedure.getDoctor().getDoctorId());
-       
-        Doctors prescriptionDoctor=providerDao.searchDoctorById(prescription.getPrescribedDoc().getDoctorId());
-        
-        if(!procedureDoctor.getSpecialization().equals(prescriptionDoctor.getSpecialization()))
-        {
-        	context.addMessage("prescribedBy", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Doctor spetialization does not match with "+procedureDoctor.getSpecialization(), null));
-            context.validationFailed();
-            isValid = false;
-        }
-        }
-        }
-        
-        if(prescription.getStartDate()==null)
-        {
-        	context.addMessage("startDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Please enter the Prescription Start date.", null));
-            context.validationFailed();
-            isValid = false;
-        }
-        if(prescription.getEndDate()==null)
-        {
-        	context.addMessage("endDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Please enter the Prescription End date.", null));
-            context.validationFailed();
-            isValid = false;
-        }
-        if (!isValid) return null;
-        //  Fetch procedure details
-        ProcedureType procedureType = procedure.getType();
-        ProcedureStatus procedureStatus = procedure.getProcedureStatus();
-
-        Date procedureDate = procedure.getProcedureDate(); // for SINGLE_DAY
-        Date fromDate = procedure.getFromDate();         // for LONG_TERM + IN_PROGRESS
-
-        if (procedureType == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "Missing Procedure Type for Procedure ID: " + procedureId, null));
-            context.validationFailed();
-            isValid = false;
-        }
-
-        //  SINGLE_DAY: writtenOn must be equal to procedureDate
-        if (procedureType == ProcedureType.SINGLE_DAY) {
-            prescription.setWrittenOn(procedureDate);
-            // Validate prescription start and end dates
-            Date truncatedStartDate = Converter.truncateTime(prescription.getStartDate());
-            Date truncatedEndDate = Converter.truncateTime(prescription.getEndDate());
-            Date truncatedpProcedureDate = Converter.truncateTime(procedureDate);
-            if (truncatedStartDate.before(truncatedpProcedureDate)) {
-                context.addMessage("startDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Prescription start date (" + truncatedStartDate +
-                                ") cannot be before the procedure date (" + truncatedpProcedureDate + ").", null));
-                context.validationFailed();
-                isValid = false;
-            }
-
-            if (truncatedEndDate.before(truncatedStartDate)) {
-                context.addMessage("endDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Prescription end date (" + truncatedEndDate +
-                                ") cannot be before the prescription start date (" + truncatedStartDate + ").", null));
-                context.validationFailed();
-                isValid = false;
-            }
-           
-        }
-
-        System.out.println(fromDate);
-        System.out.println(prescription.getWrittenOn());
-        System.out.println("reached for validation of longterm in progress");
-
-        // ✅ LONG_TERM + IN_PROGRESS: writtenOn must be after fromDate
-        if (procedureType == ProcedureType.LONG_TERM &&
-                procedureStatus == ProcedureStatus.IN_PROGRESS) {
-        	 // Normalize writtenOn date
-            Date writtenOn =Converter.truncateTime(prescription.getWrittenOn());
-            if (fromDate == null) {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Missing From Date for LONG_TERM procedure ID: " + procedureId, null));
-                context.validationFailed();
-                isValid = false;
-            }
-
-            Date truncatedFromDate = Converter.truncateTime(fromDate);
-            if (writtenOn.before(truncatedFromDate)) {
-                context.addMessage("writtenOn", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Written On date (" + writtenOn +
-                                ") must be after the Procedure From Date (" + truncatedFromDate + ") for long-term in-progress procedures.", null));
-                context.validationFailed();
-                isValid = false;
-            }
-            // Validate prescription start and end dates
-            Date startDate = Converter.truncateTime(prescription.getStartDate());
-            Date endDate = Converter.truncateTime(prescription.getEndDate());
-
-            if (startDate.before(writtenOn)) {
-                context.addMessage("startDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Prescription start date (" + startDate +
-                                ") cannot be before the prescription written date (" + writtenOn + ").", null));
-                context.validationFailed();
-                isValid = false;
-            }
-
-            if (endDate.before(startDate)) {
-                context.addMessage("endDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Prescription end date (" + endDate +
-                                ") cannot be before the prescription start date (" + startDate + ").", null));
-                context.validationFailed();
-                isValid = false;
-            }
-        }
-        if (prescribedMedicines != null && !prescribedMedicines.isEmpty()) {
-            for (PrescribedMedicines pm : prescribedMedicines) {
-            	if(pm.getPrescription().getPrescriptionId().equals(prescription.getPrescriptionId()))
-            	{
-                if (pm.getStartDate().before(prescription.getStartDate())) {
-                	 context.addMessage("startDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                			 "Prescription start date" +prescription.getStartDate() + " is after medicine start date " +pm.getStartDate()+" for "+pm.getMedicineName() ,null));
-                     context.validationFailed();
-                    isValid = false;
-                    break;
-                }
-                if (pm.getEndDate().after(prescription.getEndDate())) {
-                	 context.addMessage("endDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                			 "Prescription end date " +prescription.getEndDate()+ " is before Medicine end date " + pm.getEndDate() +" for "+pm.getMedicineName() ,null));
-                     context.validationFailed();
-                    isValid = false;
-                    break;
-                }
-            	}
-            }
-        }
-       
-        if (!isValid) return null;
-        // Save the actual validated values back (optional but good for consistency)
-        System.out.println(prescriptions);
-        System.out.println(prescription);
-        prescriptions.add(prescription);
-	    return "PrescriptionDashboard?faces-redirect=true";
-        
-    }
+		 
+		prescriptions.removeIf(p -> p.getPrescriptionId().equals(prescription.getPrescriptionId()));
+		FacesContext context = FacesContext.getCurrentInstance();
+		boolean isValid = true;
+		prescription.setProcedure(procedure);
+		prescription.setProvider(procedure.getProvider());
+		prescription.setDoctor(procedure.getDoctor());
+		prescription.setRecipient(procedure.getRecipient());
+		// Validate writtenOn field
+		if (procedure.getType() != ProcedureType.SINGLE_DAY) {
+			if (prescription.getWrittenOn() == null) {
+				context.addMessage("writtenOn", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Please enter the Prescription Written On date.", null));
+				context.validationFailed();
+				isValid = false;
+			}
+			if (prescription.getPrescribedDoc().getDoctorId() == null
+					|| prescription.getPrescribedDoc().getDoctorId().isEmpty()) {
+				context.addMessage("prescribedBy",
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter the Doctor who prescribed", null));
+				context.validationFailed();
+				isValid = false;
+			}
+			if (prescription.getPrescribedDoc().getDoctorId() != null
+					&& !prescription.getPrescribedDoc().getDoctorId().isEmpty()) {
+				Doctors procedureDoctor = providerDao.searchDoctorById(procedure.getDoctor().getDoctorId());
+ 
+				Doctors prescriptionDoctor = providerDao
+						.searchDoctorById(prescription.getPrescribedDoc().getDoctorId());
+ 
+				if (!procedureDoctor.getSpecialization().equals(prescriptionDoctor.getSpecialization())) {
+					context.addMessage("prescribedBy", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Doctor spetialization does not match with " + procedureDoctor.getSpecialization(), null));
+					context.validationFailed();
+					isValid = false;
+				}
+			}
+		}
+ 
+		if (prescription.getStartDate() == null) {
+			context.addMessage("startDate",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter the Prescription Start date.", null));
+			context.validationFailed();
+			isValid = false;
+		}
+		if (prescription.getEndDate() == null) {
+			context.addMessage("endDate",
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter the Prescription End date.", null));
+			context.validationFailed();
+			isValid = false;
+		}
+		if (!isValid)
+			return null;
+		// Fetch procedure details
+		ProcedureType procedureType = procedure.getType();
+		ProcedureStatus procedureStatus = procedure.getProcedureStatus();
+ 
+		Date procedureDate = procedure.getProcedureDate(); // for SINGLE_DAY
+		Date fromDate = procedure.getFromDate(); // for LONG_TERM + IN_PROGRESS
+ 
+		if (procedureType == null) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Missing Procedure Type for Procedure ID: " + procedureId, null));
+			context.validationFailed();
+			isValid = false;
+		}
+ 
+		// SINGLE_DAY: writtenOn must be equal to procedureDate
+		if (procedureType == ProcedureType.SINGLE_DAY) {
+			prescription.setWrittenOn(procedureDate);
+			prescription.getPrescribedDoc().setDoctorId(prescription.getDoctor().getDoctorId());
+			// Validate prescription start and end dates
+			Date truncatedStartDate = Converter.truncateTime(prescription.getStartDate());
+			Date truncatedEndDate = Converter.truncateTime(prescription.getEndDate());
+			Date truncatedpProcedureDate = Converter.truncateTime(procedureDate);
+			if (truncatedStartDate.before(truncatedpProcedureDate)) {
+				context.addMessage("startDate",
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Prescription start date (" + truncatedStartDate
+										+ ") cannot be before the procedure date (" + truncatedpProcedureDate + ").",
+								null));
+				context.validationFailed();
+				isValid = false;
+			}
+ 
+			if (truncatedEndDate.before(truncatedStartDate)) {
+				context.addMessage("endDate",
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prescription end date (" + truncatedEndDate
+								+ ") cannot be before the prescription start date (" + truncatedStartDate + ").",
+								null));
+				context.validationFailed();
+				isValid = false;
+			}
+ 
+		}
+		if (procedureType == ProcedureType.LONG_TERM && procedureStatus == ProcedureStatus.IN_PROGRESS
+				&& providerEjb.generateNewProcedureId().equalsIgnoreCase(procedure.getProcedureId())) {
+			if (!prescription.getPrescribedDoc().getDoctorId()
+					.equalsIgnoreCase(prescription.getDoctor().getDoctorId())) {
+				context.addMessage("prescribedBy", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Prescribed by doctor for same day must be same as procedure doctor as it is same day", null));
+				context.validationFailed();
+				isValid = false;
+			}
+			Date truncatedWrittenOn = Converter.truncateTime(prescription.getWrittenOn());
+			Date truncatedFromdate = Converter.truncateTime(procedure.getFromDate());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String writtenOn = sdf.format(truncatedWrittenOn);
+			String procedureFromDate = sdf.format(truncatedFromdate);
+ 
+			if (!writtenOn.equalsIgnoreCase(procedureFromDate)) {
+				context.addMessage("writtenOn", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Written on must be same as procedure start date as it is same day", null));
+				context.validationFailed();
+				isValid = false;
+			}
+		}
+ 
+		System.out.println(fromDate);
+		System.out.println(prescription.getWrittenOn());
+		System.out.println("reached for validation of longterm in progress");
+ 
+		// ✅ LONG_TERM + IN_PROGRESS: writtenOn must be after fromDate
+		if (procedureType == ProcedureType.LONG_TERM && procedureStatus == ProcedureStatus.IN_PROGRESS) {
+			// Normalize writtenOn date
+			Date writtenOn = Converter.truncateTime(prescription.getWrittenOn());
+			if (fromDate == null) {
+				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Missing From Date for LONG_TERM procedure ID: " + procedureId, null));
+				context.validationFailed();
+				isValid = false;
+			}
+ 
+			Date truncatedFromDate = Converter.truncateTime(fromDate);
+			if (writtenOn.before(truncatedFromDate)) {
+				context.addMessage("writtenOn",
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Written On date (" + writtenOn + ") must be after the Procedure From Date ("
+										+ truncatedFromDate + ") for long-term in-progress procedures.",
+								null));
+				context.validationFailed();
+				isValid = false;
+			}
+			// Validate prescription start and end dates
+			Date startDate = Converter.truncateTime(prescription.getStartDate());
+			Date endDate = Converter.truncateTime(prescription.getEndDate());
+ 
+			if (startDate.before(writtenOn)) {
+				context.addMessage("startDate",
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Prescription start date (" + startDate
+										+ ") cannot be before the prescription written date (" + writtenOn + ").",
+								null));
+				context.validationFailed();
+				isValid = false;
+			}
+ 
+			if (endDate.before(startDate)) {
+				context.addMessage("endDate", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prescription end date ("
+						+ endDate + ") cannot be before the prescription start date (" + startDate + ").", null));
+				context.validationFailed();
+				isValid = false;
+			}
+		}
+ 
+		if (prescribedMedicines != null && !prescribedMedicines.isEmpty()) {
+			for (PrescribedMedicines pm : prescribedMedicines) {
+				if (pm.getPrescription().getPrescriptionId().equals(prescription.getPrescriptionId())) {
+					if (pm.getStartDate().before(prescription.getStartDate())) {
+						context.addMessage("startDate",
+								new FacesMessage(FacesMessage.SEVERITY_ERROR,
+										"Prescription start date" + prescription.getStartDate()
+												+ " is after medicine start date " + pm.getStartDate() + " for "
+												+ pm.getMedicineName(),
+										null));
+						context.validationFailed();
+						isValid = false;
+						break;
+					}
+					if (pm.getEndDate().after(prescription.getEndDate())) {
+						context.addMessage("endDate",
+								new FacesMessage(FacesMessage.SEVERITY_ERROR,
+										"Prescription end date " + prescription.getEndDate()
+												+ " is before Medicine end date " + pm.getEndDate() + " for "
+												+ pm.getMedicineName(),
+										null));
+						context.validationFailed();
+						isValid = false;
+						break;
+					}
+				}
+			}
+		}
+ 
+		if (!isValid)
+			return null;
+		// Save the actual validated values back (optional but good for consistency)
+		System.out.println(prescriptions);
+		System.out.println(prescription);
+		prescriptions.add(prescription);
+		return "PrescriptionDashboard?faces-redirect=true";
+ 
+	}
 
 	public String addProcedureLogController(ProcedureDailyLog procedureLog)
 			throws ClassNotFoundException, SQLException {
@@ -1277,11 +1312,32 @@ public class ProcedureController {
 			}
 			procedureLog.setVitals(vitals);
 		}
+		if(providerEjb.generateNewProcedureId().equalsIgnoreCase(procedure.getProcedureId()))
+        {
+			if (!procedureLog.getloggedDoctor().getDoctorId()
+					.equalsIgnoreCase(procedure.getDoctor().getDoctorId())) {
+				context.addMessage("loggedBy", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Logged by doctor for same day must be same as procedure doctor as it is same day", null));
+				context.validationFailed();
+				isValid = false;
+			}
+			Date truncatedlogDate = Converter.truncateTime(procedureLog.getLogDate());
+			Date truncatedFromdate = Converter.truncateTime(procedure.getFromDate());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String logDateTemp = sdf.format(truncatedlogDate);
+			String procedureFromDate = sdf.format(truncatedFromdate);
+ 
+			if (!logDateTemp.equalsIgnoreCase(procedureFromDate)) {
+				context.addMessage("logDate", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"logDate must be same as procedure start date as it is same day", null));
+				context.validationFailed();
+				isValid = false;
+			}
+        }
 		if (!isValid)
 			return null;
 		// 4. Set createdAt
 		procedureLog.setCreatedAt(new Date());
-
 		procedureLogs.add(procedureLog);
 		return "LongTermProcedureDashboard?faces-redirect=true";
 	}
@@ -1326,7 +1382,7 @@ public class ProcedureController {
 
 	public String createNewPrescription() throws ClassNotFoundException, SQLException {
 		prescription = new Prescription();
-
+ 
 		if (prescriptions != null && !prescriptions.isEmpty()) {
 			prescription.setPrescriptionId(ProcedureIdGenerator.getNextPrescriptionId(prescriptions));
 		} else {
@@ -1334,10 +1390,15 @@ public class ProcedureController {
 		}
 		prescription.setWrittenOn(new Date());
 		prescription.setStartDate(new Date());
-		
+		if(procedure.getType()==ProcedureType.LONG_TERM && procedure.getProcedureStatus()==ProcedureStatus.IN_PROGRESS
+        		&& providerEjb.generateNewProcedureId().equalsIgnoreCase(procedure.getProcedureId()))
+        {
+        	prescription.getPrescribedDoc().setDoctorId(procedure.getDoctor().getDoctorId());
+        	prescription.setWrittenOn(procedure.getFromDate());
+        }
 		return "AddPrescription?faces-redirect=true";
 	}
-
+ 
 	public String createNewPrescribedMedicine() throws ClassNotFoundException, SQLException {
 		prescribedMedicine = new PrescribedMedicines();
 
@@ -1362,7 +1423,7 @@ public class ProcedureController {
 		return "AddTest?faces-redirect=true";
 	}
 
-	public String createNewProcedureLog() {
+	public String createNewProcedureLog() throws ClassNotFoundException, SQLException {
 		procedureLog = new ProcedureDailyLog();
 
 		if (procedureLogs != null && !procedureLogs.isEmpty()) {
@@ -1375,7 +1436,13 @@ public class ProcedureController {
 				// Handle DB fallback error appropriately
 			}
 		}
+		
 		procedureLog.setLogDate(new Date());
+		if(providerEjb.generateNewProcedureId().equalsIgnoreCase(procedure.getProcedureId()))
+        {
+			procedureLog.getloggedDoctor().setDoctorId(procedure.getDoctor().getDoctorId());
+			procedureLog.setLogDate(procedure.getFromDate());
+        }
 		return "AddProcedureLog?faces-redirect=true";
 	}
 
