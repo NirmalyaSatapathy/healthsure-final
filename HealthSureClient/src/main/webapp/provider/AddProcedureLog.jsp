@@ -176,14 +176,10 @@
                             <f:convertDateTime pattern="yyyy-MM-dd" />
                         </h:inputText>
                         <h:message for="logDate" styleClass="error-message" />
-                        <script>
-                            const calendarInput = document.querySelector("#logDate");
-                            if (calendarInput) {
-                                calendarInput.setAttribute("type", "date");
-                                const today = new Date().toISOString().split("T")[0];
-                                calendarInput.setAttribute("min", today);
-                            }
-                        </script>
+                         <script>
+                                let e = document.querySelector('#logDate');
+                                if (e) e.setAttribute('type', 'date');
+                            </script>
                     </div>
 
                     <div class="form-group full-width">

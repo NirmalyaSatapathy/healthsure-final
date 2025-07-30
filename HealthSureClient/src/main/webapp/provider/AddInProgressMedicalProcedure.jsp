@@ -194,7 +194,7 @@
                         </div>
 
                         <div class="form-group full-width">
-                            <label for="diagnosis">Diagnosis <span style="color:red">*</span></label>
+                            <label for="diagnosis"><span style="color:red">*</span>Diagnosis</label>
                             <h:inputTextarea id="diagnosis" value="#{procedureController.procedure.diagnosis}" styleClass="form-control" />
                             <h:message for="diagnosis" styleClass="error" />
                         </div>

@@ -6,17 +6,16 @@ import java.util.Date;
 import java.util.Set;
 
 import com.infinite.ejb.recipient.model.Recipient;
-public class Appointment implements Serializable {
+public class Appointment implements Serializable{
 
     private String appointmentId;
     private Doctors doctor;
     private Recipient recipient;
     private DoctorAvailability availability;
     private Provider provider;
-
     private Date requestedAt;
     private Date bookedAt;
-    private String status;
+    private AppointmentStatus status;
     private String notes;
     private Date start;
     private Date end;
@@ -46,9 +45,12 @@ public class Appointment implements Serializable {
 		this.slotNo = slotNo;
 	}
 
-    public Appointment() {
-		super();
-		// TODO Auto-generated constructor stub
+	@Override
+	public String toString() {
+		return "Appointment [appointmentId=" + appointmentId + ", doctor=" + doctor + ", recipient=" + recipient
+				+ ", availability=" + availability + ", provider=" + provider + ", requestedAt=" + requestedAt
+				+ ", bookedAt=" + bookedAt + ", status=" + status + ", notes=" + notes + ", procedures=" + procedures
+				+ "]";
 	}
 
 	// One-to-many: One appointment can have multiple procedures
@@ -112,11 +114,16 @@ public class Appointment implements Serializable {
         this.bookedAt = bookedAt;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public Appointment() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 

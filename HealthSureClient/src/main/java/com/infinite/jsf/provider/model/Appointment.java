@@ -18,7 +18,7 @@ public class Appointment {
     private Date start;
     private Date end;
     private int slotNo;
-    
+    private Date cancelledAt;
     public Date getStart() {
 		return start;
 	}
@@ -29,6 +29,14 @@ public class Appointment {
 
 	public Date getEnd() {
 		return end;
+	}
+
+	public Date getCancelledAt() {
+		return cancelledAt;
+	}
+
+	public void setCancelledAt(Date cancelledAt) {
+		this.cancelledAt = cancelledAt;
 	}
 
 	public void setEnd(Date end) {

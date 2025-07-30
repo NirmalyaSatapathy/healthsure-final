@@ -614,7 +614,7 @@ public class InsuranceController {
                 relatedInsuranceList = insuranceDaoImpl.showRelatedInsuranceOfMember(healthId);
                 if (relatedInsuranceList == null || relatedInsuranceList.isEmpty()) {
                     context.addMessage("recipientId", new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "No related insurance found where patient ID " + healthId + " is a member", null));
+                            "No related insurance found where patient  "+ "is a member", null));
                 } else {
                     showInsuranceFlag = false;
                     showPatientsFlag = false;
@@ -1085,7 +1085,7 @@ private void sortRelatedList() {
         relatedInsuranceList = insuranceDaoImpl.showRelatedInsuranceOfMember(hId);
 
         if (this.relatedInsuranceList == null || this.relatedInsuranceList.isEmpty()) {
-            this.topMessage = "No related insurance found where patient ID " + this.healthId + " is a member";
+            this.topMessage = "No related insurance found where patient "+ hId  + " is a member";
             return null;
         } else {
             this.topMessage = null; // Clear any previous message

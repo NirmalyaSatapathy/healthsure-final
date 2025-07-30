@@ -15,7 +15,7 @@ public class Appointment implements Serializable{
     private Provider provider;
     private Date requestedAt;
     private Date bookedAt;
-    private String status;
+    private AppointmentStatus status;
     private String notes;
     private Date start;
     private Date end;
@@ -114,7 +114,7 @@ public class Appointment implements Serializable{
         this.bookedAt = bookedAt;
     }
 
-    public String getStatus() {
+    public AppointmentStatus getStatus() {
         return status;
     }
 
@@ -123,7 +123,7 @@ public class Appointment implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 

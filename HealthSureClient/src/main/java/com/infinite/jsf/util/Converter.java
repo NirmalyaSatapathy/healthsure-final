@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.infinite.ejb.provider.model.Appointment;
+import com.infinite.ejb.provider.model.AppointmentStatus;
 import com.infinite.ejb.provider.model.Doctors;
 import com.infinite.ejb.provider.model.DoctorAvailability;
 import com.infinite.ejb.provider.model.MedicalProcedure;
@@ -21,7 +22,7 @@ public class Converter {
 	    ejbAppointment.setAppointmentId(jsfAppointment.getAppointmentId());
 	    ejbAppointment.setRequestedAt(jsfAppointment.getRequestedAt());
 	    ejbAppointment.setBookedAt(jsfAppointment.getBookedAt());
-	    ejbAppointment.setStatus(jsfAppointment.getStatus().name());
+	    ejbAppointment.setStatus(AppointmentStatus.valueOf(jsfAppointment.getStatus().name()));
 	    ejbAppointment.setNotes(jsfAppointment.getNotes());
 
 	    // Entity mapping (custom conversion methods assumed)
